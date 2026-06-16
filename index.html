@@ -1258,6 +1258,12 @@ input[type="time"]::-webkit-calendar-picker-indicator {
         <div id="remarriage-analysis"></div>
       </div>
 
+      <!-- Loyalty & Fidelity check -->
+      <div class="result-card full-width">
+        <h3 class="card-title">💍 Loyalty &amp; Fidelity Check</h3>
+        <div id="loyalty-analysis"></div>
+      </div>
+
       <!-- Do's and Don'ts for the couple -->
       <div class="result-card full-width">
         <h3 class="card-title">💡 Guidance for a Harmonious Marriage</h3>
@@ -2021,6 +2027,10 @@ function calcCompatibility(boy, girl) {
       boy:  analyzeRemarriage(boy, 'male'),
       girl: analyzeRemarriage(girl, 'female'),
     },
+    loyaltyAnalysis: {
+      boy:  analyzeLoyalty(boy, 'male'),
+      girl: analyzeLoyalty(girl, 'female'),
+    },
   };
 }
 
@@ -2075,6 +2085,75 @@ function analyzeRemarriage(p, gender) {
       : 'No strong re-marriage yoga — the chart favours a single, stable marriage.';
 
   return { score, level, verdict, factors, karaka };
+}
+
+// Loyalty / fidelity check for a chart (oriented to the groom by default).
+// Examines Venus (love karaka), the 7th house of partnership, and the
+// classical "wandering affection" combinations. Returns a fidelity score
+// (higher = more loyal/steady) plus the specific factors found.
+function analyzeLoyalty(p, gender) {
+  const asc = getRasi(p.Ascendant);
+  const houseOfRasi = r => ((r - asc + 12) % 12) + 1;
+  const factors = [];
+  let score = 75; // start neutral-positive; adjust on findings
+
+  const venRasi  = getRasi(p.Venus);
+  const venHouse = houseOfRasi(venRasi);
+  const venStat  = getPlanetStatus('Venus', venRasi);
+  const marsRasi = getRasi(p.Mars);
+  const marsHouse= houseOfRasi(marsRasi);
+  const moonRasi = getRasi(p.Moon);
+
+  // 1) Venus dignity — the core love/loyalty karaka
+  if (venStat.label === 'Exalted')  { score += 12; factors.push({ icon:'💚', label:'Venus (love karaka)', value:`Venus exalted in ${RASHIS[venRasi]} — deep capacity for devotion, tenderness and faithful affection.` }); }
+  else if (venStat.label === 'Own Sign') { score += 8; factors.push({ icon:'💚', label:'Venus (love karaka)', value:`Venus in its own sign (${RASHIS[venRasi]}) — natural warmth and steadiness in love.` }); }
+  else if (venStat.label === 'Debilitated') { score -= 18; factors.push({ icon:'⚠️', label:'Venus (love karaka)', value:`Venus debilitated in ${RASHIS[venRasi]} — affections can be unsettled; idealisation vs reality may strain loyalty.` }); }
+  else { factors.push({ icon:'✅', label:'Venus (love karaka)', value:`Venus in ${RASHIS[venRasi]} (${venStat.label}) — workable, average romantic temperament.` }); }
+
+  // 2) Venus in a dusthana (6/8/12) — classical wandering-affection / secret-relationship flag
+  if ([6,8,12].includes(venHouse)) {
+    score -= 20;
+    factors.push({ icon:'🚩', label:'Venus placement', value:`Venus sits in the ${venHouse}th house (a dusthana) — a traditional indicator of restlessness in love, secret attractions, or affections that stray from the marriage.` });
+  } else {
+    factors.push({ icon:'✅', label:'Venus placement', value:`Venus is in the ${venHouse}th house — not in a house of conflict or secrecy; supportive of steady affection.` });
+  }
+
+  // 3) Venus conjunct/with Mars or Rahu (passion/impulse over commitment)
+  const venWithMars = venRasi === marsRasi;
+  const venWithRahu = venRasi === getRasi(p.Rahu);
+  if (venWithMars) { score -= 10; factors.push({ icon:'🚩', label:'Venus + Mars', value:'Venus together with Mars — strong passion and desire that, uncontrolled, can pull toward impulsive or extramarital attraction.' }); }
+  if (venWithRahu) { score -= 12; factors.push({ icon:'🚩', label:'Venus + Rahu', value:'Venus together with Rahu — intense, unconventional desires and a classical signature for affairs or hidden relationships.' }); }
+  if (!venWithMars && !venWithRahu) { factors.push({ icon:'✅', label:'Venus combinations', value:'Venus is free of harsh Mars/Rahu conjunction — affections are less likely to be impulsive or hidden.' }); }
+
+  // 4) 7th house (partner & fidelity) condition
+  const seventhRasi = (asc + 6) % 12;
+  const seventhLord = PLANET_LORDS[seventhRasi].lord;
+  const malefics = ['Mars','Saturn','Rahu','Ketu'];
+  const maleficsIn7 = malefics.filter(m => houseOfRasi(getRasi(p[m])) === 7);
+  if (maleficsIn7.includes('Rahu')) { score -= 12; factors.push({ icon:'🚩', label:'7th house', value:'Rahu in the 7th house — can bring deception or unconventional conduct from/toward the partner.' }); }
+  else if (maleficsIn7.length) { score -= 8; factors.push({ icon:'⚠️', label:'7th house', value:`${maleficsIn7.join(', ')} in the 7th house — partnership area is under malefic stress.` }); }
+  else { factors.push({ icon:'✅', label:'7th house', value:'No malefic affliction in the 7th house — supports a steady, committed partnership.' }); }
+
+  // 5) 7th lord dignity — capacity to sustain the marriage
+  const seventhLordRasi = getRasi(p[seventhLord] || p.Jupiter);
+  const seventhLordStat = getPlanetStatus(seventhLord, seventhLordRasi);
+  const seventhLordHouse = houseOfRasi(seventhLordRasi);
+  if (seventhLordStat.label === 'Debilitated' || [6,8,12].includes(seventhLordHouse)) {
+    score -= 12;
+    factors.push({ icon:'⚠️', label:'7th lord', value:`The 7th lord (${seventhLord}) is ${seventhLordStat.label === 'Debilitated' ? 'debilitated' : 'in the '+seventhLordHouse+'th house'} — weakened ability to sustain a committed marriage.` });
+  } else {
+    factors.push({ icon:'✅', label:'7th lord', value:`The 7th lord (${seventhLord}) is well placed (${RASHIS[seventhLordRasi]}, house ${seventhLordHouse}) — supports commitment.` });
+  }
+
+  score = Math.max(0, Math.min(100, score));
+  const level = score >= 70 ? 'loyal' : score >= 50 ? 'mixed' : 'risk';
+  const verdict = level === 'loyal'
+    ? 'The chart leans toward a steady, faithful temperament in love and marriage.'
+    : level === 'mixed'
+      ? 'A mixed picture: capacity for love is present, but some placements ask for conscious commitment and honesty to keep the bond steady.'
+      : 'Several classical indicators of restless or wandering affection are present. This does not guarantee anything, but it is a genuine caution worth weighing.';
+
+  return { score, level, verdict, factors };
 }
 
 // ── Additional compatibility analyses ──
@@ -3827,6 +3906,7 @@ function renderCompatibility(boyName, girlName, result, method) {
   renderMangalAnalysis(result.mangalAnalysis);
   renderDivorceAnalysis(result.divorceAnalysis);
   renderRemarriageAnalysis(result.remarriageAnalysis);
+  renderLoyaltyAnalysis(result.loyaltyAnalysis);
   renderCoupleGuidance(result);
   renderFinalVerdict(boyName, girlName, result);
 }
@@ -4205,6 +4285,40 @@ function renderRemarriageAnalysis(r) {
       ${person(r.girl, '♀ Bride', 'girl')}
     </div>
     <p class="rm-note">Note: these are traditional yogas, not predictions of certainty. A well-matched horoscope, the right timing, and remedies can strongly support a single, lasting marriage.</p>
+  `;
+}
+
+// Render loyalty & fidelity check for both partners (groom emphasised)
+function renderLoyaltyAnalysis(l) {
+  const el = document.getElementById('loyalty-analysis');
+  if (!el || !l) return;
+  const col = lvl => lvl === 'loyal' ? '#1e8449' : lvl === 'mixed' ? '#e67e22' : '#c0392b';
+  const lbl = lvl => lvl === 'loyal' ? 'Steady & faithful' : lvl === 'mixed' ? 'Needs conscious commitment' : 'Caution — wandering signs';
+
+  function person(side, title, badgeCls) {
+    const c = col(side.level);
+    return `
+      <div class="rm-col">
+        <div class="rm-head ${badgeCls}">${title}</div>
+        <div class="rm-verdict" style="color:${c};border-color:${c}">${lbl(side.level)} · ${side.score}%</div>
+        <p class="rm-summary">${side.verdict}</p>
+        <div class="rm-factors">
+          ${side.factors.map(f => `
+            <div class="rm-factor">
+              <span class="rm-fic">${f.icon}</span>
+              <span><strong>${f.label}:</strong> ${f.value}</span>
+            </div>`).join('')}
+        </div>
+      </div>`;
+  }
+
+  el.innerHTML = `
+    <p class="rm-intro">This checks each chart for the classical fidelity factors — Venus (the karaka of love), its house and combinations (Mars/Rahu can bring impulsive or hidden attraction), and the 7th house of partnership. The Groom's reading is shown first, as requested.</p>
+    <div class="rm-grid">
+      ${person(l.boy, '♂ Groom', 'boy')}
+      ${person(l.girl, '♀ Bride', 'girl')}
+    </div>
+    <p class="rm-note">Important: astrology shows tendencies, not certainties. A chart cannot prove that any specific person was or will be unfaithful — fidelity is a personal choice. Treat this as one honest input among many, never as proof.</p>
   `;
 }
 

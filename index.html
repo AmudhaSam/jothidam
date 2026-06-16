@@ -10,27 +10,27 @@
 <style>
 /* ═══════════════════════════════════════════
    JOTHIDAM — Tamil Vedic Astrology App
-   Design: Deep cosmos + gold manuscript
+   Design: Light parchment + saffron manuscript
 ═══════════════════════════════════════════ */
 
 :root {
-  --cosmos-900: #05060f;
-  --cosmos-800: #0d1029;
-  --cosmos-700: #141838;
-  --cosmos-600: #1c2248;
-  --cosmos-500: #263070;
-  --gold-bright: #f5c842;
-  --gold-mid:    #c9982a;
-  --gold-dim:    #7a5c0e;
-  --gold-glow:   rgba(245,200,66,0.15);
-  --rose-star:   #e8718c;
-  --jade-star:   #4ecdc4;
-  --violet-star: #9b59b6;
-  --text-primary: #f0e8d0;
-  --text-secondary: #a09070;
-  --text-muted: #504830;
-  --border: rgba(245,200,66,0.18);
-  --card-bg: rgba(13,16,41,0.85);
+  --cosmos-900: #fdfaf3;   /* page background — warm cream */
+  --cosmos-800: #f6efe0;   /* select dropdown bg */
+  --cosmos-700: #fbf6ec;   /* rasi cell bg */
+  --cosmos-600: #f3ead6;   /* center cell bg */
+  --cosmos-500: #e9dcc0;
+  --gold-bright: #b8860b;  /* deep gold (readable on light) */
+  --gold-mid:    #9c6f12;  /* darker gold for labels */
+  --gold-dim:    #d8c08a;
+  --gold-glow:   rgba(184,134,11,0.12);
+  --rose-star:   #c0436a;
+  --jade-star:   #0f8a82;
+  --violet-star: #7a3f9c;
+  --text-primary: #2e2519;   /* dark ink brown */
+  --text-secondary: #7a6a4f; /* muted brown */
+  --text-muted: #a99877;
+  --border: rgba(184,134,11,0.28);
+  --card-bg: rgba(255,255,255,0.78);
   --radius: 16px;
   --radius-sm: 8px;
 }
@@ -55,18 +55,18 @@ body {
 .star {
   position: absolute;
   border-radius: 50%;
-  background: white;
+  background: var(--gold-mid);
   animation: twinkle var(--dur, 3s) ease-in-out infinite;
 }
 @keyframes twinkle {
-  0%,100% { opacity: var(--min-op, 0.2); transform: scale(1); }
-  50% { opacity: var(--max-op, 0.9); transform: scale(1.2); }
+  0%,100% { opacity: var(--min-op, 0.04); transform: scale(1); }
+  50% { opacity: var(--max-op, 0.14); transform: scale(1.2); }
 }
 
 /* ── Header ───────────────────────────────── */
 .site-header {
   position: sticky; top: 0; z-index: 100;
-  background: rgba(5,6,15,0.92);
+  background: rgba(253,250,243,0.9);
   backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--border);
 }
@@ -79,7 +79,7 @@ body {
 .logo { display: flex; align-items: center; gap: 12px; }
 .logo-om {
   font-size: 2rem; color: var(--gold-bright);
-  text-shadow: 0 0 20px var(--gold-bright);
+  text-shadow: 0 1px 8px rgba(184,134,11,0.25);
   line-height: 1;
 }
 .logo-title {
@@ -110,10 +110,10 @@ body {
 .hero-section {
   padding: 80px 24px 60px;
   text-align: center;
-  background: radial-gradient(ellipse at 50% 0%, rgba(38,48,112,0.6) 0%, transparent 70%);
+  background: radial-gradient(ellipse at 50% 0%, rgba(184,134,11,0.12) 0%, transparent 70%);
 }
 .hero-compat {
-  background: radial-gradient(ellipse at 50% 0%, rgba(155,89,182,0.3) 0%, transparent 70%);
+  background: radial-gradient(ellipse at 50% 0%, rgba(122,63,156,0.12) 0%, transparent 70%);
 }
 .hero-eyebrow {
   font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase;
@@ -140,6 +140,7 @@ body {
   border-radius: var(--radius);
   padding: 36px;
   backdrop-filter: blur(12px);
+  box-shadow: 0 4px 24px rgba(46,37,25,0.07);
 }
 .form-title {
   font-family: 'Playfair Display', serif;
@@ -158,7 +159,7 @@ body {
 }
 .form-group input,
 .form-group select {
-  background: rgba(255,255,255,0.04);
+  background: #ffffff;
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   color: var(--text-primary);
@@ -169,13 +170,14 @@ body {
 .form-group input:focus,
 .form-group select:focus {
   border-color: var(--gold-mid);
-  background: rgba(245,200,66,0.05);
+  background: #fffdf7;
+  box-shadow: 0 0 0 3px rgba(184,134,11,0.1);
 }
 .form-group input::placeholder { color: var(--text-muted); }
-.form-group select option { background: var(--cosmos-800); }
+.form-group select option { background: #ffffff; }
 input[type="date"]::-webkit-calendar-picker-indicator,
 input[type="time"]::-webkit-calendar-picker-indicator {
-  filter: invert(0.7) sepia(1) saturate(2) hue-rotate(10deg);
+  filter: sepia(1) saturate(2) hue-rotate(5deg) brightness(0.7);
   cursor: pointer;
 }
 
@@ -183,7 +185,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   display: flex; align-items: center; justify-content: center; gap: 10px;
   width: 100%; padding: 16px;
   background: linear-gradient(135deg, var(--gold-mid), var(--gold-bright));
-  color: var(--cosmos-900); font-weight: 700; font-size: 1.05rem;
+  color: #ffffff; font-weight: 700; font-size: 1.05rem;
   border: none; border-radius: var(--radius-sm);
   cursor: pointer; transition: all 0.25s; letter-spacing: 0.03em;
 }
@@ -240,6 +242,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   border-radius: var(--radius);
   padding: 28px;
   backdrop-filter: blur(12px);
+  box-shadow: 0 4px 20px rgba(46,37,25,0.06);
 }
 .full-width { grid-column: 1 / -1; }
 .card-title {
@@ -275,7 +278,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   to { opacity: 1; }
 }
 .rasi-cell.center-cell { background: var(--cosmos-600); }
-.rasi-cell.highlight { background: rgba(38,48,112,0.9); }
+.rasi-cell.highlight { background: rgba(184,134,11,0.12); }
 .rasi-num {
   font-size: 0.55rem; color: var(--gold-dim);
   font-weight: 600; position: absolute; top: 3px; right: 4px;
@@ -305,11 +308,11 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 }
 .planet-table tr:hover td { background: rgba(245,200,66,0.04); }
 .planet-symbol { font-size: 1.1rem; margin-right: 4px; }
-.status-exalted { color: #ffd700; font-weight: 600; }
+.status-exalted { color: #b8860b; font-weight: 600; }
 .status-debilitated { color: #e74c3c; }
 .status-own { color: var(--jade-star); font-weight: 600; }
 .status-neutral { color: var(--text-secondary); }
-.status-friend { color: #2ecc71; }
+.status-friend { color: #1e8449; }
 
 /* ── Detail Grid ──────────────────────────── */
 .detail-grid {
@@ -336,7 +339,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   width: 90px; flex-shrink: 0;
   font-weight: 600; font-size: 0.9rem;
 }
-.dasa-bar-wrap { flex: 1; height: 8px; background: rgba(255,255,255,0.07); border-radius: 4px; overflow: hidden; }
+.dasa-bar-wrap { flex: 1; height: 8px; background: rgba(46,37,25,0.08); border-radius: 4px; overflow: hidden; }
 .dasa-bar { height: 100%; border-radius: 4px; transition: width 1s ease; }
 .dasa-years { font-size: 0.75rem; color: var(--text-secondary); width: 60px; text-align: right; flex-shrink: 0; }
 .dasa-dates { font-size: 0.7rem; color: var(--text-muted); width: 160px; flex-shrink: 0; }
@@ -350,7 +353,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   gap: 14px;
 }
 .yoga-item {
-  background: rgba(255,255,255,0.03);
+  background: rgba(184,134,11,0.05);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   padding: 16px;
@@ -368,11 +371,11 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;
 }
 .badge-present { background: rgba(78,205,196,0.15); color: var(--jade-star); }
-.badge-absent { background: rgba(255,255,255,0.05); color: var(--text-muted); }
+.badge-absent { background: rgba(184,134,11,0.07); color: var(--text-muted); }
 .yoga-desc { font-size: 0.8rem; color: var(--text-secondary); line-height: 1.5; }
 
 /* ── Reading ──────────────────────────────── */
-.reading-card { background: linear-gradient(135deg, rgba(13,16,41,0.95), rgba(26,20,50,0.9)); }
+.reading-card { background: linear-gradient(135deg, #fffdf6, #faf3e4); }
 .reading-content { color: var(--text-secondary); line-height: 1.8; }
 .reading-section { margin-bottom: 20px; }
 .reading-section h4 {
@@ -388,7 +391,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   gap: 12px;
 }
 .div-chart-item {
-  background: rgba(255,255,255,0.03);
+  background: rgba(184,134,11,0.05);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   padding: 14px;
@@ -427,7 +430,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   gap: 12px;
 }
 .porutham-item {
-  background: rgba(255,255,255,0.03);
+  background: rgba(184,134,11,0.05);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   padding: 14px 16px;
@@ -436,7 +439,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 .porutham-icon { font-size: 1.4rem; flex-shrink: 0; }
 .porutham-name { font-size: 0.85rem; font-weight: 600; color: var(--text-primary); }
 .porutham-result { font-size: 0.75rem; margin-top: 2px; }
-.p-match { color: #2ecc71; }
+.p-match { color: #1e8449; }
 .p-partial { color: var(--gold-mid); }
 .p-nomatch { color: #e74c3c; }
 .porutham-match { border-color: rgba(46,204,113,0.3); }
@@ -449,7 +452,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   display: flex; align-items: center; gap: 10px; margin-bottom: 14px;
 }
 .analysis-meter {
-  flex: 1; height: 10px; background: rgba(255,255,255,0.08);
+  flex: 1; height: 10px; background: rgba(46,37,25,0.08);
   border-radius: 5px; overflow: hidden;
 }
 .analysis-fill { height: 100%; border-radius: 5px; transition: width 1s ease; }
@@ -471,25 +474,25 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 .risk-factors { margin-top: 12px; }
 .risk-factor {
   display: flex; align-items: flex-start; gap: 10px;
-  padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05);
+  padding: 10px 0; border-bottom: 1px solid rgba(184,134,11,0.12);
 }
 .risk-icon { flex-shrink: 0; font-size: 1rem; }
 .risk-label { font-size: 0.75rem; color: var(--text-secondary); }
 .risk-value { font-size: 0.88rem; margin-top: 2px; }
 .risk-high { color: #e74c3c; }
 .risk-medium { color: var(--gold-mid); }
-.risk-low { color: #2ecc71; }
+.risk-low { color: #1e8449; }
 .risk-level-bar {
   display: flex; gap: 4px; margin-top: 16px; align-items: center;
 }
 .risk-level-label { font-size: 0.75rem; color: var(--text-secondary); margin-right: 4px; }
-.risk-dot { width: 12px; height: 12px; border-radius: 50%; background: rgba(255,255,255,0.1); }
-.risk-dot.active-low { background: #2ecc71; }
+.risk-dot { width: 12px; height: 12px; border-radius: 50%; background: rgba(46,37,25,0.1); }
+.risk-dot.active-low { background: #27ae60; }
 .risk-dot.active-med { background: var(--gold-mid); }
 .risk-dot.active-high { background: #e74c3c; }
 
 /* ── Final Verdict ────────────────────────── */
-.verdict-card { background: linear-gradient(135deg, rgba(38,48,112,0.5), rgba(26,20,50,0.8)); }
+.verdict-card { background: linear-gradient(135deg, #fdf6e8, #f6edda); }
 .final-verdict { text-align: center; padding: 20px; }
 .verdict-emoji { font-size: 3rem; margin-bottom: 14px; }
 .verdict-title {
@@ -520,7 +523,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 /* ── Loading state ────────────────────────── */
 .loading-overlay {
   position: fixed; inset: 0; z-index: 200;
-  background: rgba(5,6,15,0.85); backdrop-filter: blur(8px);
+  background: rgba(253,250,243,0.9); backdrop-filter: blur(8px);
   display: flex; flex-direction: column;
   align-items: center; justify-content: center; gap: 20px;
 }
@@ -538,11 +541,12 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   animation: pulse 1.5s ease-in-out infinite;
 }
 @keyframes pulse { 0%,100%{opacity:0.6}50%{opacity:1} }
-</style>
-</head>
-<body>
+</style></head><body>
+
+  <!-- Stars background -->
   <div class="stars" id="stars"></div>
 
+  <!-- Header -->
   <header class="site-header">
     <div class="header-inner">
       <div class="logo">
@@ -553,14 +557,17 @@ input[type="time"]::-webkit-calendar-picker-indicator {
         </div>
       </div>
       <nav class="main-nav">
-        <button class="nav-btn active" onclick="showModule('jathagam',this)">📜 Jathagam</button>
-        <button class="nav-btn" onclick="showModule('compatibility',this)">💍 Compatibility</button>
+        <button class="nav-btn active" onclick="showModule('jathagam')">📜 Jathagam</button>
+        <button class="nav-btn" onclick="showModule('compatibility')">💍 Compatibility</button>
       </nav>
     </div>
   </header>
 
-  <!-- MODULE 1: JATHAGAM -->
+  <!-- ═══════════════════════════════════════════════════
+       MODULE 1: JATHAGAM
+  ════════════════════════════════════════════════════ -->
   <main id="module-jathagam" class="module active">
+
     <section class="hero-section">
       <div class="hero-content">
         <p class="hero-eyebrow">Your Cosmic Blueprint</p>
@@ -568,34 +575,128 @@ input[type="time"]::-webkit-calendar-picker-indicator {
         <p class="hero-desc">Enter your birth details to reveal planetary positions, rasi chart, dasas, yogas, and your complete horoscope reading.</p>
       </div>
     </section>
+
     <section class="form-section">
       <div class="form-card">
         <h3 class="form-title">Birth Details</h3>
         <div class="form-grid">
-          <div class="form-group"><label>Full Name</label><input type="text" id="name" placeholder="Enter your name" /></div>
-          <div class="form-group"><label>Date of Birth</label><input type="date" id="dob" /></div>
-          <div class="form-group"><label>Time of Birth</label><input type="time" id="tob" /></div>
-          <div class="form-group"><label>Place of Birth</label><input type="text" id="pob" placeholder="e.g. Chennai, India" /></div>
-          <div class="form-group"><label>Gender</label><select id="gender"><option value="male">Male</option><option value="female">Female</option><option value="other">Other</option></select></div>
-          <div class="form-group"><label>Ayanamsa</label><select id="ayanamsa"><option value="lahiri">Lahiri (Standard)</option><option value="krishnamurti">Krishnamurti</option><option value="raman">B.V. Raman</option></select></div>
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" id="name" placeholder="Enter your name" />
+          </div>
+          <div class="form-group">
+            <label>Date of Birth</label>
+            <input type="date" id="dob" />
+          </div>
+          <div class="form-group">
+            <label>Time of Birth</label>
+            <input type="time" id="tob" />
+          </div>
+          <div class="form-group">
+            <label>Place of Birth</label>
+            <input type="text" id="pob" placeholder="e.g. Chennai, India" />
+          </div>
+          <div class="form-group">
+            <label>Gender</label>
+            <select id="gender">
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Calculation Method</label>
+            <select id="ayanamsa">
+              <option value="vakya">Vakya Panchangam (Tamil Traditional)</option>
+              <option value="surya">Surya Siddhanta (Ancient ~400 CE)</option>
+              <option value="lahiri">Lahiri (Modern Standard)</option>
+              <option value="krishnamurti">Krishnamurti (KP)</option>
+              <option value="raman">B.V. Raman</option>
+            </select>
+          </div>
         </div>
-        <button class="generate-btn" onclick="generateJathagam()"><span class="btn-icon">✨</span> Generate Jathagam</button>
+        <button class="generate-btn" onclick="generateJathagam()">
+          <span class="btn-icon">✨</span> Generate Jathagam
+        </button>
       </div>
     </section>
+
+    <!-- Results Section -->
     <section id="jathagam-results" class="results-section hidden">
-      <div class="result-card chart-card"><h3 class="card-title">🔯 Rasi Chart (South Indian)</h3><div class="rasi-grid" id="rasi-chart"></div><div class="navamsa-label">Rasi (D1)</div></div>
-      <div class="result-card chart-card"><h3 class="card-title">🌙 Navamsa Chart (D9)</h3><div class="rasi-grid" id="navamsa-chart"></div><div class="navamsa-label">Navamsa (D9)</div></div>
-      <div class="result-card full-width"><h3 class="card-title">🪐 Planetary Positions</h3><div class="table-wrap"><table class="planet-table"><thead><tr><th>Planet</th><th>Rasi</th><th>Degree</th><th>Nakshatra</th><th>Pada</th><th>Lord</th><th>Status</th></tr></thead><tbody id="planet-tbody"></tbody></table></div></div>
-      <div class="result-card"><h3 class="card-title">📋 Birth Details</h3><div class="detail-grid" id="birth-details-panel"></div></div>
-      <div class="result-card"><h3 class="card-title">⏳ Vimshottari Dasa</h3><div class="dasa-container" id="dasa-table"></div></div>
-      <div class="result-card full-width"><h3 class="card-title">⭐ Yogas & Special Combinations</h3><div class="yoga-grid" id="yoga-grid"></div></div>
-      <div class="result-card full-width reading-card"><h3 class="card-title">🔮 Horoscope Reading</h3><div id="horoscope-reading" class="reading-content"></div></div>
-      <div class="result-card full-width"><h3 class="card-title">📊 Divisional Chart Summary</h3><div class="div-charts" id="div-charts"></div></div>
+
+      <!-- Rasi Chart -->
+      <div class="result-card chart-card">
+        <h3 class="card-title">🔯 Rasi Chart (South Indian)</h3>
+        <div class="rasi-grid" id="rasi-chart"></div>
+        <div class="navamsa-label">Rasi (D1)</div>
+      </div>
+
+      <!-- Navamsa Chart -->
+      <div class="result-card chart-card">
+        <h3 class="card-title">🌙 Navamsa Chart (D9)</h3>
+        <div class="rasi-grid" id="navamsa-chart"></div>
+        <div class="navamsa-label">Navamsa (D9)</div>
+      </div>
+
+      <!-- Planet Table -->
+      <div class="result-card full-width">
+        <h3 class="card-title">🪐 Planetary Positions</h3>
+        <div class="table-wrap">
+          <table class="planet-table" id="planet-table">
+            <thead>
+              <tr>
+                <th>Planet</th>
+                <th>Rasi</th>
+                <th>Degree</th>
+                <th>Nakshatra</th>
+                <th>Pada</th>
+                <th>Lord</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="planet-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Birth Details Panel -->
+      <div class="result-card">
+        <h3 class="card-title">📋 Birth Details</h3>
+        <div class="detail-grid" id="birth-details-panel"></div>
+      </div>
+
+      <!-- Dasa Periods -->
+      <div class="result-card">
+        <h3 class="card-title">⏳ Vimshottari Dasa</h3>
+        <div class="dasa-container" id="dasa-table"></div>
+      </div>
+
+      <!-- Yogas -->
+      <div class="result-card full-width">
+        <h3 class="card-title">⭐ Yogas & Special Combinations</h3>
+        <div class="yoga-grid" id="yoga-grid"></div>
+      </div>
+
+      <!-- Horoscope Reading -->
+      <div class="result-card full-width reading-card">
+        <h3 class="card-title">🔮 Horoscope Reading</h3>
+        <div id="horoscope-reading" class="reading-content"></div>
+      </div>
+
+      <!-- Divisional Charts Summary -->
+      <div class="result-card full-width">
+        <h3 class="card-title">📊 Divisional Chart Summary</h3>
+        <div class="div-charts" id="div-charts"></div>
+      </div>
+
     </section>
   </main>
 
-  <!-- MODULE 2: COMPATIBILITY -->
+  <!-- ═══════════════════════════════════════════════════
+       MODULE 2: COMPATIBILITY
+  ════════════════════════════════════════════════════ -->
   <main id="module-compatibility" class="module hidden">
+
     <section class="hero-section hero-compat">
       <div class="hero-content">
         <p class="hero-eyebrow">Porutham Analysis</p>
@@ -603,46 +704,267 @@ input[type="time"]::-webkit-calendar-picker-indicator {
         <p class="hero-desc">Vedic 10-Porutham matching with Venus loyalty indicator, Moon emotional stability, Jupiter strength, and divorce risk analysis.</p>
       </div>
     </section>
+
     <section class="form-section compat-form-section">
       <div class="compat-forms">
         <div class="form-card compat-card">
           <div class="compat-gender-badge male-badge">♂ Boy / Groom</div>
           <div class="form-grid">
-            <div class="form-group"><label>Full Name</label><input type="text" id="boy-name" placeholder="Groom's name" /></div>
-            <div class="form-group"><label>Date of Birth</label><input type="date" id="boy-dob" /></div>
-            <div class="form-group"><label>Time of Birth</label><input type="time" id="boy-tob" /></div>
-            <div class="form-group"><label>Place of Birth</label><input type="text" id="boy-pob" placeholder="e.g. Madurai, India" /></div>
+            <div class="form-group">
+              <label>Full Name</label>
+              <input type="text" id="boy-name" placeholder="Groom's name" />
+            </div>
+            <div class="form-group">
+              <label>Date of Birth</label>
+              <input type="date" id="boy-dob" />
+            </div>
+            <div class="form-group">
+              <label>Time of Birth</label>
+              <input type="time" id="boy-tob" />
+            </div>
+            <div class="form-group">
+              <label>Place of Birth</label>
+              <input type="text" id="boy-pob" placeholder="e.g. Madurai, India" />
+            </div>
           </div>
         </div>
-        <div class="vs-divider"><div class="vs-circle">VS</div></div>
+
+        <div class="vs-divider">
+          <div class="vs-circle">VS</div>
+        </div>
+
         <div class="form-card compat-card">
           <div class="compat-gender-badge female-badge">♀ Girl / Bride</div>
           <div class="form-grid">
-            <div class="form-group"><label>Full Name</label><input type="text" id="girl-name" placeholder="Bride's name" /></div>
-            <div class="form-group"><label>Date of Birth</label><input type="date" id="girl-dob" /></div>
-            <div class="form-group"><label>Time of Birth</label><input type="time" id="girl-tob" /></div>
-            <div class="form-group"><label>Place of Birth</label><input type="text" id="girl-pob" placeholder="e.g. Coimbatore, India" /></div>
+            <div class="form-group">
+              <label>Full Name</label>
+              <input type="text" id="girl-name" placeholder="Bride's name" />
+            </div>
+            <div class="form-group">
+              <label>Date of Birth</label>
+              <input type="date" id="girl-dob" />
+            </div>
+            <div class="form-group">
+              <label>Time of Birth</label>
+              <input type="time" id="girl-tob" />
+            </div>
+            <div class="form-group">
+              <label>Place of Birth</label>
+              <input type="text" id="girl-pob" placeholder="e.g. Coimbatore, India" />
+            </div>
           </div>
         </div>
       </div>
-      <button class="generate-btn compat-btn" onclick="generateCompatibility()"><span class="btn-icon">💍</span> Check Compatibility</button>
+      <button class="generate-btn compat-btn" onclick="generateCompatibility()">
+        <span class="btn-icon">💍</span> Check Compatibility
+      </button>
     </section>
+
+    <!-- Compatibility Results -->
     <section id="compat-results" class="results-section hidden">
-      <div class="result-card full-width score-overview-card"><div class="score-overview" id="score-overview"></div></div>
-      <div class="result-card full-width"><h3 class="card-title">🔟 10 Porutham Analysis</h3><div class="porutham-grid" id="porutham-grid"></div></div>
-      <div class="result-card venus-card"><h3 class="card-title">♀ Venus — Loyalty Indicator</h3><div id="venus-analysis" class="special-analysis"></div></div>
-      <div class="result-card moon-card"><h3 class="card-title">☾ Moon — Emotional Stability</h3><div id="moon-analysis" class="special-analysis"></div></div>
-      <div class="result-card jupiter-card"><h3 class="card-title">♃ Jupiter — Marital Blessing</h3><div id="jupiter-analysis" class="special-analysis"></div></div>
-      <div class="result-card divorce-card full-width"><h3 class="card-title">⚠️ Divorce & Separation Risk Analysis</h3><div id="divorce-analysis" class="divorce-content"></div></div>
-      <div class="result-card full-width verdict-card"><div id="final-verdict" class="final-verdict"></div></div>
+
+      <!-- Score Overview -->
+      <div class="result-card full-width score-overview-card">
+        <div class="score-overview" id="score-overview"></div>
+      </div>
+
+      <!-- 10 Porutham Grid -->
+      <div class="result-card full-width">
+        <h3 class="card-title">🔟 10 Porutham Analysis</h3>
+        <div class="porutham-grid" id="porutham-grid"></div>
+      </div>
+
+      <!-- Venus Loyalty -->
+      <div class="result-card venus-card">
+        <h3 class="card-title">♀ Venus — Loyalty Indicator</h3>
+        <div id="venus-analysis" class="special-analysis"></div>
+      </div>
+
+      <!-- Moon Stability -->
+      <div class="result-card moon-card">
+        <h3 class="card-title">☾ Moon — Emotional Stability</h3>
+        <div id="moon-analysis" class="special-analysis"></div>
+      </div>
+
+      <!-- Jupiter Strength -->
+      <div class="result-card jupiter-card">
+        <h3 class="card-title">♃ Jupiter — Marital Blessing</h3>
+        <div id="jupiter-analysis" class="special-analysis"></div>
+      </div>
+
+      <!-- Divorce Risk -->
+      <div class="result-card divorce-card full-width">
+        <h3 class="card-title">⚠️ Divorce & Separation Risk Analysis</h3>
+        <div id="divorce-analysis" class="divorce-content"></div>
+      </div>
+
+      <!-- Overall Verdict -->
+      <div class="result-card full-width verdict-card">
+        <div id="final-verdict" class="final-verdict"></div>
+      </div>
+
     </section>
   </main>
 
   <footer class="site-footer">
-    <p>Jothidam · Free Tamil Vedic Astrology · For educational purposes · <a href="https://github.com/" target="_blank">View on GitHub</a></p>
+    <p>Jothidam · Free Tamil Vedic Astrology · For educational purposes · <a href="https://github.com/" target="_blank" id="github-link">View on GitHub</a></p>
   </footer>
 
+  
 <script>
+/**
+ * SURYA SIDDHANTA & VAKYA PANCHANGAM Engine
+ * Ancient Tamil/Vedic planetary calculation
+ *
+ * Surya Siddhanta (~400 CE): raw classical text revolutions
+ * Vakya Panchangam: Surya Siddhanta + Bija (seed) corrections
+ *   as used in the living Tamil tradition (Kumbakonam/Thanjavur).
+ */
+
+// ── Constants from Surya Siddhanta ──────────────────────
+const SS_JD_KALI_EPOCH = 588465.5;        // JD at start of Kali Yuga (noon 17 Feb 3102 BCE)
+const SS_MAHAYUGA_DAYS = 1577917500;       // civil days in a Mahayuga
+
+// Planetary revolutions in one Mahayuga (4,320,000 yrs) — Surya Siddhanta
+const SS_REVOLUTIONS = {
+  Sun:        4320000,
+  Moon:      57753336,
+  Mars:       2296832,
+  Mercury:   17937060,
+  Jupiter:    364220,
+  Venus:      7022376,
+  Saturn:     146568,
+  Moon_Apogee: 488219,
+  Moon_Node:  -232238,   // Rahu (retrograde)
+};
+
+// Manda (equation of centre) epicycle sizes — degrees of arc
+const SS_MANDA_EPICYCLE = {
+  Sun: 13.5, Moon: 32.0, Mars: 73.5, Mercury: 28.0,
+  Jupiter: 32.5, Venus: 11.5, Saturn: 48.5,
+};
+// Sighra epicycle sizes — degrees of arc
+const SS_SIGHRA_EPICYCLE = {
+  Mars: 233.5, Mercury: 132.5, Jupiter: 71.0, Venus: 261.5, Saturn: 39.5,
+};
+// Mandocca (apogee) longitudes approx for the modern era (deg)
+const SS_MANDOCCA = {
+  Sun: 78.5, Moon: 0 /*calculated*/, Mars: 130, Mercury: 220,
+  Jupiter: 172, Venus: 80, Saturn: 240,
+};
+
+// ── Vakya Bija corrections (applied to raw SS) ──────────
+// These approximate the traditional Tamil corrections that keep
+// the Vakya Panchangam aligned with observed sky (~Lahiri frame).
+const VAKYA_BIJA = {
+  Sun:     -1.10,
+  Moon:    -9.66,
+  Mars:    -0.90,
+  Mercury: -2.40,
+  Jupiter: -1.30,
+  Venus:   -1.80,
+  Saturn:  -2.60,
+  Rahu:     0.40,
+};
+
+function ssDeg2rad(d) { return d * Math.PI / 180; }
+function ssSin(d) { return Math.sin(ssDeg2rad(d)); }
+function ssCos(d) { return Math.cos(ssDeg2rad(d)); }
+function ssNorm(x) { return ((x % 360) + 360) % 360; }
+
+// Mean longitude from revolutions and ahargana
+function ssMeanLon(revs, ahargana) {
+  const frac = ((revs * ahargana) / SS_MAHAYUGA_DAYS) % 1;
+  return ssNorm(frac * 360);
+}
+
+// Equation of centre / sighra correction (R-sine approximation)
+function ssEpicycleCorrection(meanLon, apogeeLon, epicycle) {
+  const anomaly = ssNorm(meanLon - apogeeLon);
+  const s = ssSin(anomaly);
+  let corr = Math.asin(Math.max(-1, Math.min(1, (epicycle / 360) * Math.abs(s))));
+  corr = corr * 180 / Math.PI;
+  return s < 0 ? -corr : corr;
+}
+
+/**
+ * Compute all positions using Surya Siddhanta.
+ * @param {number} jd       Julian Day (UT)
+ * @param {number} lat      birth latitude
+ * @param {number} lon      birth longitude (deg E)
+ * @param {boolean} useVakya  apply Vakya Bija corrections
+ * @returns {object} sidereal longitudes keyed by planet + Ascendant
+ */
+function calcSuryaSiddhanta(jd, lat, lon, useVakya) {
+  const ahargana = jd - SS_JD_KALI_EPOCH;
+
+  // Sun
+  const sunMean = ssMeanLon(SS_REVOLUTIONS.Sun, ahargana);
+  const sunCorr = ssEpicycleCorrection(sunMean, SS_MANDOCCA.Sun, SS_MANDA_EPICYCLE.Sun);
+  let sun = ssNorm(sunMean + sunCorr);
+
+  // Moon
+  const moonMean   = ssMeanLon(SS_REVOLUTIONS.Moon, ahargana);
+  const moonApogee = ssMeanLon(SS_REVOLUTIONS.Moon_Apogee, ahargana);
+  const moonCorr   = ssEpicycleCorrection(moonMean, moonApogee, SS_MANDA_EPICYCLE.Moon);
+  let moon = ssNorm(moonMean + moonCorr);
+
+  // Superior + inferior planets: manda then sighra
+  function planetTrue(key) {
+    const mean = ssMeanLon(SS_REVOLUTIONS[key], ahargana);
+    const mandaCorr = ssEpicycleCorrection(mean, SS_MANDOCCA[key], SS_MANDA_EPICYCLE[key]);
+    const manda = ssNorm(mean + mandaCorr);
+    const sighraCorr = ssEpicycleCorrection(manda, sun, SS_SIGHRA_EPICYCLE[key] / 4);
+    return ssNorm(manda + sighraCorr);
+  }
+  let mars    = planetTrue('Mars');
+  let mercury = planetTrue('Mercury');
+  let jupiter = planetTrue('Jupiter');
+  let venus   = planetTrue('Venus');
+  let saturn  = planetTrue('Saturn');
+
+  // Rahu / Ketu
+  let rahu = ssMeanLon(SS_REVOLUTIONS.Moon_Node, ahargana);
+  // Apply Vakya corrections
+  if (useVakya) {
+    sun     = ssNorm(sun     + VAKYA_BIJA.Sun);
+    moon    = ssNorm(moon    + VAKYA_BIJA.Moon);
+    mars    = ssNorm(mars    + VAKYA_BIJA.Mars);
+    mercury = ssNorm(mercury + VAKYA_BIJA.Mercury);
+    jupiter = ssNorm(jupiter + VAKYA_BIJA.Jupiter);
+    venus   = ssNorm(venus   + VAKYA_BIJA.Venus);
+    saturn  = ssNorm(saturn  + VAKYA_BIJA.Saturn);
+    rahu    = ssNorm(rahu    + VAKYA_BIJA.Rahu);
+  }
+  let ketu = ssNorm(rahu + 180);
+
+  // Ascendant — calculated from sidereal time, SS obliquity 24°
+  const epsilon = 24.0;
+  const GMST = ssNorm(280.46061837 + 360.98564736629 * (jd - 2451545.0));
+  const LST  = ssNorm(GMST + lon);
+  const numer = -ssCos(LST);
+  const denom = ssSin(epsilon) * Math.tan(ssDeg2rad(lat)) + ssCos(epsilon) * ssSin(LST);
+  let ascTropical = ssNorm(Math.atan2(numer, denom) * 180 / Math.PI);
+  if (ssCos(LST) < 0) ascTropical = ssNorm(ascTropical + 180);
+  // Convert tropical Lagna to the SS/Vakya sidereal frame.
+  // SS frame ≈ Lahiri for the modern era; Vakya targets observed (Lahiri ~23.79° in 1994).
+  // Compute a date-dependent ayanamsa to map tropical Lagna → sidereal:
+  const yearsFrom1900 = (jd - 2415020.5) / 365.25;
+  const lahiriAyan = 22.4661 + (50.2388475 * yearsFrom1900) / 3600;
+  // Lagna is a geometric (sky) quantity, not derived from SS revolution tables,
+  // so it does NOT carry the SS Moon/planet drift. Both methods compute it in the
+  // observed sidereal frame (Lahiri-aligned). Only the planetary longitudes differ
+  // between raw SS and Vakya.
+  let ascendant = ssNorm(ascTropical - lahiriAyan);
+
+  return {
+    Sun: sun, Moon: moon, Mars: mars, Mercury: mercury,
+    Jupiter: jupiter, Venus: venus, Saturn: saturn,
+    Rahu: rahu, Ketu: ketu, Ascendant: ascendant,
+  };
+}
+
+
 /**
  * JOTHIDAM — Vedic Astrology Calculation Engine
  * Implements: Rasi/Navamsa charts, planetary positions,
@@ -664,8 +986,8 @@ const RASHI_TAMIL = ['மேஷம்','ரிஷபம்','மிதுனம�
 
 const PLANETS = ['Sun','Moon','Mars','Mercury','Jupiter','Venus','Saturn','Rahu','Ketu','Ascendant'];
 const PLANET_SYMBOLS = { Sun:'☉', Moon:'☽', Mars:'♂', Mercury:'☿', Jupiter:'♃', Venus:'♀', Saturn:'♄', Rahu:'☊', Ketu:'☋', Ascendant:'Asc' };
-const PLANET_COLORS = { Sun:'#f5a623', Moon:'#c0c8e8', Mars:'#e74c3c', Mercury:'#2ecc71', Jupiter:'#f5c842', Venus:'#ff89ac', Saturn:'#9b8ca0', Rahu:'#6c7a89', Ketu:'#95a5a6', Ascendant:'#4ecdc4' };
-const DASA_COLORS = { Sun:'#f5a623', Moon:'#c0c8e8', Mars:'#e74c3c', Mercury:'#2ecc71', Jupiter:'#f5c842', Venus:'#ff89ac', Saturn:'#9b8ca0', Rahu:'#6c7a89', Ketu:'#95a5a6' };
+const PLANET_COLORS = { Sun:'#d98c00', Moon:'#5b6bbf', Mars:'#c0392b', Mercury:'#1e8449', Jupiter:'#b8860b', Venus:'#c0436a', Saturn:'#6b5b73', Rahu:'#4a5560', Ketu:'#5d6d6b', Ascendant:'#0f8a82' };
+const DASA_COLORS = { Sun:'#d98c00', Moon:'#5b6bbf', Mars:'#c0392b', Mercury:'#1e8449', Jupiter:'#b8860b', Venus:'#c0436a', Saturn:'#6b5b73', Rahu:'#4a5560', Ketu:'#5d6d6b' };
 
 const NAKSHATRAS = [
   { name:'Ashwini',     lord:'Ketu',    lord_num:0  },
@@ -1601,7 +1923,6 @@ const DIVISIONAL_CHARTS = [
 ];
 
 // Export
-if (typeof module !== 'undefined') module.exports = {
   RASHIS, RASHI_SHORT, RASHI_TAMIL, PLANETS, PLANET_SYMBOLS, PLANET_COLORS,
   NAKSHATRAS, DASA_YEARS, DASA_ORDER, PLANET_LORDS, EXALTATION, DEBILITATION,
   SOUTH_INDIAN_LAYOUT, AYANAMSA, toJulianDay, julianToDate, calcPlanetaryPositions,
@@ -1639,9 +1960,9 @@ if (typeof module !== 'undefined') module.exports = {
 // ── Module Navigation ──────────────────────────────────
 function showModule(name, btn) {
   document.querySelectorAll('.module').forEach(m => m.classList.add('hidden'));
-  document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
   document.getElementById(`module-${name}`).classList.remove('hidden');
-  btn.classList.add('active');
+  if(btn) btn.classList.add('active');
 }
 
 // ── Loading overlay ────────────────────────────────────
@@ -1674,12 +1995,20 @@ function generateJathagam() {
       const [yr, mo, dy] = dobStr.split('-').map(Number);
       const [hr, mn]     = tobStr.split(':').map(Number);
       const hour = hr + mn / 60;
-      const ayanamDeg = AYANAMSA[ayanamsaKey] || AYANAMSA.lahiri;
 
       const jd = toJulianDay(yr, mo, dy, hour, 5.5); // IST default
-      const pos = calcPlanetaryPositions(jd, ayanamDeg);
+      const coords = lookupCoords(pob);
 
-      // Stagger anim
+      let pos;
+      if (ayanamsaKey === 'surya') {
+        pos = calcSuryaSiddhanta(jd, coords.lat, coords.lon, false);
+      } else if (ayanamsaKey === 'vakya') {
+        pos = calcSuryaSiddhanta(jd, coords.lat, coords.lon, true);
+      } else {
+        const ayanamDeg = AYANAMSA[ayanamsaKey] || AYANAMSA.lahiri;
+        pos = calcPlanetaryPositions(jd, ayanamDeg);
+      }
+
       hideLoading();
       renderJathagam({ name, dobStr, tobStr, pob, ayanamsaKey, yr, mo, dy, hour }, pos, jd);
     } catch (e) {
@@ -1688,6 +2017,34 @@ function generateJathagam() {
       alert('Calculation error. Please check inputs.');
     }
   }, 1200);
+}
+
+// ── City coordinate lookup (common Indian + world cities) ──
+const CITY_COORDS = {
+  'chennai': {lat:13.0827, lon:80.2707}, 'madras': {lat:13.0827, lon:80.2707},
+  'madurai': {lat:9.9252, lon:78.1198},  'coimbatore': {lat:11.0168, lon:76.9558},
+  'trichy': {lat:10.7905, lon:78.7047},  'tiruchirappalli': {lat:10.7905, lon:78.7047},
+  'salem': {lat:11.6643, lon:78.1460},   'tirunelveli': {lat:8.7139, lon:77.7567},
+  'kumbakonam': {lat:10.9602, lon:79.3845}, 'thanjavur': {lat:10.7870, lon:79.1378},
+  'bangalore': {lat:12.9716, lon:77.5946}, 'bengaluru': {lat:12.9716, lon:77.5946},
+  'mumbai': {lat:19.0760, lon:72.8777},  'delhi': {lat:28.6139, lon:77.2090},
+  'new delhi': {lat:28.6139, lon:77.2090}, 'kolkata': {lat:22.5726, lon:88.3639},
+  'hyderabad': {lat:17.3850, lon:78.4867}, 'pune': {lat:18.5204, lon:73.8567},
+  'ahmedabad': {lat:23.0225, lon:72.5714}, 'kochi': {lat:9.9312, lon:76.2673},
+  'thiruvananthapuram': {lat:8.5241, lon:76.9366}, 'trivandrum': {lat:8.5241, lon:76.9366},
+  'vijayawada': {lat:16.5062, lon:80.6480}, 'visakhapatnam': {lat:17.6868, lon:83.2185},
+  'pondicherry': {lat:11.9416, lon:79.8083}, 'puducherry': {lat:11.9416, lon:79.8083},
+  'vellore': {lat:12.9165, lon:79.1325}, 'erode': {lat:11.3410, lon:77.7172},
+  'tirupati': {lat:13.6288, lon:79.4192}, 'mysore': {lat:12.2958, lon:76.6394},
+  'colombo': {lat:6.9271, lon:79.8612}, 'jaffna': {lat:9.6615, lon:80.0255},
+  'singapore': {lat:1.3521, lon:103.8198}, 'london': {lat:51.5074, lon:-0.1278},
+  'new york': {lat:40.7128, lon:-74.0060}, 'dubai': {lat:25.2048, lon:55.2708},
+};
+
+function lookupCoords(place) {
+  if (!place) return {lat:13.0827, lon:80.2707}; // default Chennai
+  const key = place.toLowerCase().split(',')[0].trim();
+  return CITY_COORDS[key] || {lat:13.0827, lon:80.2707};
 }
 
 function renderJathagam(info, pos, jd) {
@@ -1778,6 +2135,17 @@ function renderPlanetTable(positions) {
 }
 
 // ── Birth Details ──────────────────────────────────────
+function methodName(key) {
+  const names = {
+    vakya: 'Vakya Panchangam (Tamil Traditional)',
+    surya: 'Surya Siddhanta (Ancient ~400 CE)',
+    lahiri: 'Lahiri (Chitrapaksha)',
+    krishnamurti: 'Krishnamurti (KP)',
+    raman: 'B.V. Raman',
+  };
+  return names[key] || key;
+}
+
 function renderBirthDetails(info, pos) {
   const moonNak  = getNakshatra(pos.Moon);
   const ascRasi  = getRasi(pos.Ascendant);
@@ -1794,7 +2162,7 @@ function renderBirthDetails(info, pos) {
     { label: 'Janma Nakshatra',   value: `${moonNak.name} (Pada ${moonNak.pada})`, highlight: true },
     { label: 'Nakshatra Lord',    value: moonNak.lord },
     { label: 'Sun Sign',          value: RASHIS[sunRasi] },
-    { label: 'Ayanamsa',          value: info.ayanamsaKey.charAt(0).toUpperCase() + info.ayanamsaKey.slice(1) },
+    { label: 'Calculation Method', value: methodName(info.ayanamsaKey) },
   ];
 
   const el = document.getElementById('birth-details-panel');
@@ -1899,18 +2267,21 @@ function generateCompatibility() {
 
   setTimeout(() => {
     try {
-      const ayanamDeg = AYANAMSA.lahiri;
+      const boyPob  = (document.getElementById('boy-pob')  || {}).value || 'Chennai';
+      const girlPob = (document.getElementById('girl-pob') || {}).value || 'Chennai';
 
-      function parsePositions(dobStr, tobStr) {
+      function parsePositions(dobStr, tobStr, pob) {
         const [yr, mo, dy] = dobStr.split('-').map(Number);
         const [hr, mn]     = tobStr.split(':').map(Number);
         const hour = hr + mn / 60;
         const jd   = toJulianDay(yr, mo, dy, hour, 5.5);
-        return calcPlanetaryPositions(jd, ayanamDeg);
+        const c    = lookupCoords(pob);
+        // Vakya Panchangam — the ancient Tamil traditional method
+        return calcSuryaSiddhanta(jd, c.lat, c.lon, true);
       }
 
-      const boyPos  = parsePositions(boyDob, boyTob);
-      const girlPos = parsePositions(girlDob, girlTob);
+      const boyPos  = parsePositions(boyDob, boyTob, boyPob);
+      const girlPos = parsePositions(girlDob, girlTob, girlPob);
 
       const result = calcCompatibility(boyPos, girlPos);
 
@@ -1955,7 +2326,7 @@ function renderScoreOverview(boyName, girlName, result) {
   document.getElementById('score-overview').innerHTML = `
     <div class="score-ring">
       <svg width="160" height="160" viewBox="0 0 160 160">
-        <circle cx="80" cy="80" r="60" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="12"/>
+        <circle cx="80" cy="80" r="60" fill="none" stroke="rgba(46,37,25,0.1)" stroke-width="12"/>
         <circle cx="80" cy="80" r="60" fill="none" stroke="${color}" stroke-width="12"
           stroke-dasharray="${circum}" stroke-dashoffset="${offset}"
           stroke-linecap="round" style="transition:stroke-dashoffset 1.5s ease"/>
@@ -2010,7 +2381,7 @@ function renderVenusAnalysis(venus) {
       <strong>Boy's Venus:</strong> ${venus.boyVenus} &nbsp;|&nbsp;
       <strong>Girl's Venus:</strong> ${venus.girlVenus}
     </div>
-    ${venus.factors.map(f => `<div style="padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:0.82rem;color:var(--text-secondary)">• ${f}</div>`).join('')}
+    ${venus.factors.map(f => `<div style="padding:6px 0;border-bottom:1px solid rgba(184,134,11,0.15);font-size:0.82rem;color:var(--text-secondary)">• ${f}</div>`).join('')}
     <div style="margin-top:14px;font-size:0.88rem;color:var(--text-primary);font-style:italic">${venus.summary}</div>
   `;
 }
@@ -2028,7 +2399,7 @@ function renderMoonAnalysis(moon) {
       <strong>Boy's Moon:</strong> ${moon.boyMoon} &nbsp;|&nbsp;
       <strong>Girl's Moon:</strong> ${moon.girlMoon}
     </div>
-    ${moon.factors.map(f => `<div style="padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:0.82rem;color:var(--text-secondary)">• ${f}</div>`).join('')}
+    ${moon.factors.map(f => `<div style="padding:6px 0;border-bottom:1px solid rgba(184,134,11,0.15);font-size:0.82rem;color:var(--text-secondary)">• ${f}</div>`).join('')}
     <div style="margin-top:14px;font-size:0.88rem;color:var(--text-primary);font-style:italic">${moon.summary}</div>
   `;
 }
@@ -2046,7 +2417,7 @@ function renderJupiterAnalysis(jup) {
       <strong>Boy's Jupiter:</strong> ${jup.boyJupiter} &nbsp;|&nbsp;
       <strong>Girl's Jupiter:</strong> ${jup.girlJupiter}
     </div>
-    ${jup.factors.map(f => `<div style="padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:0.82rem;color:var(--text-secondary)">• ${f}</div>`).join('')}
+    ${jup.factors.map(f => `<div style="padding:6px 0;border-bottom:1px solid rgba(184,134,11,0.15);font-size:0.82rem;color:var(--text-secondary)">• ${f}</div>`).join('')}
     <div style="margin-top:14px;font-size:0.88rem;color:var(--text-primary);font-style:italic">${jup.summary}</div>
   `;
 }
@@ -2143,6 +2514,5 @@ window.addEventListener('DOMContentLoaded', () => {
   document.getElementById('girl-dob').value  = fmt(thirtyTwoYearsAgo);
   document.getElementById('girl-tob').value  = '14:00';
 });
-</script>
-</body>
-</html>
+
+</script></body></html>

@@ -399,6 +399,101 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 .div-chart-name { font-weight: 600; color: var(--gold-mid); font-size: 0.85rem; margin-bottom: 4px; }
 .div-chart-meaning { font-size: 0.75rem; color: var(--text-secondary); }
 
+/* ── Life Area Tabs ───────────────────────── */
+.life-tabs {
+  display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 22px;
+}
+.life-tab {
+  background: rgba(184,134,11,0.06);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  padding: 8px 16px; border-radius: 50px;
+  cursor: pointer; font-size: 0.85rem; font-family: inherit;
+  transition: all 0.2s;
+}
+.life-tab:hover { background: var(--gold-glow); color: var(--gold-mid); }
+.life-tab.active {
+  background: linear-gradient(135deg, var(--gold-mid), var(--gold-bright));
+  color: #fff; border-color: transparent;
+  box-shadow: 0 3px 12px rgba(184,134,11,0.25);
+}
+.life-area-content { animation: fadeIn 0.4s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.life-area-block { margin-bottom: 18px; }
+.life-area-block h4 {
+  font-family: 'Playfair Display', serif;
+  color: var(--gold-bright); font-size: 1.05rem; margin-bottom: 8px;
+}
+.life-area-block p { color: var(--text-secondary); line-height: 1.75; font-size: 0.9rem; }
+.life-rating {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(184,134,11,0.08); border-radius: 50px;
+  padding: 4px 14px; font-size: 0.8rem; color: var(--gold-mid);
+  font-weight: 600; margin-bottom: 12px;
+}
+.life-stars { color: var(--gold-bright); letter-spacing: 1px; }
+
+/* ── Forecast ─────────────────────────────── */
+.forecast-content { font-size: 0.88rem; }
+.forecast-row {
+  display: flex; gap: 12px; padding: 12px 0;
+  border-bottom: 1px solid rgba(184,134,11,0.12);
+}
+.forecast-row:last-child { border-bottom: none; }
+.forecast-period {
+  flex-shrink: 0; width: 90px; font-weight: 600;
+  color: var(--gold-mid); font-size: 0.82rem;
+}
+.forecast-text { color: var(--text-secondary); line-height: 1.6; flex: 1; }
+.forecast-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; }
+.dot-good { background: #1e8449; }
+.dot-mixed { background: var(--gold-mid); }
+.dot-caution { background: #c0392b; }
+
+/* ── Advice Lists ─────────────────────────── */
+.advice-list { font-size: 0.88rem; }
+.advice-item {
+  display: flex; gap: 10px; padding: 10px 0;
+  border-bottom: 1px solid rgba(184,134,11,0.1);
+  color: var(--text-secondary); line-height: 1.6;
+}
+.advice-item:last-child { border-bottom: none; }
+.advice-icon { flex-shrink: 0; }
+
+.dos-donts { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+@media(max-width:600px){ .dos-donts { grid-template-columns: 1fr; } }
+.dos-col h4, .donts-col h4 {
+  font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em;
+  margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid var(--border);
+}
+.dos-col h4 { color: #1e8449; }
+.donts-col h4 { color: #c0392b; }
+.dos-donts ul { list-style: none; }
+.dos-donts li {
+  font-size: 0.83rem; color: var(--text-secondary);
+  padding: 6px 0 6px 22px; position: relative; line-height: 1.5;
+}
+.dos-col li::before { content: '✓'; position: absolute; left: 0; color: #1e8449; font-weight: 700; }
+.donts-col li::before { content: '✕'; position: absolute; left: 0; color: #c0392b; font-weight: 700; }
+
+/* ── Lucky Grid ───────────────────────────── */
+.lucky-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(180px,1fr)); gap: 14px;
+}
+.lucky-item {
+  background: rgba(184,134,11,0.05);
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  padding: 16px; text-align: center;
+}
+.lucky-label {
+  font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em;
+  color: var(--text-secondary); margin-bottom: 6px;
+}
+.lucky-value { font-size: 1rem; color: var(--gold-bright); font-weight: 600; }
+.lucky-item.remedy-item { text-align: left; }
+.lucky-item.remedy-item .lucky-value { font-size: 0.85rem; color: var(--text-primary); font-weight: 400; line-height: 1.5; }
+
+
 /* ── Compatibility Results ────────────────── */
 .score-overview-card { text-align: center; }
 .score-overview {
@@ -678,6 +773,52 @@ input[type="time"]::-webkit-calendar-picker-indicator {
       <div class="result-card full-width reading-card">
         <h3 class="card-title">🔮 Horoscope Reading</h3>
         <div id="horoscope-reading" class="reading-content"></div>
+      </div>
+
+      <!-- Life Area Predictions (tabbed) -->
+      <div class="result-card full-width">
+        <h3 class="card-title">🌟 Life Predictions</h3>
+        <div class="life-tabs" id="life-tabs">
+          <button class="life-tab active" data-area="life"     onclick="showLifeArea('life',this)">🧬 Life</button>
+          <button class="life-tab" data-area="love"     onclick="showLifeArea('love',this)">❤️ Love</button>
+          <button class="life-tab" data-area="marriage" onclick="showLifeArea('marriage',this)">💍 Marriage</button>
+          <button class="life-tab" data-area="career"   onclick="showLifeArea('career',this)">💼 Career</button>
+          <button class="life-tab" data-area="wealth"   onclick="showLifeArea('wealth',this)">💰 Wealth</button>
+          <button class="life-tab" data-area="children" onclick="showLifeArea('children',this)">👶 Children</button>
+          <button class="life-tab" data-area="health"   onclick="showLifeArea('health',this)">🩺 Health</button>
+          <button class="life-tab" data-area="education" onclick="showLifeArea('education',this)">📚 Education</button>
+        </div>
+        <div id="life-area-content" class="life-area-content"></div>
+      </div>
+
+      <!-- Monthly Forecast -->
+      <div class="result-card">
+        <h3 class="card-title">📅 Monthly Forecast</h3>
+        <div id="monthly-forecast" class="forecast-content"></div>
+      </div>
+
+      <!-- Yearly Forecast -->
+      <div class="result-card">
+        <h3 class="card-title">🗓️ Yearly Forecast</h3>
+        <div id="yearly-forecast" class="forecast-content"></div>
+      </div>
+
+      <!-- Cautions -->
+      <div class="result-card">
+        <h3 class="card-title">⚠️ Cautions & Challenges</h3>
+        <div id="cautions-list" class="advice-list"></div>
+      </div>
+
+      <!-- Do's and Don'ts -->
+      <div class="result-card">
+        <h3 class="card-title">✅ Do's & Don'ts</h3>
+        <div id="dos-donts" class="dos-donts"></div>
+      </div>
+
+      <!-- Lucky Factors & Remedies -->
+      <div class="result-card full-width">
+        <h3 class="card-title">🍀 Lucky Factors & Remedies</h3>
+        <div id="lucky-remedies" class="lucky-grid"></div>
       </div>
 
       <!-- Divisional Charts Summary -->
@@ -2041,6 +2182,10 @@ function renderJathagam(info, pos, jd) {
   resultsEl.classList.remove('hidden');
   resultsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
+  // store for life-area tab switching
+  window._chartPos = pos;
+  window._chartInfo = info;
+
   renderRasiChart('rasi-chart', pos, false);
   renderRasiChart('navamsa-chart', pos, true);
   renderPlanetTable(pos);
@@ -2048,6 +2193,12 @@ function renderJathagam(info, pos, jd) {
   renderDasaTable(pos.Moon, info.dobStr);
   renderYogas(pos);
   renderHoroscope(pos, info.name);
+  showLifeArea('life');           // default tab
+  renderMonthlyForecast(pos);
+  renderYearlyForecast(pos, info);
+  renderCautions(pos);
+  renderDosDonts(pos);
+  renderLuckyRemedies(pos);
   renderDivisionalCharts();
 }
 
@@ -2135,10 +2286,10 @@ function formatDOB(dobStr) {
 
 function methodName(key) {
   const names = {
-    vakya: 'Vakya Panchangam (Tamil Traditional)',
-    surya: 'Surya Siddhanta (Ancient ~400 CE)',
+    vakya: 'Traditional (Vakya Panchangam)',
+    surya: 'Ancient (Surya Siddhanta)',
   };
-  return names[key] || 'Vakya Panchangam (Tamil Traditional)';
+  return names[key] || 'Traditional';
 }
 
 function renderBirthDetails(info, pos) {
@@ -2242,6 +2393,307 @@ function renderDivisionalCharts() {
     </div>
   `).join('');
 }
+
+// ═══════════════════════════════════════════════════════
+// LIFE PREDICTIONS — driven by planetary positions
+// ═══════════════════════════════════════════════════════
+
+function houseOf(pos, planet) {
+  const asc = getRasi(pos.Ascendant);
+  return ((getRasi(pos[planet]) - asc + 12) % 12) + 1;
+}
+function planetsInHouse(pos, houseNum) {
+  const asc = getRasi(pos.Ascendant);
+  const targetRasi = (asc + houseNum - 1) % 12;
+  return ['Sun','Moon','Mars','Mercury','Jupiter','Venus','Saturn','Rahu','Ketu']
+    .filter(p => getRasi(pos[p]) === targetRasi);
+}
+function strengthStars(planet, pos) {
+  const r = getRasi(pos[planet]);
+  const st = getPlanetStatus(planet, r);
+  if (st.label === 'Exalted') return 5;
+  if (st.label === 'Own Sign') return 4;
+  if (st.label === 'Debilitated') return 2;
+  return 3;
+}
+function starBar(n) {
+  return '★'.repeat(n) + '☆'.repeat(5 - n);
+}
+
+function showLifeArea(area, btn) {
+  const pos = window._chartPos;
+  if (!pos) return;
+  document.querySelectorAll('.life-tab').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  else {
+    const def = document.querySelector(`.life-tab[data-area="${area}"]`);
+    if (def) def.classList.add('active');
+  }
+  document.getElementById('life-area-content').innerHTML = lifeAreaText(area, pos);
+}
+
+function lifeAreaText(area, pos) {
+  const ascRasi = getRasi(pos.Ascendant);
+  const fn = {
+    life:      lifeArea_Life,
+    love:      lifeArea_Love,
+    marriage:  lifeArea_Marriage,
+    career:    lifeArea_Career,
+    wealth:    lifeArea_Wealth,
+    children:  lifeArea_Children,
+    health:    lifeArea_Health,
+    education: lifeArea_Education,
+  }[area];
+  return fn ? fn(pos) : '';
+}
+
+function block(title, rating, text) {
+  return `<div class="life-area-block">
+    <h4>${title}</h4>
+    ${rating ? `<div class="life-rating"><span class="life-stars">${starBar(rating)}</span> ${ratingWord(rating)}</div>` : ''}
+    <p>${text}</p>
+  </div>`;
+}
+function ratingWord(n){ return ['','Challenging','Below Average','Moderate','Favourable','Excellent'][n]; }
+
+function lifeArea_Life(pos) {
+  const ascRasi = getRasi(pos.Ascendant);
+  const lagnaLord = PLANET_LORDS[ascRasi].lord;
+  const lordHouse = houseOf(pos, lagnaLord);
+  const moonNak = getNakshatra(pos.Moon);
+  const r = strengthStars(lagnaLord, pos);
+  const traits = [
+    'pioneering, courageous and self-driven','patient, grounded and pleasure-loving',
+    'communicative, curious and adaptable','nurturing, sensitive and home-centred',
+    'confident, dignified and leadership-oriented','analytical, meticulous and service-minded',
+    'diplomatic, balanced and partnership-focused','intense, determined and transformative',
+    'optimistic, philosophical and freedom-loving','disciplined, ambitious and persevering',
+    'humanitarian, original and forward-thinking','compassionate, imaginative and spiritual'
+  ];
+  return block('Overall Life Path', r,
+    `With ${RASHIS[ascRasi]} ascendant, your core nature is ${traits[ascRasi]}. The Lagna lord ${lagnaLord} sits in house ${lordHouse}, which directs your central life energy toward ${houseTheme(lordHouse)}. Born under ${moonNak.name} nakshatra (Pada ${moonNak.pada}), you carry the qualities of ${getNakDesc(moonNak.name)}. Life unfolds in distinct chapters governed by your dasa sequence — periods of consolidation alternate with periods of expansion.`)
+  + block('Personality & Temperament', 0,
+    `Your Moon in ${RASHIS[getRasi(pos.Moon)]} shapes your emotional core, while ${RASHIS[getRasi(pos.Sun)]} Sun defines your sense of identity and willpower. The interplay of these gives you a personality that others find ${r >= 4 ? 'magnetic and reliable' : 'thoughtful and quietly resilient'}.`);
+}
+
+function lifeArea_Love(pos) {
+  const venHouse = houseOf(pos, 'Venus');
+  const venRasi = getRasi(pos.Venus);
+  const r = strengthStars('Venus', pos);
+  const fifthPlanets = planetsInHouse(pos, 5);
+  const benefic5 = fifthPlanets.some(p => ['Venus','Jupiter','Moon','Mercury'].includes(p));
+  return block('Romance & Attraction', r,
+    `Venus, the planet of love, occupies ${RASHIS[venRasi]} in house ${venHouse}. This colours your romantic style as ${venusStyle(venRasi)}. ${r >= 4 ? 'You attract affection effortlessly and form deep, lasting bonds.' : r <= 2 ? 'Love may test you early, but maturity brings the right partner and genuine devotion.' : 'Relationships grow steadily through mutual understanding rather than instant sparks.'}`)
+  + block('Romantic Prospects', 0,
+    `${benefic5 ? 'Benefic planets in your 5th house favour romance, courtship and joyful love affairs.' : 'Your 5th house of romance asks for patience; love deepens once trust is established.'} The best romantic phases arrive during Venus and Moon dasa-bhukti periods. Express feelings openly — your chart rewards sincerity over games.`);
+}
+
+function lifeArea_Marriage(pos) {
+  const seventhRasi = (getRasi(pos.Ascendant) + 6) % 12;
+  const seventhLord = PLANET_LORDS[seventhRasi].lord;
+  const lordHouse = houseOf(pos, seventhLord);
+  const sevenPlanets = planetsInHouse(pos, 7);
+  const jupAspects7 = [5,7,9].some(h => (getRasi(pos.Jupiter) + h - 1) % 12 === seventhRasi);
+  const r = sevenPlanets.includes('Jupiter') || sevenPlanets.includes('Venus') || jupAspects7 ? 4
+          : sevenPlanets.includes('Saturn') || sevenPlanets.includes('Mars') ? 3 : 3;
+  return block('Marriage & Partnership', r,
+    `Your 7th house of marriage falls in ${RASHIS[seventhRasi]}, ruled by ${seventhLord} (placed in house ${lordHouse}). ${sevenPlanets.length ? `${sevenPlanets.join(', ')} occupy the 7th house, ${sevenPlanets.includes('Jupiter')||sevenPlanets.includes('Venus') ? 'a blessing for marital harmony' : sevenPlanets.includes('Saturn') ? 'suggesting a mature or slightly delayed union that proves durable' : 'giving the partnership distinctive character'}.` : 'The 7th house works mainly through its lord.'} ${jupAspects7 ? "Jupiter's aspect on the 7th house is highly auspicious — it protects the marriage and brings a wise, supportive spouse." : ''}`)
+  + block('Marriage Timing & Spouse', 0,
+    `Favourable marriage windows open during the dasa/bhukti of ${seventhLord}, Venus, and Jupiter. Your spouse is likely to be ${spouseNature(seventhRasi)}. A harmonious married life is supported when both partners share spiritual or value-based common ground.`);
+}
+
+function lifeArea_Career(pos) {
+  const tenthRasi = (getRasi(pos.Ascendant) + 9) % 12;
+  const tenthLord = PLANET_LORDS[tenthRasi].lord;
+  const lordHouse = houseOf(pos, tenthLord);
+  const satHouse = houseOf(pos, 'Saturn');
+  const tenPlanets = planetsInHouse(pos, 10);
+  const r = strengthStars(tenthLord, pos);
+  return block('Career & Profession', r,
+    `Your 10th house of career lies in ${RASHIS[tenthRasi]}, ruled by ${tenthLord} (in house ${lordHouse}). This points toward careers connected with ${careerField(tenthRasi)}. ${tenPlanets.length ? `${tenPlanets.join(', ')} in the 10th house add ${tenPlanets.includes('Sun')||tenPlanets.includes('Jupiter') ? 'authority and recognition' : 'dynamism'} to your professional life.` : ''} Saturn in house ${satHouse} indicates ${satHouse === 10 ? 'a steadily rising, authoritative career built on persistence' : 'rewards that arrive through sustained, disciplined effort'}.`)
+  + block('Professional Growth', 0,
+    `Major career breakthroughs align with the dasa periods of ${tenthLord}, Sun and Saturn. ${r >= 4 ? 'You are suited to leadership and independent roles.' : 'Collaborative environments and skill-building bring the best long-term results.'} Avoid frequent job changes during inauspicious sub-periods; stability compounds your success.`);
+}
+
+function lifeArea_Wealth(pos) {
+  const secondLord = PLANET_LORDS[(getRasi(pos.Ascendant) + 1) % 12].lord;
+  const eleventhLord = PLANET_LORDS[(getRasi(pos.Ascendant) + 10) % 12].lord;
+  const jupHouse = houseOf(pos, 'Jupiter');
+  const r = strengthStars('Jupiter', pos);
+  return block('Wealth & Finance', r,
+    `Your 2nd house (savings) lord is ${secondLord} and 11th house (gains) lord is ${eleventhLord}. Jupiter, the natural significator of wealth, sits in house ${jupHouse}, ${[2,5,9,11].includes(jupHouse) ? 'a strong position promising financial growth and prosperity' : 'channelling abundance through your efforts and relationships'}. ${r >= 4 ? 'Wealth accumulates well, especially in the second half of life.' : 'Disciplined saving and avoiding speculation secure your finances.'}`)
+  + block('Income & Prosperity', 0,
+    `Peak earning phases occur during Jupiter, Venus and the 11th-lord dasa periods. Multiple income streams suit your chart. Property and long-term investments tend to outperform quick-gain ventures. Generosity and charity, per Vedic principle, further multiply your prosperity.`);
+}
+
+function lifeArea_Children(pos) {
+  const fifthRasi = (getRasi(pos.Ascendant) + 4) % 12;
+  const fifthLord = PLANET_LORDS[fifthRasi].lord;
+  const lordHouse = houseOf(pos, fifthLord);
+  const jupHouse = houseOf(pos, 'Jupiter');
+  const fifthPlanets = planetsInHouse(pos, 5);
+  const r = strengthStars(fifthLord, pos);
+  const jupGood = [1,4,5,7,9,10,11].includes(jupHouse);
+  return block('Children & Progeny', r,
+    `The 5th house of children falls in ${RASHIS[fifthRasi]}, ruled by ${fifthLord} (in house ${lordHouse}). ${fifthPlanets.length ? `${fifthPlanets.join(', ')} influence this house. ` : ''}Jupiter — the karaka for children — is in house ${jupHouse}, which is ${jupGood ? 'favourable, indicating healthy and accomplished children who bring joy' : 'asking for patience and blessings; conception may come a little later but is supported'}.`)
+  + block('Parenthood', 0,
+    `Auspicious periods for childbirth align with Jupiter and 5th-lord dasa-bhukti. Your children are likely to be ${childNature(fifthRasi)}. Worship of family deities and Thursday observances are traditionally recommended to strengthen the 5th house.`);
+}
+
+function lifeArea_Health(pos) {
+  const sixthRasi = (getRasi(pos.Ascendant) + 5) % 12;
+  const ascLord = PLANET_LORDS[getRasi(pos.Ascendant)].lord;
+  const ascLordStr = strengthStars(ascLord, pos);
+  const sixPlanets = planetsInHouse(pos, 6);
+  const malefic6 = sixPlanets.some(p => ['Mars','Saturn','Sun','Rahu','Ketu'].includes(p));
+  return block('Health & Vitality', ascLordStr,
+    `Your Lagna lord ${ascLord} governs overall vitality and is ${ascLordStr >= 4 ? 'well-placed, granting strong constitution and recovery power' : 'moderately placed, so a balanced lifestyle protects your energy'}. The 6th house of health in ${RASHIS[sixthRasi]} ${malefic6 ? 'carries malefic influence — pay attention to '+bodyZone(sixthRasi)+' and adopt preventive care' : 'is relatively clear, supporting good resistance to illness'}.`)
+  + block('Wellbeing Guidance', 0,
+    `Maintain regularity in sleep and meals during Saturn and Rahu/Ketu sub-periods, when vitality dips. Yoga, pranayama and a sattvic diet suit your constitution. Address minor issues early rather than letting them accumulate. Mental wellbeing improves greatly through meditation and time in nature.`);
+}
+
+function lifeArea_Education(pos) {
+  const fourthLord = PLANET_LORDS[(getRasi(pos.Ascendant) + 3) % 12].lord;
+  const fifthLord = PLANET_LORDS[(getRasi(pos.Ascendant) + 4) % 12].lord;
+  const mercHouse = houseOf(pos, 'Mercury');
+  const jupHouse = houseOf(pos, 'Jupiter');
+  const r = Math.round((strengthStars('Mercury', pos) + strengthStars('Jupiter', pos)) / 2);
+  return block('Education & Learning', r,
+    `Mercury (intellect) is in house ${mercHouse} and Jupiter (wisdom) in house ${jupHouse}. Together they shape a mind suited to ${learningStyle(getRasi(pos.Mercury))}. ${r >= 4 ? 'You learn quickly and can excel in higher studies and competitive exams.' : 'Consistent study habits and good mentors unlock your full academic potential.'} The 4th lord ${fourthLord} and 5th lord ${fifthLord} support formal education and intelligence respectively.`)
+  + block('Knowledge & Skills', 0,
+    `Educational success peaks during Mercury and Jupiter dasa periods. Fields involving ${learningStyle(getRasi(pos.Mercury))} are especially favoured. Worship of Goddess Saraswati and study during the Brahma muhurta (pre-dawn) are traditionally said to sharpen the intellect.`);
+}
+
+// ── Helper descriptive maps ──
+function houseTheme(h){return ['','self & identity','wealth & family','courage & communication','home & comfort','creativity & children','service & health','partnerships','transformation & longevity','fortune & dharma','career & status','gains & networks','spirituality & liberation'][h];}
+function venusStyle(r){return ['ardent and impulsive','sensual and loyal','playful and communicative','tender and protective','warm and generous','refined and selective','harmonious and romantic','passionate and intense','adventurous and free','committed and practical','unconventional and friendly','dreamy and devoted'][r];}
+function spouseNature(r){return ['energetic and independent','steady and affectionate','intelligent and talkative','caring and family-minded','dignified and proud','practical and helpful','charming and fair-minded','passionate and loyal','wise and optimistic','responsible and mature','progressive and friendly','gentle and spiritual'][r];}
+function careerField(r){return ['defence, sports, engineering or leadership','finance, arts, luxury goods or agriculture','media, writing, IT or commerce','hospitality, real estate, nursing or food','government, administration or entertainment','healthcare, analysis, accounting or editing','law, design, diplomacy or fashion','research, surgery, investigation or insurance','teaching, law, travel or publishing','administration, mining, engineering or management','technology, social work or innovation','healing, spirituality, film or charity'][r];}
+function childNature(r){return ['bold and energetic','steady and artistic','clever and lively','caring and emotional','confident and bright','intelligent and disciplined','charming and balanced','determined and deep','wise and cheerful','responsible and serious','original and friendly','gentle and creative'][r];}
+function bodyZone(r){return ['head and eyes','throat and neck','arms, shoulders and lungs','chest and stomach','heart and spine','digestion and intestines','kidneys and lower back','reproductive system','hips and thighs','knees and joints','calves and circulation','feet and immunity'][r];}
+function learningStyle(r){return ['quick decisive thinking','practical applied knowledge','communication and languages','intuitive and memory-based learning','creative and authoritative subjects','detailed analytical study','balanced reasoning and design','deep research and investigation','philosophy and broad concepts','structured methodical mastery','innovative and technical fields','imaginative and intuitive arts'][r];}
+
+// ── Monthly Forecast ──
+function renderMonthlyForecast(pos) {
+  const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const now = new Date();
+  const moonRasi = getRasi(pos.Moon);
+  const out = [];
+  for (let i = 0; i < 12; i++) {
+    const mIdx = (now.getMonth() + i) % 12;
+    const transitRasi = (moonRasi + i) % 12;     // simple Moon-sign transit model
+    const rel = (transitRasi - moonRasi + 12) % 12;
+    let tone, text;
+    if ([0,4,8].includes(rel))      { tone='good';    text = `Favourable month — new opportunities in work and relationships. Good time to begin ventures.`; }
+    else if ([1,2,10,11].includes(rel)) { tone='mixed';  text = `Steady progress with some adjustments needed. Focus on completing pending tasks.`; }
+    else if ([3,7].includes(rel))   { tone='caution'; text = `Exercise patience; avoid major decisions and conflicts. Health and rest deserve attention.`; }
+    else                            { tone='mixed';   text = `Mixed results — careful planning turns challenges into gains. Manage finances prudently.`; }
+    out.push({ period: months[mIdx], tone, text });
+  }
+  document.getElementById('monthly-forecast').innerHTML = out.map(m => `
+    <div class="forecast-row">
+      <div class="forecast-period"><span class="forecast-dot dot-${m.tone}"></span>${m.period}</div>
+      <div class="forecast-text">${m.text}</div>
+    </div>`).join('');
+}
+
+// ── Yearly Forecast ──
+function renderYearlyForecast(pos, info) {
+  const now = new Date();
+  const startYear = now.getFullYear();
+  const jupHouse = houseOf(pos, 'Jupiter');
+  const satHouse = houseOf(pos, 'Saturn');
+  const out = [];
+  for (let i = 0; i < 5; i++) {
+    const yr = startYear + i;
+    const jHouse = ((jupHouse + i - 1) % 12) + 1;   // Jupiter ~1 sign/year
+    let tone, text;
+    if ([1,2,5,7,9,11].includes(jHouse)) { tone='good'; text = `Jupiter transits a supportive house — growth in career, finances and family. An expansive, fortunate year.`; }
+    else if ([3,6,10].includes(jHouse))  { tone='mixed'; text = `A year of effort and learning. Hard work pays off; build skills and networks steadily.`; }
+    else                                  { tone='caution'; text = `A reflective, consolidating year. Guard health and expenses; avoid overcommitment and focus inward.`; }
+    out.push({ period: String(yr), tone, text });
+  }
+  document.getElementById('yearly-forecast').innerHTML = out.map(y => `
+    <div class="forecast-row">
+      <div class="forecast-period"><span class="forecast-dot dot-${y.tone}"></span>${y.period}</div>
+      <div class="forecast-text">${y.text}</div>
+    </div>`).join('');
+}
+
+// ── Cautions ──
+function renderCautions(pos) {
+  const cautions = [];
+  const satHouse = houseOf(pos, 'Saturn');
+  const rahuHouse = houseOf(pos, 'Rahu');
+  const marsHouse = houseOf(pos, 'Mars');
+  const moonRasi = getRasi(pos.Moon);
+
+  cautions.push({ icon:'🪐', text:`Saturn in house ${satHouse}: be patient with matters of ${houseTheme(satHouse)} — delays here are lessons, not denials. Avoid shortcuts.` });
+  cautions.push({ icon:'☊', text:`Rahu in house ${rahuHouse}: guard against over-ambition and illusions concerning ${houseTheme(rahuHouse)}. Verify before you trust.` });
+  cautions.push({ icon:'♂', text:`Mars in house ${marsHouse}: manage anger and impulsiveness around ${houseTheme(marsHouse)}; channel energy into disciplined action.` });
+  cautions.push({ icon:'🌙', text:`During the waning Moon and your low monthly transits, postpone major launches and emotionally-charged conversations.` });
+  cautions.push({ icon:'⏳', text:`Sade Sati and Saturn sub-periods call for extra care in health, finances and key relationships — proceed steadily.` });
+
+  document.getElementById('cautions-list').innerHTML = cautions.map(c => `
+    <div class="advice-item"><span class="advice-icon">${c.icon}</span><span>${c.text}</span></div>`).join('');
+}
+
+// ── Do's & Don'ts ──
+function renderDosDonts(pos) {
+  const jupHouse = houseOf(pos, 'Jupiter');
+  const dos = [
+    'Begin important work on auspicious days (your favourable months above)',
+    'Worship your Ishta Devata and observe weekly fasts for your benefic planets',
+    'Cultivate honesty and charity — they strengthen Jupiter in your chart',
+    'Keep a disciplined daily routine, especially during Saturn periods',
+    'Wear your lucky colours and gemstone (see Lucky Factors) on key days',
+    'Maintain strong family and mentor relationships for support',
+  ];
+  const donts = [
+    'Avoid major decisions during inauspicious sub-periods and eclipses',
+    'Do not make impulsive financial commitments during Rahu phases',
+    'Refrain from anger and conflict during adverse Mars transits',
+    'Avoid speculation and gambling — your chart favours steady gains',
+    'Do not neglect health warnings; address symptoms early',
+    'Avoid breaking promises — integrity protects your dharma and fortune',
+  ];
+  document.getElementById('dos-donts').innerHTML = `
+    <div class="dos-col"><h4>Do's</h4><ul>${dos.map(d=>`<li>${d}</li>`).join('')}</ul></div>
+    <div class="donts-col"><h4>Don'ts</h4><ul>${donts.map(d=>`<li>${d}</li>`).join('')}</ul></div>`;
+}
+
+// ── Lucky Factors & Remedies ──
+function renderLuckyRemedies(pos) {
+  const moonNak = getNakshatra(pos.Moon);
+  const ascRasi = getRasi(pos.Ascendant);
+  const lagnaLord = PLANET_LORDS[ascRasi].lord;
+
+  const luckyColor = { Sun:'Orange / Gold', Moon:'White / Silver', Mars:'Red / Coral', Mercury:'Green', Jupiter:'Yellow / Gold', Venus:'White / Pink', Saturn:'Blue / Black' }[lagnaLord] || 'Yellow';
+  const luckyGem   = { Sun:'Ruby', Moon:'Pearl', Mars:'Red Coral', Mercury:'Emerald', Jupiter:'Yellow Sapphire', Venus:'Diamond', Saturn:'Blue Sapphire' }[lagnaLord] || 'Yellow Sapphire';
+  const luckyDay   = { Sun:'Sunday', Moon:'Monday', Mars:'Tuesday', Mercury:'Wednesday', Jupiter:'Thursday', Venus:'Friday', Saturn:'Saturday' }[lagnaLord] || 'Thursday';
+  const luckyDeity = { Sun:'Surya / Shiva', Moon:'Parvati / Chandra', Mars:'Murugan / Hanuman', Mercury:'Vishnu', Jupiter:'Guru / Vishnu', Venus:'Lakshmi', Saturn:'Shani / Hanuman' }[lagnaLord] || 'Vishnu';
+  const luckyNum   = { Sun:'1', Moon:'2', Mars:'9', Mercury:'5', Jupiter:'3', Venus:'6', Saturn:'8' }[lagnaLord] || '3';
+
+  const items = [
+    { label:'Lucky Colour', value: luckyColor },
+    { label:'Lucky Gemstone', value: luckyGem },
+    { label:'Lucky Day', value: luckyDay },
+    { label:'Lucky Number', value: luckyNum },
+    { label:'Favourable Direction', value: ['East','South','West','North','East','North','West','North','East','West','West','North-East'][ascRasi] },
+    { label:'Ishta Deity', value: luckyDeity },
+  ];
+  const remedies = [
+    `Chant the ${lagnaLord} mantra or your Nakshatra (${moonNak.name}) mantra regularly`,
+    `Observe ${luckyDay} as your spiritual day with light fasting and prayer`,
+    `Donate items linked to weak planets (e.g. yellow items for Jupiter on Thursdays)`,
+    `Light a ghee lamp at home daily and recite a short prayer to ${luckyDeity}`,
+    `Practise gratitude and charity — the most powerful universal remedy`,
+  ];
+  document.getElementById('lucky-remedies').innerHTML =
+    items.map(i => `<div class="lucky-item"><div class="lucky-label">${i.label}</div><div class="lucky-value">${i.value}</div></div>`).join('')
+    + remedies.map(r => `<div class="lucky-item remedy-item"><div class="lucky-label">Remedy</div><div class="lucky-value">${r}</div></div>`).join('');
+}
+
 
 // ═══════════════════════════════════════════════════════
 // COMPATIBILITY MODULE

@@ -395,9 +395,85 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   padding: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.div-chart-item:hover {
+  background: var(--gold-glow);
+  border-color: var(--gold-mid);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(184,134,11,0.18);
+}
+.div-chart-item.active {
+  background: var(--gold-glow);
+  border-color: var(--gold-bright);
+  box-shadow: 0 0 0 2px rgba(184,134,11,0.25);
 }
 .div-chart-name { font-weight: 600; color: var(--gold-mid); font-size: 0.85rem; margin-bottom: 4px; }
 .div-chart-meaning { font-size: 0.75rem; color: var(--text-secondary); }
+.div-chart-hint { font-size: 0.68rem; color: var(--gold-mid); margin-top: 6px; opacity: 0.8; }
+
+/* Divisional chart detail panel */
+.div-detail-panel {
+  margin-top: 20px;
+  border-top: 1px solid var(--border);
+  padding-top: 20px;
+  animation: fadeIn 0.4s ease;
+}
+.div-detail-header {
+  display: flex; align-items: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap;
+}
+.div-detail-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem; color: var(--gold-bright);
+}
+.div-detail-badge {
+  font-size: 0.7rem; padding: 3px 10px; border-radius: 50px;
+  background: var(--gold-glow); color: var(--gold-mid); font-weight: 600;
+}
+.div-detail-layout {
+  display: grid; grid-template-columns: auto 1fr; gap: 24px; align-items: start;
+}
+@media(max-width: 720px){ .div-detail-layout { grid-template-columns: 1fr; } }
+.div-detail-interp { font-size: 0.88rem; }
+.div-detail-interp h5 {
+  font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--gold-mid); margin: 14px 0 8px;
+}
+.div-detail-interp p { color: var(--text-secondary); line-height: 1.7; margin-bottom: 10px; }
+.div-placement-row {
+  display: flex; justify-content: space-between; gap: 10px;
+  padding: 6px 0; border-bottom: 1px solid rgba(184,134,11,0.1);
+  font-size: 0.82rem;
+}
+.div-placement-row span:first-child { color: var(--text-primary); font-weight: 500; }
+.div-placement-row span:last-child { color: var(--text-secondary); }
+
+/* ── Required field markers ───────────────── */
+.req { color: #c0392b; font-weight: 700; }
+.req-note { font-size: 0.7rem; color: #c0392b; font-weight: 500; letter-spacing: 0.02em; margin-left: 8px; text-transform: none; }
+.form-group input:invalid, .form-group select:invalid { /* no aggressive red until submit */ }
+.field-error { border-color: #c0392b !important; box-shadow: 0 0 0 3px rgba(192,57,43,0.12) !important; }
+
+/* ── Compatibility method bar ─────────────── */
+.compat-method-bar {
+  max-width: 1100px; margin: 0 auto 24px;
+  background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 16px 22px;
+  display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+  box-shadow: 0 4px 16px rgba(46,37,25,0.05);
+}
+.compat-method-bar label {
+  font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--gold-mid); font-weight: 600;
+}
+.compat-method-bar select {
+  background: #fff; border: 1px solid var(--border); border-radius: var(--radius-sm);
+  color: var(--text-primary); padding: 9px 14px; font-size: 0.92rem; font-family: inherit;
+  outline: none; min-width: 200px;
+}
+.compat-method-bar select:focus { border-color: var(--gold-mid); }
+
 
 /* ── Life Area Tabs ───────────────────────── */
 .life-tabs {
@@ -673,35 +749,37 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 
     <section class="form-section">
       <div class="form-card">
-        <h3 class="form-title">Birth Details</h3>
+        <h3 class="form-title">Birth Details <span class="req-note">All fields required *</span></h3>
         <div class="form-grid">
           <div class="form-group">
-            <label>Full Name</label>
-            <input type="text" id="name" placeholder="Enter your name" />
+            <label>Full Name <span class="req">*</span></label>
+            <input type="text" id="name" placeholder="Enter your name" required />
           </div>
           <div class="form-group">
-            <label>Date of Birth</label>
-            <input type="date" id="dob" />
+            <label>Date of Birth <span class="req">*</span></label>
+            <input type="date" id="dob" required />
           </div>
           <div class="form-group">
-            <label>Time of Birth</label>
-            <input type="time" id="tob" />
+            <label>Time of Birth <span class="req">*</span></label>
+            <input type="time" id="tob" required />
           </div>
           <div class="form-group">
-            <label>Place of Birth</label>
-            <input type="text" id="pob" placeholder="e.g. Chennai, India" />
+            <label>Place of Birth <span class="req">*</span></label>
+            <input type="text" id="pob" placeholder="e.g. Chennai, India" required />
           </div>
           <div class="form-group">
-            <label>Gender</label>
-            <select id="gender">
+            <label>Gender <span class="req">*</span></label>
+            <select id="gender" required>
+              <option value="">— Select —</option>
               <option value="male">Male</option>
               <option value="female">Female</option>
               <option value="other">Other</option>
             </select>
           </div>
           <div class="form-group">
-            <label>Calculation Method</label>
-            <select id="ayanamsa">
+            <label>Calculation Method <span class="req">*</span></label>
+            <select id="calcMethod" required>
+              <option value="">— Select —</option>
               <option value="vakya">Traditional</option>
               <option value="surya">Ancient</option>
             </select>
@@ -823,8 +901,9 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 
       <!-- Divisional Charts Summary -->
       <div class="result-card full-width">
-        <h3 class="card-title">📊 Divisional Chart Summary</h3>
+        <h3 class="card-title">📊 Divisional Charts (Vargas) — tap any chart for details</h3>
         <div class="div-charts" id="div-charts"></div>
+        <div id="div-detail" class="div-detail-panel hidden"></div>
       </div>
 
     </section>
@@ -839,30 +918,38 @@ input[type="time"]::-webkit-calendar-picker-indicator {
       <div class="hero-content">
         <p class="hero-eyebrow">Porutham Analysis</p>
         <h2 class="hero-title">Marriage<br><em>Compatibility</em></h2>
-        <p class="hero-desc">Vedic 10-Porutham matching with Venus loyalty indicator, Moon emotional stability, Jupiter strength, and divorce risk analysis.</p>
+        <p class="hero-desc">Complete Vedic matching: 10 Poruthams, Venus loyalty, Moon stability, Jupiter blessing, plus love, intimacy, wealth, children, family happiness, Mangal Dosha and divorce-risk analysis — using your chosen Ancient or Traditional method.</p>
       </div>
     </section>
 
     <section class="form-section compat-form-section">
+      <div class="compat-method-bar">
+        <label>Calculation Method <span class="req">*</span></label>
+        <select id="compatMethod" required>
+          <option value="">— Select —</option>
+          <option value="vakya">Traditional</option>
+          <option value="surya">Ancient</option>
+        </select>
+      </div>
       <div class="compat-forms">
         <div class="form-card compat-card">
           <div class="compat-gender-badge male-badge">♂ Boy / Groom</div>
           <div class="form-grid">
             <div class="form-group">
-              <label>Full Name</label>
-              <input type="text" id="boy-name" placeholder="Groom's name" />
+              <label>Full Name <span class="req">*</span></label>
+              <input type="text" id="boy-name" placeholder="Groom's name" required />
             </div>
             <div class="form-group">
-              <label>Date of Birth</label>
-              <input type="date" id="boy-dob" />
+              <label>Date of Birth <span class="req">*</span></label>
+              <input type="date" id="boy-dob" required />
             </div>
             <div class="form-group">
-              <label>Time of Birth</label>
-              <input type="time" id="boy-tob" />
+              <label>Time of Birth <span class="req">*</span></label>
+              <input type="time" id="boy-tob" required />
             </div>
             <div class="form-group">
-              <label>Place of Birth</label>
-              <input type="text" id="boy-pob" placeholder="e.g. Madurai, India" />
+              <label>Place of Birth <span class="req">*</span></label>
+              <input type="text" id="boy-pob" placeholder="e.g. Madurai, India" required />
             </div>
           </div>
         </div>
@@ -875,20 +962,20 @@ input[type="time"]::-webkit-calendar-picker-indicator {
           <div class="compat-gender-badge female-badge">♀ Girl / Bride</div>
           <div class="form-grid">
             <div class="form-group">
-              <label>Full Name</label>
-              <input type="text" id="girl-name" placeholder="Bride's name" />
+              <label>Full Name <span class="req">*</span></label>
+              <input type="text" id="girl-name" placeholder="Bride's name" required />
             </div>
             <div class="form-group">
-              <label>Date of Birth</label>
-              <input type="date" id="girl-dob" />
+              <label>Date of Birth <span class="req">*</span></label>
+              <input type="date" id="girl-dob" required />
             </div>
             <div class="form-group">
-              <label>Time of Birth</label>
-              <input type="time" id="girl-tob" />
+              <label>Time of Birth <span class="req">*</span></label>
+              <input type="time" id="girl-tob" required />
             </div>
             <div class="form-group">
-              <label>Place of Birth</label>
-              <input type="text" id="girl-pob" placeholder="e.g. Coimbatore, India" />
+              <label>Place of Birth <span class="req">*</span></label>
+              <input type="text" id="girl-pob" placeholder="e.g. Coimbatore, India" required />
             </div>
           </div>
         </div>
@@ -930,10 +1017,52 @@ input[type="time"]::-webkit-calendar-picker-indicator {
         <div id="jupiter-analysis" class="special-analysis"></div>
       </div>
 
+      <!-- Love & Romance -->
+      <div class="result-card">
+        <h3 class="card-title">❤️ Love & Romance</h3>
+        <div id="love-analysis" class="special-analysis"></div>
+      </div>
+
+      <!-- Physical / Sexual Harmony -->
+      <div class="result-card">
+        <h3 class="card-title">🔥 Physical & Intimate Harmony</h3>
+        <div id="sex-analysis" class="special-analysis"></div>
+      </div>
+
+      <!-- Wealth & Prosperity together -->
+      <div class="result-card">
+        <h3 class="card-title">💰 Wealth & Prosperity Together</h3>
+        <div id="wealth-analysis" class="special-analysis"></div>
+      </div>
+
+      <!-- Children & Progeny -->
+      <div class="result-card">
+        <h3 class="card-title">👶 Children & Progeny</h3>
+        <div id="children-analysis" class="special-analysis"></div>
+      </div>
+
+      <!-- Family Happiness -->
+      <div class="result-card">
+        <h3 class="card-title">🏡 Family Happiness & Longevity</h3>
+        <div id="happiness-analysis" class="special-analysis"></div>
+      </div>
+
+      <!-- Mangal Dosha comparison -->
+      <div class="result-card">
+        <h3 class="card-title">♂ Mangal Dosha (Chevvai) Check</h3>
+        <div id="mangal-analysis" class="special-analysis"></div>
+      </div>
+
       <!-- Divorce Risk -->
       <div class="result-card divorce-card full-width">
         <h3 class="card-title">⚠️ Divorce & Separation Risk Analysis</h3>
         <div id="divorce-analysis" class="divorce-content"></div>
+      </div>
+
+      <!-- Do's and Don'ts for the couple -->
+      <div class="result-card full-width">
+        <h3 class="card-title">💡 Guidance for a Harmonious Marriage</h3>
+        <div id="couple-guidance" class="dos-donts"></div>
       </div>
 
       <!-- Overall Verdict -->
@@ -1719,8 +1848,133 @@ function calcCompatibility(boy, girl) {
     venusAnalysis: analyzeVenus(boy, girl),
     moonAnalysis:  analyzeMoon(boy, girl),
     jupiterAnalysis: analyzeJupiter(boy, girl),
+    loveAnalysis:  analyzeLove(boy, girl),
+    sexAnalysis:   analyzeSex(boy, girl),
+    wealthAnalysis: analyzeWealthTogether(boy, girl),
+    childrenAnalysis: analyzeChildren(boy, girl),
+    happinessAnalysis: analyzeHappiness(boy, girl),
+    mangalAnalysis: analyzeMangal(boy, girl),
     divorceAnalysis: analyzeDivorce(boy, girl),
   };
+}
+
+// ── Additional compatibility analyses ──
+function _scoreSummary(score, hi, mid, lo) {
+  return score >= 75 ? hi : score >= 55 ? mid : lo;
+}
+
+function analyzeLove(boy, girl) {
+  const bVen = getRasi(boy.Venus), gVen = getRasi(girl.Venus);
+  const bMoon = getRasi(boy.Moon), gMoon = getRasi(girl.Moon);
+  let score = 60; const factors = [];
+  const venDiff = ((gVen - bVen) + 12) % 12;
+  if ([0,4,8].includes(venDiff)) { score += 20; factors.push('Venus signs in trine — natural romantic chemistry and shared tastes in beauty and pleasure'); }
+  else if ([2,6,10].includes(venDiff)) { score += 8; factors.push('Venus signs harmonise reasonably — affection grows with shared experiences'); }
+  else { factors.push('Venus signs differ — romance benefits from learning each other\'s love language'); }
+  const moonDiff = ((gMoon - bMoon) + 12) % 12;
+  if ([0,4,8].includes(moonDiff)) { score += 15; factors.push('Emotional trine — you feel safe and understood in each other\'s company'); }
+  if (getPlanetStatus('Venus', bVen).label === 'Exalted' || getPlanetStatus('Venus', gVen).label === 'Exalted') { score += 10; factors.push('One partner\'s exalted Venus brings devotion, tenderness and romantic warmth'); }
+  score = Math.min(100, Math.max(25, score));
+  return { score, factors, summary: _scoreSummary(score,
+    'Deep romantic compatibility — affection, tenderness and shared joys flow naturally.',
+    'Good romantic potential — love deepens steadily with mutual appreciation.',
+    'Romance needs nurturing — express appreciation often and create shared rituals of affection.') };
+}
+
+function analyzeSex(boy, girl) {
+  const bMars = getRasi(boy.Mars), gMars = getRasi(girl.Mars);
+  const bVen = getRasi(boy.Venus), gVen = getRasi(girl.Venus);
+  let score = 58; const factors = [];
+  const marsDiff = ((gMars - bMars) + 12) % 12;
+  if ([0,4,8].includes(marsDiff)) { score += 18; factors.push('Mars energies align — strong mutual passion and physical compatibility'); }
+  else if ([6].includes(marsDiff)) { score += 10; factors.push('Mars in opposition — magnetic attraction with fiery intensity; balance is key'); }
+  else if ([3,9].includes(marsDiff)) { score -= 6; factors.push('Mars in square — passionate but occasionally clashing desires; communication smooths this'); }
+  // Venus–Mars cross connection boosts chemistry
+  if (Math.abs(bVen - gMars) <= 1 || Math.abs(gVen - bMars) <= 1) { score += 14; factors.push('Venus–Mars cross-link between charts — powerful physical and romantic magnetism'); }
+  const fire = [0,4,8], water = [3,7,11];
+  if (fire.includes(bMars) && fire.includes(gMars)) { score += 6; factors.push('Both Mars in fire signs — energetic, spontaneous intimacy'); }
+  if (water.includes(bMars) && water.includes(gMars)) { score += 6; factors.push('Both Mars in water signs — emotionally intimate, tender physical bond'); }
+  score = Math.min(100, Math.max(25, score));
+  return { score, factors, summary: _scoreSummary(score,
+    'Strong physical harmony — passion and intimacy come naturally and stay vibrant.',
+    'Healthy physical compatibility — intimacy thrives with openness and care.',
+    'Intimacy grows with patience — emotional closeness and honest communication strengthen the physical bond.') };
+}
+
+function analyzeWealthTogether(boy, girl) {
+  const bJup = getRasi(boy.Jupiter), gJup = getRasi(girl.Jupiter);
+  const bHouse2 = ((getRasi(boy.Jupiter) - getRasi(boy.Ascendant) + 12) % 12) + 1;
+  let score = 60; const factors = [];
+  if (getPlanetStatus('Jupiter', bJup).label !== 'Debilitated') { score += 8; factors.push('Boy\'s Jupiter supports steady financial growth in the household'); }
+  if (getPlanetStatus('Jupiter', gJup).label !== 'Debilitated') { score += 8; factors.push('Girl\'s Jupiter favours prosperity and wise money management'); }
+  if (getPlanetStatus('Jupiter', bJup).label === 'Exalted' || getPlanetStatus('Jupiter', gJup).label === 'Exalted') { score += 14; factors.push('An exalted Jupiter promises notable wealth and abundance together'); }
+  const bVen = getRasi(boy.Venus), gVen = getRasi(girl.Venus);
+  if ([1,6].includes(bVen) || [1,6].includes(gVen)) { score += 8; factors.push('Venus well-placed — comforts, luxuries and a pleasant lifestyle are favoured'); }
+  // 2nd & 11th harmony
+  if (((gJup - bJup) + 12) % 12 % 4 === 0) { score += 8; factors.push('Jupiters in harmony — shared financial values and aligned long-term goals'); }
+  score = Math.min(100, Math.max(30, score));
+  return { score, factors, summary: _scoreSummary(score,
+    'Excellent financial prospects — together you build lasting wealth and security.',
+    'Good prosperity outlook — disciplined teamwork brings steady financial growth.',
+    'Prosperity through cooperation — joint budgeting and avoiding speculation secure your finances.') };
+}
+
+function analyzeChildren(boy, girl) {
+  const b5 = (getRasi(boy.Ascendant) + 4) % 12;
+  const g5 = (getRasi(girl.Ascendant) + 4) % 12;
+  const bJupH = ((getRasi(boy.Jupiter) - getRasi(boy.Ascendant) + 12) % 12) + 1;
+  const gJupH = ((getRasi(girl.Jupiter) - getRasi(girl.Ascendant) + 12) % 12) + 1;
+  let score = 60; const factors = [];
+  const good = [1,4,5,7,9,10,11];
+  if (good.includes(bJupH)) { score += 12; factors.push('Boy\'s Jupiter well-placed for progeny — supportive of healthy, happy children'); }
+  else { factors.push('Boy\'s Jupiter asks for blessings and patience regarding children'); }
+  if (good.includes(gJupH)) { score += 12; factors.push('Girl\'s Jupiter favours childbirth and nurturing motherhood'); }
+  else { factors.push('Girl\'s 5th-house support strengthens with prayer and remedies'); }
+  const b5lord = PLANET_LORDS[b5].lord, g5lord = PLANET_LORDS[g5].lord;
+  if (getPlanetStatus(b5lord, getRasi(boy[b5lord] || boy.Jupiter)).label !== 'Debilitated') { score += 6; }
+  score = Math.min(100, Math.max(30, score));
+  return { score, factors, summary: _scoreSummary(score,
+    'Strongly favourable for children — progeny brings joy, health and family continuity.',
+    'Good prospects for children — a happy family life with supportive parenting energy.',
+    'Children come with blessings and patience — traditional remedies and Jupiter worship help.') };
+}
+
+function analyzeHappiness(boy, girl) {
+  const bMoon = getRasi(boy.Moon), gMoon = getRasi(girl.Moon);
+  const b4 = ((getRasi(boy.Moon) - getRasi(boy.Ascendant) + 12) % 12) + 1;
+  let score = 62; const factors = [];
+  const moonDiff = ((gMoon - bMoon) + 12) % 12;
+  if ([0,4,8].includes(moonDiff)) { score += 18; factors.push('Trine Moons create a peaceful, emotionally warm and contented home'); }
+  else if ([6].includes(moonDiff)) { score -= 6; factors.push('Moon opposition — emotional needs differ; conscious empathy keeps harmony'); }
+  if (getPlanetStatus('Jupiter', getRasi(boy.Jupiter)).label !== 'Debilitated' &&
+      getPlanetStatus('Jupiter', getRasi(girl.Jupiter)).label !== 'Debilitated') {
+    score += 10; factors.push('Both Jupiters benefic — wisdom, gratitude and shared values sustain happiness');
+  }
+  // Venus harmony adds domestic joy
+  const venDiff = ((getRasi(girl.Venus) - getRasi(boy.Venus)) + 12) % 12;
+  if ([0,4,8].includes(venDiff)) { score += 8; factors.push('Venus harmony brings affection, comfort and shared enjoyment of life'); }
+  score = Math.min(100, Math.max(30, score));
+  return { score, factors, summary: _scoreSummary(score,
+    'A deeply happy, harmonious household with lasting emotional contentment and longevity.',
+    'A contented family life — small adjustments keep the home warm and peaceful.',
+    'Happiness grows through empathy — prioritise emotional connection and shared gratitude.') };
+}
+
+function analyzeMangal(boy, girl) {
+  const mangalHouses = [1,2,4,7,8,12];
+  function isManglik(p) {
+    const asc = getRasi(p.Ascendant);
+    const marsHouse = ((getRasi(p.Mars) - asc + 12) % 12) + 1;
+    return mangalHouses.includes(marsHouse);
+  }
+  const bM = isManglik(boy), gM = isManglik(girl);
+  let score, factors = [], status;
+  if (bM && gM) { score = 85; status = 'Both Manglik — Cancelled'; factors.push('Both partners are Manglik, so the dosha cancels out. This is considered favourable — passionate, energetic and balanced.'); }
+  else if (!bM && !gM) { score = 90; status = 'No Dosha'; factors.push('Neither partner has Mangal Dosha — Mars energy is harmonious in the union.'); }
+  else { score = 50; status = 'Partial Dosha'; factors.push(`${bM ? 'Boy' : 'Girl'} is Manglik while the other is not — an imbalance. Traditional remedies (Mangal Shanti puja, marrying after appropriate rituals) are recommended before fixing the marriage.`); }
+  return { score, status, factors, summary:
+    score >= 85 ? 'Mangal Dosha is not an obstacle for this match.' :
+    'Mangal Dosha needs attention — perform recommended remedies for marital peace.' };
 }
 
 // 10 Tamil Poruthams
@@ -2042,23 +2296,90 @@ function analyzeDivorce(boy, girl) {
 // ═══════════════════════════════════════════════════════
 
 const DIVISIONAL_CHARTS = [
-  { code:'D1',  name:'Rasi Chart',      meaning:'Overall personality and life path' },
-  { code:'D2',  name:'Hora Chart',      meaning:'Wealth and financial status' },
-  { code:'D3',  name:'Drekkana Chart',  meaning:'Siblings, courage, self-effort' },
-  { code:'D4',  name:'Chaturthamsha',   meaning:'Fixed assets, home, fortune' },
-  { code:'D7',  name:'Saptamsha',       meaning:'Children and grandchildren' },
-  { code:'D9',  name:'Navamsa Chart',   meaning:'Marriage, dharma, and spiritual path' },
-  { code:'D10', name:'Dashamsha',       meaning:'Career, profession, authority' },
-  { code:'D12', name:'Dwadashamsha',    meaning:'Parents and ancestors' },
-  { code:'D16', name:'Shodashamsha',    meaning:'Vehicles, comforts, mental happiness' },
-  { code:'D20', name:'Vimshamsha',      meaning:'Spiritual progress and upasana' },
-  { code:'D24', name:'Chaturvimshamsha',meaning:'Education and knowledge' },
-  { code:'D27', name:'Bhamsha',         meaning:'Strength and vitality' },
-  { code:'D30', name:'Trimshamsha',     meaning:'Misfortunes and evils' },
-  { code:'D40', name:'Khavedamsha',     meaning:'Auspicious and inauspicious effects' },
-  { code:'D45', name:'Akshavedamsha',   meaning:'General indications' },
-  { code:'D60', name:'Shashtyamsha',    meaning:'Past life karma and overall indications' },
+  { code:'D1',  div:1,  name:'Rasi Chart',      meaning:'Overall personality and life path',
+    sig:'physical body, overall life, general nature, and the foundation of all other charts' },
+  { code:'D2',  div:2,  name:'Hora Chart',      meaning:'Wealth and financial status',
+    sig:'wealth, prosperity, savings, and material resources' },
+  { code:'D3',  div:3,  name:'Drekkana Chart',  meaning:'Siblings, courage, self-effort',
+    sig:'siblings, courage, communication, short journeys, and personal initiative' },
+  { code:'D4',  div:4,  name:'Chaturthamsha',   meaning:'Fixed assets, home, fortune',
+    sig:'property, vehicles, fixed assets, home comforts, and inner happiness' },
+  { code:'D7',  div:7,  name:'Saptamsha',       meaning:'Children and grandchildren',
+    sig:'children, progeny, creativity, and the continuity of lineage' },
+  { code:'D9',  div:9,  name:'Navamsa Chart',   meaning:'Marriage, dharma, and spiritual path',
+    sig:'marriage, spouse, dharma, fortune, and the true inner strength of every planet' },
+  { code:'D10', div:10, name:'Dashamsha',       meaning:'Career, profession, authority',
+    sig:'career, profession, achievements, status, and public reputation' },
+  { code:'D12', div:12, name:'Dwadashamsha',    meaning:'Parents and ancestors',
+    sig:'parents, ancestors, heritage, and inherited karma' },
+  { code:'D16', div:16, name:'Shodashamsha',    meaning:'Vehicles, comforts, mental happiness',
+    sig:'vehicles, luxuries, comforts, and mental peace or disturbance' },
+  { code:'D20', div:20, name:'Vimshamsha',      meaning:'Spiritual progress and upasana',
+    sig:'spiritual practice, devotion, worship, and religious inclination' },
+  { code:'D24', div:24, name:'Chaturvimshamsha',meaning:'Education and knowledge',
+    sig:'education, learning, academic success, and intellectual achievements' },
+  { code:'D27', div:27, name:'Bhamsha',         meaning:'Strength and vitality',
+    sig:'physical and mental strength, stamina, and inherent weaknesses' },
+  { code:'D30', div:30, name:'Trimshamsha',     meaning:'Misfortunes and evils',
+    sig:'misfortunes, challenges, character flaws, and protective influences' },
+  { code:'D40', div:40, name:'Khavedamsha',     meaning:'Auspicious and inauspicious effects',
+    sig:'maternal lineage karma and general auspicious/inauspicious results' },
+  { code:'D45', div:45, name:'Akshavedamsha',   meaning:'General indications',
+    sig:'paternal lineage karma, character, and overall conduct' },
+  { code:'D60', div:60, name:'Shashtyamsha',    meaning:'Past life karma and overall indications',
+    sig:'past-life karma, the subtlest layer of destiny, and overall life summation' },
 ];
+
+// ── Varga (divisional) longitude calculator ──
+// Computes the sign a planet falls into for a given divisional chart (Parashara rules)
+function vargaRasi(lon, division) {
+  const L = ((lon % 360) + 360) % 360;
+  const sign = Math.floor(L / 30);        // 0-11 natal sign
+  const deg = L % 30;                      // degrees within sign
+  const oddSign = sign % 2 === 0;          // Aries=0 is odd in Vedic counting
+
+  switch (division) {
+    case 1:  return sign;
+
+    case 2: { // Hora — Sun's hora / Moon's hora → Leo(4) or Cancer(3)
+      const half = Math.floor(deg / 15);   // 0 first half, 1 second
+      if (oddSign) return half === 0 ? 4 : 3;
+      else         return half === 0 ? 3 : 4;
+    }
+
+    case 3: { // Drekkana — 3 parts of 10°, sign / 5th / 9th from it
+      const part = Math.floor(deg / 10);
+      return (sign + part * 4) % 12;
+    }
+
+    case 9: { // Navamsa — 9 parts of 3°20'
+      const part = Math.floor(deg / (30 / 9));
+      // start sign depends on element
+      const movable = sign % 3 === 0;  // movable signs start from themselves
+      const fixed = sign % 3 === 1;
+      let start;
+      if (movable) start = sign;
+      else if (fixed) start = (sign + 8) % 12;     // 9th from sign
+      else start = (sign + 4) % 12;                // 5th from sign (dual)
+      return (start + part) % 12;
+    }
+
+    case 12: { // Dwadashamsha — 12 parts of 2°30', from the sign itself
+      const part = Math.floor(deg / (30 / 12));
+      return (sign + part) % 12;
+    }
+
+    default: {
+      // General Parashara method for other vargas:
+      // part index counts equal divisions; counting start varies, we use
+      // the common "from Aries for odd, from Libra for even" simplification
+      const part = Math.floor(deg / (30 / division));
+      const startSign = oddSign ? 0 : 6;
+      return (startSign + (sign * division + part)) % 12;
+    }
+  }
+}
+
 
 // Export
 // (module.exports removed for browser inline use)
@@ -2112,13 +2433,23 @@ function hideLoading() {
 
 // ── Jathagam Generation ────────────────────────────────
 function generateJathagam() {
-  const name   = document.getElementById('name').value || 'Native';
-  const dobStr = document.getElementById('dob').value;
-  const tobStr = document.getElementById('tob').value || '06:00';
-  const pob    = document.getElementById('pob').value || 'India';
-  const ayanamsaKey = document.getElementById('ayanamsa').value;
+  // Mandatory validation
+  const fields = [
+    { id:'name',       label:'Full Name' },
+    { id:'dob',        label:'Date of Birth' },
+    { id:'tob',        label:'Time of Birth' },
+    { id:'pob',        label:'Place of Birth' },
+    { id:'gender',     label:'Gender' },
+    { id:'calcMethod', label:'Calculation Method' },
+  ];
+  if (!validateFields(fields)) return;
 
-  if (!dobStr) { alert('Please enter your Date of Birth.'); return; }
+  const name   = document.getElementById('name').value.trim();
+  const dobStr = document.getElementById('dob').value;
+  const tobStr = document.getElementById('tob').value;
+  const pob    = document.getElementById('pob').value.trim();
+  const gender = document.getElementById('gender').value;
+  const methodKey = document.getElementById('calcMethod').value;
 
   showLoading('Reading the stars for ' + name + '…');
 
@@ -2132,15 +2463,14 @@ function generateJathagam() {
       const coords = lookupCoords(pob);
 
       let pos;
-      if (ayanamsaKey === 'surya') {
+      if (methodKey === 'surya') {
         pos = calcSuryaSiddhanta(jd, coords.lat, coords.lon, false);
       } else {
-        // Default and 'vakya' → Vakya Panchangam
         pos = calcSuryaSiddhanta(jd, coords.lat, coords.lon, true);
       }
 
       hideLoading();
-      renderJathagam({ name, dobStr, tobStr, pob, ayanamsaKey, yr, mo, dy, hour }, pos, jd);
+      renderJathagam({ name, dobStr, tobStr, pob, gender, ayanamsaKey: methodKey, yr, mo, dy, hour }, pos, jd);
     } catch (e) {
       hideLoading();
       console.error(e);
@@ -2148,6 +2478,31 @@ function generateJathagam() {
     }
   }, 1200);
 }
+
+// ── Mandatory field validation ──
+function validateFields(fields) {
+  let firstBad = null;
+  const missing = [];
+  fields.forEach(f => {
+    const el = document.getElementById(f.id);
+    if (!el) return;
+    const empty = !el.value || !el.value.trim();
+    if (empty) {
+      el.classList.add('field-error');
+      missing.push(f.label);
+      if (!firstBad) firstBad = el;
+    } else {
+      el.classList.remove('field-error');
+    }
+  });
+  if (missing.length) {
+    alert('Please fill all required fields:\n• ' + missing.join('\n• '));
+    if (firstBad) firstBad.focus();
+    return false;
+  }
+  return true;
+}
+
 
 // ── City coordinate lookup (common Indian + world cities) ──
 const CITY_COORDS = {
@@ -2386,13 +2741,156 @@ function renderHoroscope(positions, name) {
 // ── Divisional Charts ──────────────────────────────────
 function renderDivisionalCharts() {
   const el = document.getElementById('div-charts');
-  el.innerHTML = DIVISIONAL_CHARTS.map(d => `
-    <div class="div-chart-item">
+  el.innerHTML = DIVISIONAL_CHARTS.map((d, i) => `
+    <div class="div-chart-item" id="divchart-${i}" onclick="showDivChartDetail(${i})">
       <div class="div-chart-name">${d.code} — ${d.name}</div>
       <div class="div-chart-meaning">${d.meaning}</div>
+      <div class="div-chart-hint">▸ Tap to view details</div>
     </div>
   `).join('');
+  // reset detail panel
+  const dp = document.getElementById('div-detail');
+  if (dp) { dp.classList.add('hidden'); dp.innerHTML = ''; }
 }
+
+const PLANET_ORDER = ['Sun','Moon','Mars','Mercury','Jupiter','Venus','Saturn','Rahu','Ketu','Ascendant'];
+
+function showDivChartDetail(idx) {
+  const pos = window._chartPos;
+  if (!pos) return;
+  const d = DIVISIONAL_CHARTS[idx];
+
+  // highlight active card
+  document.querySelectorAll('.div-chart-item').forEach(c => c.classList.remove('active'));
+  const card = document.getElementById('divchart-' + idx);
+  if (card) card.classList.add('active');
+
+  // Compute varga rasi for every planet
+  const vargaPos = {};
+  PLANET_ORDER.forEach(p => { vargaPos[p] = vargaRasi(pos[p], d.div) * 30 + (((pos[p]%30)+30)%30); });
+
+  // Build placement rows + mini chart
+  const placements = PLANET_ORDER.map(p => {
+    const vr = vargaRasi(pos[p], d.div);
+    const st = (p !== 'Ascendant' && p !== 'Rahu' && p !== 'Ketu') ? getPlanetStatus(p, vr) : null;
+    return { planet: p, rasi: vr, status: st };
+  });
+
+  const vargaAsc = vargaRasi(pos.Ascendant, d.div);
+
+  // Interpretation based on which planets are strong/weak in this varga + the chart's domain
+  const interp = divChartInterpretation(d, placements, vargaAsc);
+
+  const rowsHtml = placements.map(pl => {
+    const sym = PLANET_SYMBOLS[pl.planet] || pl.planet;
+    const stTxt = pl.status ? ` · ${pl.status.label}` : '';
+    return `<div class="div-placement-row">
+      <span>${sym} ${pl.planet}</span>
+      <span>${RASHIS[pl.rasi]}${stTxt}</span>
+    </div>`;
+  }).join('');
+
+  const panel = document.getElementById('div-detail');
+  panel.classList.remove('hidden');
+  panel.innerHTML = `
+    <div class="div-detail-header">
+      <span class="div-detail-title">${d.code} — ${d.name}</span>
+      <span class="div-detail-badge">Division: ${d.div}</span>
+      <span class="div-detail-badge">Lagna: ${RASHIS[vargaAsc]}</span>
+    </div>
+    <div class="div-detail-layout">
+      <div class="div-chart-mini" id="div-mini"></div>
+      <div class="div-detail-interp">
+        <h5>What ${d.code} reveals</h5>
+        <p>${d.name} (${d.code}) governs ${d.sig}.</p>
+        <h5>Your ${d.name} analysis</h5>
+        ${interp.map(t => `<p>${t}</p>`).join('')}
+        <h5>Planetary placements in ${d.code}</h5>
+        ${rowsHtml}
+      </div>
+    </div>
+  `;
+
+  // Render the mini South-Indian chart for this varga
+  renderVargaMiniChart('div-mini', vargaPos);
+  panel.scrollIntoView({ behavior:'smooth', block:'nearest' });
+}
+
+// Mini South Indian chart for a divisional chart
+function renderVargaMiniChart(elId, vargaPos) {
+  const el = document.getElementById(elId);
+  if (!el) return;
+  el.className = 'rasi-grid';
+  el.style.width = 'min(300px, 90vw)';
+  el.innerHTML = '';
+
+  const rasiMap = {};
+  for (const [planet, lon] of Object.entries(vargaPos)) {
+    const r = getRasi(lon);
+    if (!rasiMap[r]) rasiMap[r] = [];
+    rasiMap[r].push(planet);
+  }
+
+  SOUTH_INDIAN_LAYOUT.forEach((rasiNum, cellIdx) => {
+    const cell = document.createElement('div');
+    if (rasiNum === -1) {
+      cell.className = 'rasi-cell center-cell';
+      if (cellIdx === 5) cell.innerHTML = `<div style="text-align:center;color:var(--gold-bright);font-size:1rem;margin:auto;">ॐ</div>`;
+      el.appendChild(cell);
+      return;
+    }
+    cell.className = 'rasi-cell';
+    const planetsHere = (rasiMap[rasiNum] || []).map(p => PLANET_SYMBOLS[p] || p.slice(0,2)).join(' ');
+    cell.innerHTML = `
+      <span class="rasi-num">${rasiNum + 1}</span>
+      <span class="rasi-name">${RASHI_SHORT[rasiNum]}</span>
+      ${planetsHere ? `<span class="rasi-planets">${planetsHere}</span>` : ''}`;
+    if (planetsHere) cell.classList.add('highlight');
+    el.appendChild(cell);
+  });
+}
+
+// Generate interpretation text for a divisional chart from actual placements
+function divChartInterpretation(d, placements, vargaAsc) {
+  const out = [];
+  const find = p => placements.find(x => x.planet === p);
+  const strong = placements.filter(p => p.status && (p.status.label === 'Exalted' || p.status.label === 'Own Sign'));
+  const weak   = placements.filter(p => p.status && p.status.label === 'Debilitated');
+
+  // Domain-specific key planet for each varga
+  const keyPlanet = {
+    'D1':'Ascendant', 'D2':'Jupiter', 'D3':'Mars', 'D4':'Venus', 'D7':'Jupiter',
+    'D9':'Venus', 'D10':'Saturn', 'D12':'Sun', 'D16':'Venus', 'D20':'Jupiter',
+    'D24':'Mercury', 'D27':'Mars', 'D30':'Saturn', 'D40':'Moon', 'D45':'Sun', 'D60':'Saturn'
+  }[d.code] || 'Jupiter';
+
+  const kp = find(keyPlanet);
+  const kpSym = PLANET_SYMBOLS[keyPlanet] || keyPlanet;
+  if (kp) {
+    const where = RASHIS[kp.rasi];
+    let q;
+    if (kp.status && kp.status.label === 'Exalted')  q = `is exalted here — an outstanding result for ${d.meaning.toLowerCase()}. This area of life is strongly blessed.`;
+    else if (kp.status && kp.status.label === 'Own Sign') q = `sits in its own sign — a very favourable, stable indication for ${d.meaning.toLowerCase()}.`;
+    else if (kp.status && kp.status.label === 'Debilitated') q = `is debilitated here, so ${d.meaning.toLowerCase()} needs conscious effort and remedies; early challenges give way to growth.`;
+    else q = `is comfortably placed, giving steady, workable results for ${d.meaning.toLowerCase()}.`;
+    out.push(`The key planet for this chart, ${kpSym} ${keyPlanet}, falls in ${where} and ${q}`);
+  }
+
+  if (strong.length) {
+    out.push(`Strong planets in this varga: ${strong.map(p => (PLANET_SYMBOLS[p.planet]||'') + ' ' + p.planet + ' (' + p.status.label + ')').join(', ')}. These confer their best results in the matters this chart governs.`);
+  }
+  if (weak.length) {
+    out.push(`Planets needing support: ${weak.map(p => (PLANET_SYMBOLS[p.planet]||'') + ' ' + p.planet).join(', ')} are debilitated in this division — their significations may bring lessons before rewards.`);
+  }
+  if (!strong.length && !weak.length) {
+    out.push('Planets here are in neutral dignity, indicating balanced, moderate outcomes that respond well to your own effort and the supporting dasa periods.');
+  }
+
+  // Varga-Lagna note
+  out.push(`The ${d.code} ascendant is ${RASHIS[vargaAsc]}, which sets the tone for how these matters express in your life.`);
+  return out;
+}
+
 
 // ═══════════════════════════════════════════════════════
 // LIFE PREDICTIONS — driven by planetary positions
@@ -2700,22 +3198,35 @@ function renderLuckyRemedies(pos) {
 // ═══════════════════════════════════════════════════════
 
 function generateCompatibility() {
-  const boyName = document.getElementById('boy-name').value || 'Groom';
-  const boyDob  = document.getElementById('boy-dob').value;
-  const boyTob  = document.getElementById('boy-tob').value || '06:00';
+  const fields = [
+    { id:'compatMethod', label:'Calculation Method' },
+    { id:'boy-name',  label:"Groom's Full Name" },
+    { id:'boy-dob',   label:"Groom's Date of Birth" },
+    { id:'boy-tob',   label:"Groom's Time of Birth" },
+    { id:'boy-pob',   label:"Groom's Place of Birth" },
+    { id:'girl-name', label:"Bride's Full Name" },
+    { id:'girl-dob',  label:"Bride's Date of Birth" },
+    { id:'girl-tob',  label:"Bride's Time of Birth" },
+    { id:'girl-pob',  label:"Bride's Place of Birth" },
+  ];
+  if (!validateFields(fields)) return;
 
-  const girlName = document.getElementById('girl-name').value || 'Bride';
+  const methodKey = document.getElementById('compatMethod').value;
+  const useVakya = methodKey !== 'surya';
+
+  const boyName  = document.getElementById('boy-name').value.trim();
+  const boyDob   = document.getElementById('boy-dob').value;
+  const boyTob   = document.getElementById('boy-tob').value;
+  const girlName = document.getElementById('girl-name').value.trim();
   const girlDob  = document.getElementById('girl-dob').value;
-  const girlTob  = document.getElementById('girl-tob').value || '06:00';
-
-  if (!boyDob || !girlDob) { alert('Please enter both Date of Birth fields.'); return; }
+  const girlTob  = document.getElementById('girl-tob').value;
 
   showLoading(`Calculating compatibility for ${boyName} & ${girlName}…`);
 
   setTimeout(() => {
     try {
-      const boyPob  = (document.getElementById('boy-pob')  || {}).value || 'Chennai';
-      const girlPob = (document.getElementById('girl-pob') || {}).value || 'Chennai';
+      const boyPob  = document.getElementById('boy-pob').value.trim() || 'Chennai';
+      const girlPob = document.getElementById('girl-pob').value.trim() || 'Chennai';
 
       function parsePositions(dobStr, tobStr, pob) {
         const [yr, mo, dy] = dobStr.split('-').map(Number);
@@ -2723,8 +3234,7 @@ function generateCompatibility() {
         const hour = hr + mn / 60;
         const jd   = toJulianDay(yr, mo, dy, hour, 5.5);
         const c    = lookupCoords(pob);
-        // Vakya Panchangam — the ancient Tamil traditional method
-        return calcSuryaSiddhanta(jd, c.lat, c.lon, true);
+        return calcSuryaSiddhanta(jd, c.lat, c.lon, useVakya);
       }
 
       const boyPos  = parsePositions(boyDob, boyTob, boyPob);
@@ -2752,8 +3262,62 @@ function renderCompatibility(boyName, girlName, result) {
   renderVenusAnalysis(result.venusAnalysis);
   renderMoonAnalysis(result.moonAnalysis);
   renderJupiterAnalysis(result.jupiterAnalysis);
+  renderSimpleAnalysis('love-analysis', result.loveAnalysis, 'var(--rose-star)');
+  renderSimpleAnalysis('sex-analysis', result.sexAnalysis, '#c0392b');
+  renderSimpleAnalysis('wealth-analysis', result.wealthAnalysis, 'var(--gold-bright)');
+  renderSimpleAnalysis('children-analysis', result.childrenAnalysis, 'var(--violet-star)');
+  renderSimpleAnalysis('happiness-analysis', result.happinessAnalysis, 'var(--jade-star)');
+  renderMangalAnalysis(result.mangalAnalysis);
   renderDivorceAnalysis(result.divorceAnalysis);
+  renderCoupleGuidance(result);
   renderFinalVerdict(boyName, girlName, result);
+}
+
+// Generic analysis renderer for the new sections
+function renderSimpleAnalysis(elId, data, color) {
+  const el = document.getElementById(elId);
+  if (!el || !data) return;
+  el.innerHTML = `
+    <div class="analysis-score">
+      <div class="analysis-meter"><div class="analysis-fill" style="width:${data.score}%;background:${color}"></div></div>
+      <div class="analysis-score-val" style="color:${color}">${data.score}%</div>
+    </div>
+    ${data.factors.map(f => `<div style="padding:6px 0;border-bottom:1px solid rgba(184,134,11,0.15);font-size:0.82rem;color:var(--text-secondary)">• ${f}</div>`).join('')}
+    <div style="margin-top:14px;font-size:0.88rem;color:var(--text-primary);font-style:italic">${data.summary}</div>`;
+}
+
+function renderMangalAnalysis(data) {
+  const el = document.getElementById('mangal-analysis');
+  if (!el || !data) return;
+  const color = data.score >= 85 ? '#1e8449' : '#c0392b';
+  el.innerHTML = `
+    <div class="life-rating" style="background:rgba(184,134,11,0.08)">
+      <span style="color:${color};font-weight:700">${data.status}</span>
+    </div>
+    ${data.factors.map(f => `<div style="padding:6px 0;border-bottom:1px solid rgba(184,134,11,0.15);font-size:0.82rem;color:var(--text-secondary)">• ${f}</div>`).join('')}
+    <div style="margin-top:14px;font-size:0.88rem;color:var(--text-primary);font-style:italic">${data.summary}</div>`;
+}
+
+function renderCoupleGuidance(result) {
+  const dos = [
+    'Marry during an auspicious muhurta after consulting a Jyotishi',
+    'Perform pre-marriage Navagraha and (if needed) Mangal Shanti pujas',
+    'Cultivate open, honest communication about feelings and finances',
+    'Observe Pradosh and Lakshmi pujas together for harmony and prosperity',
+    'Respect each other\'s families and build shared spiritual practices',
+    'Celebrate small moments — gratitude keeps Venus and Jupiter strong',
+  ];
+  const donts = [
+    'Avoid finalising marriage during inauspicious periods or eclipses',
+    'Do not ignore Mangal Dosha imbalance — complete remedies first',
+    'Avoid harsh words during adverse Mars or Saturn transits',
+    'Do not let financial decisions be made in anger or haste',
+    'Avoid neglecting intimacy and quality time as life gets busy',
+    'Do not compare your marriage to others — honour your own path',
+  ];
+  document.getElementById('couple-guidance').innerHTML = `
+    <div class="dos-col"><h4>Do's</h4><ul>${dos.map(d=>`<li>${d}</li>`).join('')}</ul></div>
+    <div class="donts-col"><h4>Don'ts</h4><ul>${donts.map(d=>`<li>${d}</li>`).join('')}</ul></div>`;
 }
 
 function renderScoreOverview(boyName, girlName, result) {
@@ -2949,23 +3513,11 @@ function renderFinalVerdict(boyName, girlName, result) {
 
 // ── Set default dates ─────────────────────────────────
 window.addEventListener('DOMContentLoaded', () => {
-  const today = new Date();
-  // Timezone-safe local date formatter (avoids toISOString UTC shift)
-  const fmt = d => {
-    const y = d.getFullYear();
-    const m = String(d.getMonth() + 1).padStart(2, '0');
-    const day = String(d.getDate()).padStart(2, '0');
-    return `${y}-${m}-${day}`;
-  };
-  const thirtyYearsAgo  = new Date(today.getFullYear() - 30, today.getMonth(), today.getDate());
-  const twentyEightAgo  = new Date(today.getFullYear() - 28, today.getMonth(), today.getDate());
-
-  document.getElementById('dob').value      = fmt(thirtyYearsAgo);
-  document.getElementById('tob').value      = '10:30';
-  document.getElementById('boy-dob').value  = fmt(thirtyYearsAgo);
-  document.getElementById('boy-tob').value  = '08:00';
-  document.getElementById('girl-dob').value = fmt(twentyEightAgo);
-  document.getElementById('girl-tob').value = '14:00';
+  // Clear the error highlight as soon as the user starts filling a field
+  document.querySelectorAll('input, select').forEach(el => {
+    el.addEventListener('input', () => el.classList.remove('field-error'));
+    el.addEventListener('change', () => el.classList.remove('field-error'));
+  });
 });
 
 </script></body></html>

@@ -557,8 +557,8 @@ input[type="time"]::-webkit-calendar-picker-indicator {
         </div>
       </div>
       <nav class="main-nav">
-        <button class="nav-btn active" onclick="showModule('jathagam')">📜 Jathagam</button>
-        <button class="nav-btn" onclick="showModule('compatibility')">💍 Compatibility</button>
+        <button class="nav-btn active" onclick="showModule('jathagam',this)">📜 Jathagam</button>
+        <button class="nav-btn" onclick="showModule('compatibility',this)">💍 Compatibility</button>
       </nav>
     </div>
   </header>
@@ -609,9 +609,6 @@ input[type="time"]::-webkit-calendar-picker-indicator {
             <select id="ayanamsa">
               <option value="vakya">Vakya Panchangam (Tamil Traditional)</option>
               <option value="surya">Surya Siddhanta (Ancient ~400 CE)</option>
-              <option value="lahiri">Lahiri (Modern Standard)</option>
-              <option value="krishnamurti">Krishnamurti (KP)</option>
-              <option value="raman">B.V. Raman</option>
             </select>
           </div>
         </div>
@@ -1923,13 +1920,7 @@ const DIVISIONAL_CHARTS = [
 ];
 
 // Export
-  RASHIS, RASHI_SHORT, RASHI_TAMIL, PLANETS, PLANET_SYMBOLS, PLANET_COLORS,
-  NAKSHATRAS, DASA_YEARS, DASA_ORDER, PLANET_LORDS, EXALTATION, DEBILITATION,
-  SOUTH_INDIAN_LAYOUT, AYANAMSA, toJulianDay, julianToDate, calcPlanetaryPositions,
-  getRasi, getDegInRasi, getNakshatra, getPlanetStatus, getNavamsaRasi,
-  calcDasa, fmtDate, detectYogas, generateReading,
-  calcCompatibility, DIVISIONAL_CHARTS, DASA_COLORS
-};
+// (module.exports removed for browser inline use)
 
 /**
  * JOTHIDAM — App UI Controller
@@ -1962,7 +1953,7 @@ function showModule(name, btn) {
   document.querySelectorAll('.module').forEach(m => m.classList.add('hidden'));
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
   document.getElementById(`module-${name}`).classList.remove('hidden');
-  if(btn) btn.classList.add('active');
+  if (btn) btn.classList.add('active');
 }
 
 // ── Loading overlay ────────────────────────────────────
@@ -2002,11 +1993,9 @@ function generateJathagam() {
       let pos;
       if (ayanamsaKey === 'surya') {
         pos = calcSuryaSiddhanta(jd, coords.lat, coords.lon, false);
-      } else if (ayanamsaKey === 'vakya') {
-        pos = calcSuryaSiddhanta(jd, coords.lat, coords.lon, true);
       } else {
-        const ayanamDeg = AYANAMSA[ayanamsaKey] || AYANAMSA.lahiri;
-        pos = calcPlanetaryPositions(jd, ayanamDeg);
+        // Default and 'vakya' → Vakya Panchangam
+        pos = calcSuryaSiddhanta(jd, coords.lat, coords.lon, true);
       }
 
       hideLoading();
@@ -2135,15 +2124,21 @@ function renderPlanetTable(positions) {
 }
 
 // ── Birth Details ──────────────────────────────────────
+// Parse "YYYY-MM-DD" as a local date (avoids UTC off-by-one)
+function parseLocalDate(dobStr) {
+  const [y, m, d] = dobStr.split('-').map(Number);
+  return new Date(y, m - 1, d);
+}
+function formatDOB(dobStr) {
+  return parseLocalDate(dobStr).toLocaleDateString('en-IN', {day:'numeric', month:'long', year:'numeric'});
+}
+
 function methodName(key) {
   const names = {
     vakya: 'Vakya Panchangam (Tamil Traditional)',
     surya: 'Surya Siddhanta (Ancient ~400 CE)',
-    lahiri: 'Lahiri (Chitrapaksha)',
-    krishnamurti: 'Krishnamurti (KP)',
-    raman: 'B.V. Raman',
   };
-  return names[key] || key;
+  return names[key] || 'Vakya Panchangam (Tamil Traditional)';
 }
 
 function renderBirthDetails(info, pos) {
@@ -2154,7 +2149,7 @@ function renderBirthDetails(info, pos) {
 
   const items = [
     { label: 'Name',          value: info.name },
-    { label: 'Date of Birth', value: new Date(info.dobStr).toLocaleDateString('en-IN', {day:'numeric',month:'long',year:'numeric'}) },
+    { label: 'Date of Birth', value: formatDOB(info.dobStr) },
     { label: 'Time of Birth', value: info.tobStr + ' IST' },
     { label: 'Place of Birth',value: info.pob },
     { label: 'Lagna (Ascendant)', value: RASHIS[ascRasi], highlight: true },
@@ -2176,7 +2171,7 @@ function renderBirthDetails(info, pos) {
 
 // ── Dasa Table ─────────────────────────────────────────
 function renderDasaTable(moonLon, dobStr) {
-  const birthDate = new Date(dobStr);
+  const birthDate = parseLocalDate(dobStr);
   const dasaData  = calcDasa(moonLon, birthDate);
   const today     = new Date();
 
@@ -2503,16 +2498,22 @@ function renderFinalVerdict(boyName, girlName, result) {
 // ── Set default dates ─────────────────────────────────
 window.addEventListener('DOMContentLoaded', () => {
   const today = new Date();
-  const thirtyYearsAgo = new Date(today.getFullYear() - 30, today.getMonth(), today.getDate());
-  const fmt = d => d.toISOString().split('T')[0];
+  // Timezone-safe local date formatter (avoids toISOString UTC shift)
+  const fmt = d => {
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${y}-${m}-${day}`;
+  };
+  const thirtyYearsAgo  = new Date(today.getFullYear() - 30, today.getMonth(), today.getDate());
+  const twentyEightAgo  = new Date(today.getFullYear() - 28, today.getMonth(), today.getDate());
 
-  document.getElementById('dob').value       = fmt(thirtyYearsAgo);
-  document.getElementById('tob').value       = '10:30';
-  document.getElementById('boy-dob').value   = fmt(thirtyYearsAgo);
-  document.getElementById('boy-tob').value   = '08:00';
-  const thirtyTwoYearsAgo = new Date(today.getFullYear() - 28, today.getMonth(), today.getDate());
-  document.getElementById('girl-dob').value  = fmt(thirtyTwoYearsAgo);
-  document.getElementById('girl-tob').value  = '14:00';
+  document.getElementById('dob').value      = fmt(thirtyYearsAgo);
+  document.getElementById('tob').value      = '10:30';
+  document.getElementById('boy-dob').value  = fmt(thirtyYearsAgo);
+  document.getElementById('boy-tob').value  = '08:00';
+  document.getElementById('girl-dob').value = fmt(twentyEightAgo);
+  document.getElementById('girl-tob').value = '14:00';
 });
 
 </script></body></html>

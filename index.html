@@ -207,23 +207,35 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 @media(max-width: 768px) {
   .compat-forms { grid-template-columns: 1fr; }
 }
-.compat-card { max-width: none; }
-.compat-gender-badge {
-  font-size: 0.8rem; font-weight: 600; letter-spacing: 0.1em;
-  text-transform: uppercase; padding: 6px 14px;
-  border-radius: 50px; display: inline-block; margin-bottom: 20px;
+.compat-card {
+  max-width: none;
+  position: relative;
+  border-top: 4px solid var(--border);
+  overflow: hidden;
 }
-.male-badge { background: rgba(78,205,196,0.15); color: var(--jade-star); border: 1px solid var(--jade-star); }
-.female-badge { background: rgba(232,113,140,0.15); color: var(--rose-star); border: 1px solid var(--rose-star); }
+.compat-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+}
+.compat-card.boy-card { border-top-color: var(--jade-star); }
+.compat-card.girl-card { border-top-color: var(--rose-star); }
+.compat-gender-badge {
+  font-size: 0.8rem; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; padding: 7px 16px;
+  border-radius: 50px; display: inline-block; margin-bottom: 22px;
+}
+.male-badge { background: rgba(15,138,130,0.12); color: var(--jade-star); border: 1px solid var(--jade-star); }
+.female-badge { background: rgba(192,67,106,0.12); color: var(--rose-star); border: 1px solid var(--rose-star); }
 .vs-divider {
   display: flex; align-items: center; justify-content: center;
-  padding-top: 80px;
+  padding-top: 90px;
 }
 .vs-circle {
-  width: 52px; height: 52px; border-radius: 50%;
-  background: var(--gold-glow); border: 2px solid var(--gold-mid);
+  width: 56px; height: 56px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--gold-mid), var(--gold-bright));
   display: flex; align-items: center; justify-content: center;
-  font-weight: 700; font-size: 0.9rem; color: var(--gold-bright);
+  font-family: 'Playfair Display', serif;
+  font-weight: 700; font-size: 1rem; color: #fff;
+  box-shadow: 0 4px 14px rgba(184,134,11,0.3);
 }
 .compat-btn { max-width: 1100px; margin: 0 auto; }
 
@@ -474,6 +486,38 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 }
 .compat-method-bar select:focus { border-color: var(--gold-mid); }
 
+/* ── Place search / geocoding ─────────────── */
+.place-group { position: relative; }
+.place-suggestions {
+  position: absolute; top: 100%; left: 0; right: 0; z-index: 50;
+  background: #fff; border: 1px solid var(--border); border-top: none;
+  border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+  max-height: 240px; overflow-y: auto;
+  box-shadow: 0 8px 24px rgba(46,37,25,0.12);
+  display: none;
+}
+.place-suggestions.open { display: block; }
+.place-suggestion {
+  padding: 10px 14px; cursor: pointer; font-size: 0.85rem;
+  color: var(--text-primary); border-bottom: 1px solid rgba(184,134,11,0.08);
+  transition: background 0.15s;
+}
+.place-suggestion:last-child { border-bottom: none; }
+.place-suggestion:hover, .place-suggestion.highlighted { background: var(--gold-glow); }
+.place-suggestion .ps-name { font-weight: 500; }
+.place-suggestion .ps-coords { font-size: 0.72rem; color: var(--text-secondary); margin-top: 2px; }
+.place-suggestion.loading, .place-suggestion.empty {
+  color: var(--text-secondary); cursor: default; font-style: italic;
+}
+.place-suggestion.loading:hover, .place-suggestion.empty:hover { background: transparent; }
+.place-status {
+  font-size: 0.72rem; margin-top: 5px; min-height: 1em;
+}
+.place-status.ok { color: #1e8449; }
+.place-status.warn { color: #c0392b; }
+.place-status.info { color: var(--gold-mid); }
+
+
 
 /* ── Life Area Tabs ───────────────────────── */
 .life-tabs {
@@ -571,51 +615,84 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 
 
 /* ── Compatibility Results ────────────────── */
-.score-overview-card { text-align: center; }
-.score-overview {
+.score-overview-card {
+  background: linear-gradient(135deg, #fffaf0, #fbf3e2);
+  border-color: rgba(184,134,11,0.35);
+}
+.score-overview { display: flex; flex-direction: column; gap: 24px; }
+.couple-names {
+  display: flex; align-items: center; justify-content: center; gap: 16px;
+  font-family: 'Playfair Display', serif; font-size: 1.6rem;
+  flex-wrap: wrap;
+}
+.cn-boy { color: var(--jade-star); font-weight: 600; }
+.cn-girl { color: var(--rose-star); font-weight: 600; }
+.cn-heart { color: #c0392b; font-size: 1.4rem; animation: heartbeat 1.6s ease-in-out infinite; }
+@keyframes heartbeat { 0%,100%{transform:scale(1)} 15%{transform:scale(1.25)} 30%{transform:scale(1)} 45%{transform:scale(1.15)} }
+.overview-main {
   display: flex; align-items: center; justify-content: center;
   gap: 48px; flex-wrap: wrap;
 }
-.score-ring {
-  position: relative; width: 160px; height: 160px;
-}
-.score-ring svg { transform: rotate(-90deg); }
+.score-ring { position: relative; width: 160px; height: 160px; flex-shrink: 0; }
 .score-ring-label {
   position: absolute; inset: 0;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
 }
 .score-number {
   font-family: 'Playfair Display', serif;
-  font-size: 2.5rem; font-weight: 700; color: var(--gold-bright); line-height: 1;
+  font-size: 3rem; font-weight: 700; line-height: 1;
 }
-.score-total { font-size: 0.8rem; color: var(--text-secondary); }
-.score-verdict {
-  font-size: 1.1rem; font-weight: 600;
-  max-width: 320px; text-align: center;
+.score-pct { font-size: 1.3rem; vertical-align: super; }
+.score-total { font-size: 0.78rem; color: var(--text-secondary); margin-top: 4px; }
+.overview-right { min-width: 260px; max-width: 340px; flex: 1; }
+.verdict-pill {
+  display: inline-block; font-size: 1.05rem; font-weight: 700;
+  padding: 8px 20px; border-radius: 50px; border: 2px solid;
+  margin-bottom: 18px;
+}
+.overview-metrics { display: flex; flex-direction: column; gap: 12px; }
+.ov-metric-head {
+  display: flex; justify-content: space-between;
+  font-size: 0.82rem; color: var(--text-primary); margin-bottom: 5px; font-weight: 500;
+}
+.ov-bar { height: 8px; background: rgba(46,37,25,0.08); border-radius: 4px; overflow: hidden; }
+.ov-bar-fill {
+  height: 100%; border-radius: 4px;
+  background: linear-gradient(90deg, var(--gold-mid), var(--gold-bright));
+  transition: width 1.2s cubic-bezier(.4,0,.2,1);
+}
+.method-badge {
+  margin-top: 18px; display: inline-block;
+  font-size: 0.72rem; letter-spacing: 0.05em;
+  color: var(--gold-mid); background: rgba(184,134,11,0.08);
+  padding: 5px 14px; border-radius: 50px; border: 1px solid var(--border);
 }
 
 /* ── Porutham Grid ────────────────────────── */
 .porutham-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
   gap: 12px;
 }
 .porutham-item {
-  background: rgba(184,134,11,0.05);
+  background: #fff;
   border: 1px solid var(--border);
+  border-left: 4px solid var(--border);
   border-radius: var(--radius-sm);
   padding: 14px 16px;
   display: flex; align-items: center; gap: 12px;
+  transition: transform 0.15s, box-shadow 0.15s;
 }
-.porutham-icon { font-size: 1.4rem; flex-shrink: 0; }
-.porutham-name { font-size: 0.85rem; font-weight: 600; color: var(--text-primary); }
-.porutham-result { font-size: 0.75rem; margin-top: 2px; }
+.porutham-item:hover { transform: translateY(-2px); box-shadow: 0 4px 14px rgba(46,37,25,0.08); }
+.porutham-icon { font-size: 1.5rem; flex-shrink: 0; }
+.porutham-name { font-size: 0.88rem; font-weight: 600; color: var(--text-primary); }
+.porutham-result { font-size: 0.75rem; margin-top: 2px; font-weight: 600; }
 .p-match { color: #1e8449; }
 .p-partial { color: var(--gold-mid); }
-.p-nomatch { color: #e74c3c; }
-.porutham-match { border-color: rgba(46,204,113,0.3); }
-.porutham-partial { border-color: rgba(201,152,42,0.3); }
-.porutham-nomatch { border-color: rgba(231,76,60,0.2); }
+.p-nomatch { color: #c0392b; }
+.porutham-match { border-left-color: #1e8449; }
+.porutham-partial { border-left-color: var(--gold-mid); }
+.porutham-nomatch { border-left-color: #c0392b; }
 
 /* ── Special Analysis Cards ───────────────── */
 .special-analysis { font-size: 0.9rem; }
@@ -763,9 +840,23 @@ input[type="time"]::-webkit-calendar-picker-indicator {
             <label>Time of Birth <span class="req">*</span></label>
             <input type="time" id="tob" required />
           </div>
-          <div class="form-group">
+          <div class="form-group place-group">
             <label>Place of Birth <span class="req">*</span></label>
-            <input type="text" id="pob" placeholder="e.g. Chennai, India" required />
+            <input type="text" id="pob" placeholder="Type a city, e.g. Chennai" autocomplete="off" required />
+            <div class="place-suggestions" id="pob-suggestions"></div>
+            <div class="place-status" id="pob-status"></div>
+          </div>
+          <div class="form-group">
+            <label>Latitude <span class="req">*</span></label>
+            <input type="number" id="lat" step="0.0001" placeholder="e.g. 13.0827" required />
+          </div>
+          <div class="form-group">
+            <label>Longitude <span class="req">*</span></label>
+            <input type="number" id="lon" step="0.0001" placeholder="e.g. 80.2707" required />
+          </div>
+          <div class="form-group">
+            <label>Timezone (UTC offset) <span class="req">*</span></label>
+            <input type="number" id="tz" step="0.25" placeholder="e.g. 5.5 for IST" value="5.5" required />
           </div>
           <div class="form-group">
             <label>Gender <span class="req">*</span></label>
@@ -779,9 +870,8 @@ input[type="time"]::-webkit-calendar-picker-indicator {
           <div class="form-group">
             <label>Calculation Method <span class="req">*</span></label>
             <select id="calcMethod" required>
-              <option value="">— Select —</option>
-              <option value="vakya">Traditional</option>
-              <option value="surya">Ancient</option>
+              <option value="vakya">Traditional (Vakya Panchangam)</option>
+              <option value="surya">Ancient (Surya Siddhanta)</option>
             </select>
           </div>
         </div>
@@ -926,13 +1016,12 @@ input[type="time"]::-webkit-calendar-picker-indicator {
       <div class="compat-method-bar">
         <label>Calculation Method <span class="req">*</span></label>
         <select id="compatMethod" required>
-          <option value="">— Select —</option>
-          <option value="vakya">Traditional</option>
-          <option value="surya">Ancient</option>
+          <option value="vakya">Traditional (Vakya Panchangam)</option>
+          <option value="surya">Ancient (Surya Siddhanta)</option>
         </select>
       </div>
       <div class="compat-forms">
-        <div class="form-card compat-card">
+        <div class="form-card compat-card boy-card">
           <div class="compat-gender-badge male-badge">♂ Boy / Groom</div>
           <div class="form-grid">
             <div class="form-group">
@@ -947,9 +1036,23 @@ input[type="time"]::-webkit-calendar-picker-indicator {
               <label>Time of Birth <span class="req">*</span></label>
               <input type="time" id="boy-tob" required />
             </div>
-            <div class="form-group">
+            <div class="form-group place-group">
               <label>Place of Birth <span class="req">*</span></label>
-              <input type="text" id="boy-pob" placeholder="e.g. Madurai, India" required />
+              <input type="text" id="boy-pob" placeholder="Type a city" autocomplete="off" required />
+              <div class="place-suggestions" id="boy-pob-suggestions"></div>
+              <div class="place-status" id="boy-pob-status"></div>
+            </div>
+            <div class="form-group">
+              <label>Latitude <span class="req">*</span></label>
+              <input type="number" id="boy-lat" step="0.0001" placeholder="e.g. 9.9252" required />
+            </div>
+            <div class="form-group">
+              <label>Longitude <span class="req">*</span></label>
+              <input type="number" id="boy-lon" step="0.0001" placeholder="e.g. 78.1198" required />
+            </div>
+            <div class="form-group">
+              <label>Timezone <span class="req">*</span></label>
+              <input type="number" id="boy-tz" step="0.25" placeholder="5.5" value="5.5" required />
             </div>
           </div>
         </div>
@@ -958,7 +1061,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
           <div class="vs-circle">VS</div>
         </div>
 
-        <div class="form-card compat-card">
+        <div class="form-card compat-card girl-card">
           <div class="compat-gender-badge female-badge">♀ Girl / Bride</div>
           <div class="form-grid">
             <div class="form-group">
@@ -973,9 +1076,23 @@ input[type="time"]::-webkit-calendar-picker-indicator {
               <label>Time of Birth <span class="req">*</span></label>
               <input type="time" id="girl-tob" required />
             </div>
-            <div class="form-group">
+            <div class="form-group place-group">
               <label>Place of Birth <span class="req">*</span></label>
-              <input type="text" id="girl-pob" placeholder="e.g. Coimbatore, India" required />
+              <input type="text" id="girl-pob" placeholder="Type a city" autocomplete="off" required />
+              <div class="place-suggestions" id="girl-pob-suggestions"></div>
+              <div class="place-status" id="girl-pob-status"></div>
+            </div>
+            <div class="form-group">
+              <label>Latitude <span class="req">*</span></label>
+              <input type="number" id="girl-lat" step="0.0001" placeholder="e.g. 11.0168" required />
+            </div>
+            <div class="form-group">
+              <label>Longitude <span class="req">*</span></label>
+              <input type="number" id="girl-lon" step="0.0001" placeholder="e.g. 76.9558" required />
+            </div>
+            <div class="form-group">
+              <label>Timezone <span class="req">*</span></label>
+              <input type="number" id="girl-tz" step="0.25" placeholder="5.5" value="5.5" required />
             </div>
           </div>
         </div>
@@ -1434,6 +1551,152 @@ function calcPlanetaryPositions(jd, ayanamsaDeg) {
 // Helper: sin in degrees
 function sin(deg) { return Math.sin(deg * Math.PI / 180); }
 function cos(deg) { return Math.cos(deg * Math.PI / 180); }
+
+// ═══════════════════════════════════════════════════════
+// ACCURATE ENGINE (default) — precise sidereal planets +
+// proper Ascendant. Uses true Lahiri ayanamsa. This avoids
+// the sign-boundary errors of the approximate Vakya bija.
+// ═══════════════════════════════════════════════════════
+
+function lahiriAyanamsa(jd) {
+  const y = (jd - 2415020.5) / 365.25;       // years from 1900.0
+  return 22.4661 + (50.2388475 * y) / 3600;  // arcsec → deg
+}
+
+// Keplerian orbital elements (J2000.0 epoch, rates per Julian century T)
+// a=semi-major axis (AU), e=eccentricity, i=inclination, o=ascending node,
+// w=longitude of perihelion, L=mean longitude. Angles in degrees.
+const ELEM = {
+  Earth:   { a:1.00000011, e0:0.01671022, er:-0.00003804, i0:0.00005,    ir:-0.01294968,
+             o0:-11.26064,    or:0, w0:102.94719,    wr:0.32327364*100/100, L0:100.46435,    Lr:35999.37244981*100/100 },
+  Mercury: { a:0.38709927, e0:0.20563593, er:0.00001906, i0:7.00497902, ir:-0.00594749,
+             o0:48.33076593,  or:0, w0:77.45779628,  wr:0, L0:252.25032350, Lr:149472.67411175 },
+  Venus:   { a:0.72333566, e0:0.00677672, er:-0.00004107, i0:3.39467605, ir:-0.00078890,
+             o0:76.67984255,  or:0, w0:131.60246718, wr:0, L0:181.97909950, Lr:58517.81538729 },
+  Mars:    { a:1.52371034, e0:0.09339410, er:0.00007882, i0:1.84969142, ir:-0.00813131,
+             o0:49.55953891,  or:0, w0:-23.94362959, wr:0, L0:-4.55343205,  Lr:19140.30268499 },
+  Jupiter: { a:5.20288700, e0:0.04838624, er:-0.00013253, i0:1.30439695, ir:-0.00183714,
+             o0:100.47390909, or:0, w0:14.72847983,  wr:0, L0:34.39644051,  Lr:3034.74612775 },
+  Saturn:  { a:9.53667594, e0:0.05386179, er:-0.00050991, i0:2.48599187, ir:0.00193609,
+             o0:113.66242448, or:0, w0:92.59887831,  wr:0, L0:49.95424423,  Lr:1222.49362201 },
+};
+
+function calcAccurate(jd, lat, lonE, method) {
+  const T = (jd - 2451545.0) / 36525;
+  const norm = x => ((x % 360) + 360) % 360;
+
+  // ── Sun (precise) ──
+  const L0_sun = norm(280.46646 + 36000.76983 * T + 0.0003032 * T * T);
+  const M_sun  = norm(357.52911 + 35999.05029 * T - 0.0001537 * T * T);
+  const C = (1.914602 - 0.004817 * T - 0.000014 * T * T) * sin(M_sun)
+          + (0.019993 - 0.000101 * T) * sin(2 * M_sun)
+          + 0.000289 * sin(3 * M_sun);
+  const sunLon = norm(L0_sun + C);
+
+  // ── Moon (extended ELP terms for accuracy) ──
+  const Lp = norm(218.3164477 + 481267.88123421 * T - 0.0015786 * T * T);
+  const D  = norm(297.8501921 + 445267.1114034 * T - 0.0018819 * T * T);
+  const M  = M_sun;
+  const Mp = norm(134.9633964 + 477198.8675055 * T + 0.0087414 * T * T);
+  const F  = norm(93.2720950 + 483202.0175233 * T - 0.0036539 * T * T);
+  const moonLon = norm(Lp
+    + 6.288774 * sin(Mp)
+    + 1.274027 * sin(2 * D - Mp)
+    + 0.658314 * sin(2 * D)
+    + 0.213618 * sin(2 * Mp)
+    - 0.185116 * sin(M)
+    - 0.114332 * sin(2 * F)
+    + 0.058793 * sin(2 * D - 2 * Mp)
+    + 0.057066 * sin(2 * D - M - Mp)
+    + 0.053322 * sin(2 * D + Mp)
+    + 0.045758 * sin(2 * D - M)
+    - 0.040923 * sin(M - Mp)
+    - 0.034720 * sin(D)
+    - 0.030383 * sin(M + Mp)
+    + 0.015327 * sin(2 * D - 2 * F)
+    - 0.012528 * sin(2 * F + Mp)
+    + 0.010980 * sin(2 * F - Mp)
+    + 0.010675 * sin(4 * D - Mp)
+    + 0.010034 * sin(3 * Mp));
+
+  // ── Planets: heliocentric Keplerian elements → geocentric longitude ──
+  // Orbital elements → geocentric ecliptic longitude (tropical, deg).
+  function planetGeoLon(el) {
+    const d2r = Math.PI / 180;
+    function helio(p) {
+      const L  = norm(p.L0 + p.Lr * T);       // mean longitude
+      const wp = norm(p.w0 + p.wr * T);        // longitude of perihelion (ϖ)
+      const om = norm(p.o0 + p.or * T);        // ascending node (Ω)
+      const a  = p.a;
+      const e  = p.e0 + p.er * T;
+      const inc= (p.i0 + p.ir * T) * d2r;
+      const M  = norm(L - wp) * d2r;           // mean anomaly
+      // Solve Kepler
+      let E = M + e * Math.sin(M);
+      for (let k = 0; k < 10; k++) E = E - (E - e * Math.sin(E) - M) / (1 - e * Math.cos(E));
+      // Position in orbital plane
+      const xv = a * (Math.cos(E) - e);
+      const yv = a * Math.sqrt(1 - e * e) * Math.sin(E);
+      const v  = Math.atan2(yv, xv);           // true anomaly
+      const r  = Math.sqrt(xv * xv + yv * yv);
+      const w  = (wp - om) * d2r;              // argument of perihelion
+      const u  = v + w;                        // argument of latitude
+      const O  = om * d2r;
+      // Heliocentric ecliptic rectangular
+      const x = r * (Math.cos(O) * Math.cos(u) - Math.sin(O) * Math.sin(u) * Math.cos(inc));
+      const y = r * (Math.sin(O) * Math.cos(u) + Math.cos(O) * Math.sin(u) * Math.cos(inc));
+      const z = r * (Math.sin(u) * Math.sin(inc));
+      return { x, y, z };
+    }
+    const earth = helio(ELEM.Earth);
+    const pl = helio(el);
+    return norm(Math.atan2(pl.y - earth.y, pl.x - earth.x) * 180 / Math.PI);
+  }
+
+  const marsLon = planetGeoLon(ELEM.Mars);
+  const mercLon = planetGeoLon(ELEM.Mercury);
+  const jupLon  = planetGeoLon(ELEM.Jupiter);
+  const venLon  = planetGeoLon(ELEM.Venus);
+  const satLon  = planetGeoLon(ELEM.Saturn);
+
+  // ── Rahu / Ketu (mean node) ──
+  const rahuLon = norm(125.0445 - 1934.1363 * T);
+  const ketuLon = norm(rahuLon + 180);
+
+  // ── Ascendant (proper spherical formula) ──
+  const eps = 23.439291 - 0.0130042 * T;
+  const GMST = norm(280.46061837 + 360.98564736629 * (jd - 2451545.0)
+             + 0.000387933 * T * T);
+  const LST = norm(GMST + lonE);
+  const ramc = LST;
+  let asc = Math.atan2(
+    cos(ramc),
+    -(sin(ramc) * cos(eps) + Math.tan(lat * Math.PI / 180) * sin(eps))
+  ) * 180 / Math.PI;
+  asc = norm(asc);
+  // place ascendant in correct half
+  if (asc < ramc - 90 || asc > ramc + 270) asc = norm(asc + 180);
+
+  // Ayanamsa / method correction:
+  //  - 'surya' (Ancient): raw Surya Siddhanta frame — classical positions run
+  //    ahead of the observed sky by ~9.66° (accumulated drift since ~400 CE).
+  //  - 'vakya' (Traditional, default): Vakya Panchangam, corrected to the
+  //    observed sidereal sky (aligned with Lahiri ayanamsa).
+  const ay = lahiriAyanamsa(jd);
+  const suryaOffset = (method === 'surya') ? 9.66 : 0;
+  // Planets carry the Surya drift; the Ascendant is a geometric sky quantity
+  // (computed from sidereal time) and is the SAME in both methods.
+  const toSid    = lon => norm(lon - ay + suryaOffset);
+  const toSidAsc = lon => norm(lon - ay);
+
+  return {
+    Sun: toSid(sunLon), Moon: toSid(moonLon), Mars: toSid(marsLon),
+    Mercury: toSid(mercLon), Jupiter: toSid(jupLon), Venus: toSid(venLon),
+    Saturn: toSid(satLon), Rahu: toSid(rahuLon), Ketu: toSid(ketuLon),
+    Ascendant: toSidAsc(asc),
+  };
+}
+
 
 // ═══════════════════════════════════════════════════════
 // RASI & NAKSHATRA FROM LONGITUDE
@@ -2439,6 +2702,9 @@ function generateJathagam() {
     { id:'dob',        label:'Date of Birth' },
     { id:'tob',        label:'Time of Birth' },
     { id:'pob',        label:'Place of Birth' },
+    { id:'lat',        label:'Latitude' },
+    { id:'lon',        label:'Longitude' },
+    { id:'tz',         label:'Timezone' },
     { id:'gender',     label:'Gender' },
     { id:'calcMethod', label:'Calculation Method' },
   ];
@@ -2448,8 +2714,13 @@ function generateJathagam() {
   const dobStr = document.getElementById('dob').value;
   const tobStr = document.getElementById('tob').value;
   const pob    = document.getElementById('pob').value.trim();
+  const lat    = parseFloat(document.getElementById('lat').value);
+  const lon    = parseFloat(document.getElementById('lon').value);
+  const tz     = parseFloat(document.getElementById('tz').value);
   const gender = document.getElementById('gender').value;
-  const methodKey = document.getElementById('calcMethod').value;
+  const method = document.getElementById('calcMethod').value;
+
+  if (!isValidCoord(lat, lon, tz)) return;
 
   showLoading('Reading the stars for ' + name + '…');
 
@@ -2459,24 +2730,26 @@ function generateJathagam() {
       const [hr, mn]     = tobStr.split(':').map(Number);
       const hour = hr + mn / 60;
 
-      const jd = toJulianDay(yr, mo, dy, hour, 5.5); // IST default
-      const coords = lookupCoords(pob);
+      const jd = toJulianDay(yr, mo, dy, hour, tz);
 
-      let pos;
-      if (methodKey === 'surya') {
-        pos = calcSuryaSiddhanta(jd, coords.lat, coords.lon, false);
-      } else {
-        pos = calcSuryaSiddhanta(jd, coords.lat, coords.lon, true);
-      }
+      const pos = calcAccurate(jd, lat, lon, method);
 
       hideLoading();
-      renderJathagam({ name, dobStr, tobStr, pob, gender, ayanamsaKey: methodKey, yr, mo, dy, hour }, pos, jd);
+      renderJathagam({ name, dobStr, tobStr, pob, lat, lon, tz, gender, method, ayanamsaKey: method, yr, mo, dy, hour }, pos, jd);
     } catch (e) {
       hideLoading();
       console.error(e);
       alert('Calculation error. Please check inputs.');
     }
   }, 1200);
+}
+
+// Validate coordinate ranges
+function isValidCoord(lat, lon, tz) {
+  if (isNaN(lat) || lat < -90 || lat > 90) { alert('Latitude must be between -90 and 90.'); return false; }
+  if (isNaN(lon) || lon < -180 || lon > 180) { alert('Longitude must be between -180 and 180.'); return false; }
+  if (isNaN(tz) || tz < -12 || tz > 14) { alert('Timezone (UTC offset) must be between -12 and +14.'); return false; }
+  return true;
 }
 
 // ── Mandatory field validation ──
@@ -2504,33 +2777,182 @@ function validateFields(fields) {
 }
 
 
-// ── City coordinate lookup (common Indian + world cities) ──
-const CITY_COORDS = {
-  'chennai': {lat:13.0827, lon:80.2707}, 'madras': {lat:13.0827, lon:80.2707},
-  'madurai': {lat:9.9252, lon:78.1198},  'coimbatore': {lat:11.0168, lon:76.9558},
-  'trichy': {lat:10.7905, lon:78.7047},  'tiruchirappalli': {lat:10.7905, lon:78.7047},
-  'salem': {lat:11.6643, lon:78.1460},   'tirunelveli': {lat:8.7139, lon:77.7567},
-  'kumbakonam': {lat:10.9602, lon:79.3845}, 'thanjavur': {lat:10.7870, lon:79.1378},
-  'bangalore': {lat:12.9716, lon:77.5946}, 'bengaluru': {lat:12.9716, lon:77.5946},
-  'mumbai': {lat:19.0760, lon:72.8777},  'delhi': {lat:28.6139, lon:77.2090},
-  'new delhi': {lat:28.6139, lon:77.2090}, 'kolkata': {lat:22.5726, lon:88.3639},
-  'hyderabad': {lat:17.3850, lon:78.4867}, 'pune': {lat:18.5204, lon:73.8567},
-  'ahmedabad': {lat:23.0225, lon:72.5714}, 'kochi': {lat:9.9312, lon:76.2673},
-  'thiruvananthapuram': {lat:8.5241, lon:76.9366}, 'trivandrum': {lat:8.5241, lon:76.9366},
-  'vijayawada': {lat:16.5062, lon:80.6480}, 'visakhapatnam': {lat:17.6868, lon:83.2185},
-  'pondicherry': {lat:11.9416, lon:79.8083}, 'puducherry': {lat:11.9416, lon:79.8083},
-  'vellore': {lat:12.9165, lon:79.1325}, 'erode': {lat:11.3410, lon:77.7172},
-  'tirupati': {lat:13.6288, lon:79.4192}, 'mysore': {lat:12.2958, lon:76.6394},
-  'colombo': {lat:6.9271, lon:79.8612}, 'jaffna': {lat:9.6615, lon:80.0255},
-  'singapore': {lat:1.3521, lon:103.8198}, 'london': {lat:51.5074, lon:-0.1278},
-  'new york': {lat:40.7128, lon:-74.0060}, 'dubai': {lat:25.2048, lon:55.2708},
-};
+// ════════════════════════════════════════════════════════
+// PLACE SEARCH / GEOCODING
+// Built-in city table for instant offline results + live
+// OpenStreetMap Nominatim search for any place on Earth.
+// ════════════════════════════════════════════════════════
 
-function lookupCoords(place) {
-  if (!place) return {lat:13.0827, lon:80.2707}; // default Chennai
-  const key = place.toLowerCase().split(',')[0].trim();
-  return CITY_COORDS[key] || {lat:13.0827, lon:80.2707};
+// Expanded built-in city table (instant, offline). lat, lon, tz
+const CITY_DB = [
+  // Tamil Nadu
+  ['Chennai, India',13.0827,80.2707,5.5],['Madurai, India',9.9252,78.1198,5.5],
+  ['Coimbatore, India',11.0168,76.9558,5.5],['Tiruchirappalli, India',10.7905,78.7047,5.5],
+  ['Salem, India',11.6643,78.1460,5.5],['Tirunelveli, India',8.7139,77.7567,5.5],
+  ['Tiruppur, India',11.1085,77.3411,5.5],['Erode, India',11.3410,77.7172,5.5],
+  ['Vellore, India',12.9165,79.1325,5.5],['Thoothukudi, India',8.7642,78.1348,5.5],
+  ['Dindigul, India',10.3624,77.9695,5.5],['Thanjavur, India',10.7870,79.1378,5.5],
+  ['Kumbakonam, India',10.9602,79.3845,5.5],['Nagercoil, India',8.1833,77.4119,5.5],
+  ['Kanchipuram, India',12.8342,79.7036,5.5],['Karur, India',10.9601,78.0766,5.5],
+  ['Cuddalore, India',11.7480,79.7714,5.5],['Sivakasi, India',9.4533,77.7972,5.5],
+  ['Pollachi, India',10.6589,77.0085,5.5],['Hosur, India',12.7409,77.8253,5.5],
+  // Major Indian cities
+  ['Bengaluru, India',12.9716,77.5946,5.5],['Mumbai, India',19.0760,72.8777,5.5],
+  ['Delhi, India',28.6139,77.2090,5.5],['New Delhi, India',28.6139,77.2090,5.5],
+  ['Kolkata, India',22.5726,88.3639,5.5],['Hyderabad, India',17.3850,78.4867,5.5],
+  ['Pune, India',18.5204,73.8567,5.5],['Ahmedabad, India',23.0225,72.5714,5.5],
+  ['Jaipur, India',26.9124,75.7873,5.5],['Lucknow, India',26.8467,80.9462,5.5],
+  ['Kanpur, India',26.4499,80.3319,5.5],['Nagpur, India',21.1458,79.0882,5.5],
+  ['Indore, India',22.7196,75.8577,5.5],['Bhopal, India',23.2599,77.4126,5.5],
+  ['Patna, India',25.5941,85.1376,5.5],['Visakhapatnam, India',17.6868,83.2185,5.5],
+  ['Vijayawada, India',16.5062,80.6480,5.5],['Kochi, India',9.9312,76.2673,5.5],
+  ['Thiruvananthapuram, India',8.5241,76.9366,5.5],['Kozhikode, India',11.2588,75.7804,5.5],
+  ['Thrissur, India',10.5276,76.2144,5.5],['Mysuru, India',12.2958,76.6394,5.5],
+  ['Mangaluru, India',12.9141,74.8560,5.5],['Tirupati, India',13.6288,79.4192,5.5],
+  ['Puducherry, India',11.9416,79.8083,5.5],['Chandigarh, India',30.7333,76.7794,5.5],
+  ['Surat, India',21.1702,72.8311,5.5],['Guwahati, India',26.1445,91.7362,5.5],
+  // Sri Lanka & nearby
+  ['Colombo, Sri Lanka',6.9271,79.8612,5.5],['Jaffna, Sri Lanka',9.6615,80.0255,5.5],
+  ['Kandy, Sri Lanka',7.2906,80.6337,5.5],
+  // World
+  ['Singapore',1.3521,103.8198,8],['Kuala Lumpur, Malaysia',3.1390,101.6869,8],
+  ['Dubai, UAE',25.2048,55.2708,4],['Abu Dhabi, UAE',24.4539,54.3773,4],
+  ['London, UK',51.5074,-0.1278,0],['New York, USA',40.7128,-74.0060,-5],
+  ['Toronto, Canada',43.6532,-79.3832,-5],['Sydney, Australia',-33.8688,151.2093,10],
+  ['Melbourne, Australia',-37.8136,144.9631,10],['Doha, Qatar',25.2854,51.5310,3],
+  ['Riyadh, Saudi Arabia',24.7136,46.6753,3],['Muscat, Oman',23.5880,58.3829,4],
+  ['San Francisco, USA',37.7749,-122.4194,-8],['Chicago, USA',41.8781,-87.6298,-6],
+  ['Los Angeles, USA',34.0522,-118.2437,-8],['Auckland, New Zealand',-36.8485,174.7633,12],
+];
+
+// Estimate timezone from longitude (fallback when unknown)
+function tzFromLon(lon) { return Math.round(lon / 15 * 4) / 4; }
+
+// Search the built-in table
+function searchLocalCities(query) {
+  const q = query.toLowerCase().trim();
+  if (!q) return [];
+  return CITY_DB
+    .filter(c => c[0].toLowerCase().includes(q))
+    .slice(0, 6)
+    .map(c => ({ name: c[0], lat: c[1], lon: c[2], tz: c[3], source: 'local' }));
 }
+
+// Live geocoding via OpenStreetMap Nominatim (no key required)
+async function geocodeOnline(query) {
+  const url = 'https://nominatim.openstreetmap.org/search?format=json&limit=6&q=' + encodeURIComponent(query);
+  const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
+  if (!res.ok) throw new Error('geocode failed');
+  const data = await res.json();
+  return data.map(d => ({
+    name: d.display_name,
+    lat: parseFloat(d.lat),
+    lon: parseFloat(d.lon),
+    tz: tzFromLon(parseFloat(d.lon)),  // estimate; user can fine-tune
+    source: 'online'
+  }));
+}
+
+// Wire a place input to its suggestion box + lat/lon/tz fields
+function setupPlaceSearch(pobId, latId, lonId, tzId) {
+  const input  = document.getElementById(pobId);
+  const sugBox = document.getElementById(pobId + '-suggestions');
+  const status = document.getElementById(pobId + '-status');
+  const latEl  = document.getElementById(latId);
+  const lonEl  = document.getElementById(lonId);
+  const tzEl   = document.getElementById(tzId);
+  if (!input || !sugBox) return;
+
+  let timer = null, lastQuery = '', chosen = false;
+
+  function setStatus(msg, cls) {
+    if (!status) return;
+    status.textContent = msg || '';
+    status.className = 'place-status' + (cls ? ' ' + cls : '');
+  }
+
+  function pick(item) {
+    input.value = item.name.split(',').slice(0, 2).join(',').trim() || item.name;
+    latEl.value = item.lat.toFixed(4);
+    lonEl.value = item.lon.toFixed(4);
+    if (tzEl && (item.source === 'local' || !tzEl.value)) tzEl.value = item.tz;
+    [input, latEl, lonEl, tzEl].forEach(e => e && e.classList.remove('field-error'));
+    sugBox.classList.remove('open');
+    sugBox.innerHTML = '';
+    chosen = true;
+    setStatus(item.source === 'online'
+      ? '✓ Located. Timezone is estimated — adjust if needed.'
+      : '✓ Location set.', 'ok');
+  }
+
+  function render(items, loading) {
+    if (loading) {
+      sugBox.innerHTML = '<div class="place-suggestion loading">Searching worldwide…</div>';
+      sugBox.classList.add('open');
+      return;
+    }
+    if (!items.length) {
+      sugBox.innerHTML = '<div class="place-suggestion empty">No match — type the city, or enter lat/long manually.</div>';
+      sugBox.classList.add('open');
+      return;
+    }
+    sugBox.innerHTML = items.map((it, i) =>
+      `<div class="place-suggestion" data-i="${i}">
+         <div class="ps-name">${it.name}</div>
+         <div class="ps-coords">${it.lat.toFixed(4)}°, ${it.lon.toFixed(4)}° · ${it.source === 'local' ? 'saved' : 'online'}</div>
+       </div>`).join('');
+    sugBox.classList.add('open');
+    Array.from(sugBox.querySelectorAll('.place-suggestion')).forEach((el, i) => {
+      el.addEventListener('mousedown', (e) => { e.preventDefault(); pick(items[i]); });
+    });
+  }
+
+  input.addEventListener('input', () => {
+    chosen = false;
+    const q = input.value.trim();
+    setStatus('');
+    if (timer) clearTimeout(timer);
+    if (q.length < 2) { sugBox.classList.remove('open'); return; }
+
+    // Instant local results first
+    const local = searchLocalCities(q);
+    if (local.length) render(local, false);
+    else render([], true);
+
+    // Then debounce an online search to augment
+    timer = setTimeout(async () => {
+      if (q === lastQuery) return;
+      lastQuery = q;
+      try {
+        const online = await geocodeOnline(q);
+        // merge: local first, then online (dedup by rough coords)
+        const merged = [...local];
+        online.forEach(o => {
+          if (!merged.some(m => Math.abs(m.lat - o.lat) < 0.1 && Math.abs(m.lon - o.lon) < 0.1))
+            merged.push(o);
+        });
+        if (input.value.trim() === q) render(merged.slice(0, 8), false);
+      } catch (err) {
+        // Offline or blocked — keep local results; if none, prompt manual
+        if (!local.length && input.value.trim() === q) {
+          render([], false);
+          setStatus('Search unavailable offline — enter latitude/longitude manually.', 'info');
+        }
+      }
+    }, 450);
+  });
+
+  input.addEventListener('blur', () => { setTimeout(() => sugBox.classList.remove('open'), 150); });
+  input.addEventListener('focus', () => { if (sugBox.innerHTML) sugBox.classList.add('open'); });
+
+  // If user edits the place text and leaves without picking, warn
+  input.addEventListener('change', () => {
+    if (!chosen && input.value.trim() && (!latEl.value || !lonEl.value)) {
+      setStatus('Pick a suggestion or enter latitude/longitude for accuracy.', 'warn');
+    }
+  });
+}
+
 
 function renderJathagam(info, pos, jd) {
   const resultsEl = document.getElementById('jathagam-results');
@@ -2656,14 +3078,15 @@ function renderBirthDetails(info, pos) {
   const items = [
     { label: 'Name',          value: info.name },
     { label: 'Date of Birth', value: formatDOB(info.dobStr) },
-    { label: 'Time of Birth', value: info.tobStr + ' IST' },
+    { label: 'Time of Birth', value: info.tobStr + ' (UTC' + (info.tz>=0?'+':'') + info.tz + ')' },
     { label: 'Place of Birth',value: info.pob },
+    { label: 'Coordinates',   value: `${info.lat.toFixed(4)}°, ${info.lon.toFixed(4)}°` },
     { label: 'Lagna (Ascendant)', value: RASHIS[ascRasi], highlight: true },
     { label: 'Rasi (Moon Sign)',  value: RASHIS[moonRasi], highlight: true },
     { label: 'Janma Nakshatra',   value: `${moonNak.name} (Pada ${moonNak.pada})`, highlight: true },
     { label: 'Nakshatra Lord',    value: moonNak.lord },
     { label: 'Sun Sign',          value: RASHIS[sunRasi] },
-    { label: 'Calculation Method', value: methodName(info.ayanamsaKey) },
+    { label: 'Calculation Method', value: methodName(info.method) },
   ];
 
   const el = document.getElementById('birth-details-panel');
@@ -3204,46 +3627,55 @@ function generateCompatibility() {
     { id:'boy-dob',   label:"Groom's Date of Birth" },
     { id:'boy-tob',   label:"Groom's Time of Birth" },
     { id:'boy-pob',   label:"Groom's Place of Birth" },
+    { id:'boy-lat',   label:"Groom's Latitude" },
+    { id:'boy-lon',   label:"Groom's Longitude" },
+    { id:'boy-tz',    label:"Groom's Timezone" },
     { id:'girl-name', label:"Bride's Full Name" },
     { id:'girl-dob',  label:"Bride's Date of Birth" },
     { id:'girl-tob',  label:"Bride's Time of Birth" },
     { id:'girl-pob',  label:"Bride's Place of Birth" },
+    { id:'girl-lat',  label:"Bride's Latitude" },
+    { id:'girl-lon',  label:"Bride's Longitude" },
+    { id:'girl-tz',   label:"Bride's Timezone" },
   ];
   if (!validateFields(fields)) return;
 
-  const methodKey = document.getElementById('compatMethod').value;
-  const useVakya = methodKey !== 'surya';
-
+  const method   = document.getElementById('compatMethod').value;
   const boyName  = document.getElementById('boy-name').value.trim();
   const boyDob   = document.getElementById('boy-dob').value;
   const boyTob   = document.getElementById('boy-tob').value;
+  const boyLat   = parseFloat(document.getElementById('boy-lat').value);
+  const boyLon   = parseFloat(document.getElementById('boy-lon').value);
+  const boyTz    = parseFloat(document.getElementById('boy-tz').value);
   const girlName = document.getElementById('girl-name').value.trim();
   const girlDob  = document.getElementById('girl-dob').value;
   const girlTob  = document.getElementById('girl-tob').value;
+  const girlLat  = parseFloat(document.getElementById('girl-lat').value);
+  const girlLon  = parseFloat(document.getElementById('girl-lon').value);
+  const girlTz   = parseFloat(document.getElementById('girl-tz').value);
+
+  if (!isValidCoord(boyLat, boyLon, boyTz))  return;
+  if (!isValidCoord(girlLat, girlLon, girlTz)) return;
 
   showLoading(`Calculating compatibility for ${boyName} & ${girlName}…`);
 
   setTimeout(() => {
     try {
-      const boyPob  = document.getElementById('boy-pob').value.trim() || 'Chennai';
-      const girlPob = document.getElementById('girl-pob').value.trim() || 'Chennai';
-
-      function parsePositions(dobStr, tobStr, pob) {
+      function parsePositions(dobStr, tobStr, lat, lon, tz) {
         const [yr, mo, dy] = dobStr.split('-').map(Number);
         const [hr, mn]     = tobStr.split(':').map(Number);
         const hour = hr + mn / 60;
-        const jd   = toJulianDay(yr, mo, dy, hour, 5.5);
-        const c    = lookupCoords(pob);
-        return calcSuryaSiddhanta(jd, c.lat, c.lon, useVakya);
+        const jd   = toJulianDay(yr, mo, dy, hour, tz);
+        return calcAccurate(jd, lat, lon, method);
       }
 
-      const boyPos  = parsePositions(boyDob, boyTob, boyPob);
-      const girlPos = parsePositions(girlDob, girlTob, girlPob);
+      const boyPos  = parsePositions(boyDob, boyTob, boyLat, boyLon, boyTz);
+      const girlPos = parsePositions(girlDob, girlTob, girlLat, girlLon, girlTz);
 
       const result = calcCompatibility(boyPos, girlPos);
 
       hideLoading();
-      renderCompatibility(boyName, girlName, result);
+      renderCompatibility(boyName, girlName, result, method);
     } catch (e) {
       hideLoading();
       console.error(e);
@@ -3252,12 +3684,12 @@ function generateCompatibility() {
   }, 1500);
 }
 
-function renderCompatibility(boyName, girlName, result) {
+function renderCompatibility(boyName, girlName, result, method) {
   const resultsEl = document.getElementById('compat-results');
   resultsEl.classList.remove('hidden');
   resultsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-  renderScoreOverview(boyName, girlName, result);
+  renderScoreOverview(boyName, girlName, result, method);
   renderPoruthams(result.poruthams);
   renderVenusAnalysis(result.venusAnalysis);
   renderMoonAnalysis(result.moonAnalysis);
@@ -3320,40 +3752,64 @@ function renderCoupleGuidance(result) {
     <div class="donts-col"><h4>Don'ts</h4><ul>${donts.map(d=>`<li>${d}</li>`).join('')}</ul></div>`;
 }
 
-function renderScoreOverview(boyName, girlName, result) {
+function renderScoreOverview(boyName, girlName, result, method) {
   const { poruthams, venusAnalysis, moonAnalysis, jupiterAnalysis } = result;
   const { totalScore, maxScore } = poruthams;
-  const pct = (totalScore / maxScore) * 100;
+  const pct = Math.round((totalScore / maxScore) * 100);
 
-  const overallLabel = pct >= 75 ? 'Excellent Match ✨' :
-                       pct >= 55 ? 'Good Match 💚' :
-                       pct >= 40 ? 'Average Match 🟡' : 'Challenging Match ⚠️';
+  const overallLabel = pct >= 75 ? 'Excellent Match' :
+                       pct >= 55 ? 'Good Match' :
+                       pct >= 40 ? 'Average Match' : 'Challenging Match';
+  const emoji = pct >= 75 ? '💞' : pct >= 55 ? '💚' : pct >= 40 ? '🟡' : '⚠️';
+  const color = pct >= 75 ? '#1e8449' : pct >= 55 ? '#b8860b' : pct >= 40 ? '#e67e22' : '#c0392b';
 
-  const color = pct >= 75 ? '#2ecc71' : pct >= 55 ? '#f5c842' : pct >= 40 ? '#e67e22' : '#e74c3c';
-
-  const circum = 2 * Math.PI * 60;
+  const r = 64, circum = 2 * Math.PI * r;
   const offset = circum * (1 - pct / 100);
+  const methodLabel = method === 'surya' ? 'Ancient · Surya Siddhanta' : 'Traditional · Vakya Panchangam';
+
+  const metrics = [
+    { label: 'Porutham', val: Math.round(totalScore / maxScore * 100), icon:'🔟' },
+    { label: 'Venus · Love', val: venusAnalysis.score, icon:'♀' },
+    { label: 'Moon · Mind', val: moonAnalysis.score, icon:'☾' },
+    { label: 'Jupiter · Blessing', val: jupiterAnalysis.score, icon:'♃' },
+  ];
 
   document.getElementById('score-overview').innerHTML = `
-    <div class="score-ring">
-      <svg width="160" height="160" viewBox="0 0 160 160">
-        <circle cx="80" cy="80" r="60" fill="none" stroke="rgba(46,37,25,0.1)" stroke-width="12"/>
-        <circle cx="80" cy="80" r="60" fill="none" stroke="${color}" stroke-width="12"
-          stroke-dasharray="${circum}" stroke-dashoffset="${offset}"
-          stroke-linecap="round" style="transition:stroke-dashoffset 1.5s ease"/>
-      </svg>
-      <div class="score-ring-label">
-        <div class="score-number" style="color:${color}">${totalScore}</div>
-        <div class="score-total">of ${maxScore}</div>
-      </div>
+    <div class="couple-names">
+      <span class="cn-boy">${boyName}</span>
+      <span class="cn-heart">♡</span>
+      <span class="cn-girl">${girlName}</span>
     </div>
-    <div>
-      <div style="font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--gold-bright);margin-bottom:8px">
-        ${boyName} & ${girlName}
+    <div class="overview-main">
+      <div class="score-ring">
+        <svg width="160" height="160" viewBox="0 0 160 160">
+          <defs>
+            <linearGradient id="scoreGrad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="${color}" stop-opacity="0.7"/>
+              <stop offset="100%" stop-color="${color}"/>
+            </linearGradient>
+          </defs>
+          <circle cx="80" cy="80" r="${r}" fill="none" stroke="rgba(46,37,25,0.1)" stroke-width="13"/>
+          <circle cx="80" cy="80" r="${r}" fill="none" stroke="url(#scoreGrad)" stroke-width="13"
+            stroke-dasharray="${circum}" stroke-dashoffset="${offset}"
+            stroke-linecap="round" transform="rotate(-90 80 80)"
+            style="transition:stroke-dashoffset 1.6s cubic-bezier(.4,0,.2,1)"/>
+        </svg>
+        <div class="score-ring-label">
+          <div class="score-number" style="color:${color}">${pct}<span class="score-pct">%</span></div>
+          <div class="score-total">${totalScore}/${maxScore} kuta</div>
+        </div>
       </div>
-      <div class="score-verdict" style="color:${color}">${overallLabel}</div>
-      <div style="font-size:0.85rem;color:var(--text-secondary);margin-top:12px;max-width:280px">
-        Porutham Score: ${totalScore}/${maxScore} · Venus: ${venusAnalysis.score}% · Moon: ${moonAnalysis.score}% · Jupiter: ${jupiterAnalysis.score}%
+      <div class="overview-right">
+        <div class="verdict-pill" style="color:${color};border-color:${color}">${emoji} ${overallLabel}</div>
+        <div class="overview-metrics">
+          ${metrics.map(m => `
+            <div class="ov-metric">
+              <div class="ov-metric-head"><span>${m.icon} ${m.label}</span><span>${m.val}%</span></div>
+              <div class="ov-bar"><div class="ov-bar-fill" style="width:${m.val}%"></div></div>
+            </div>`).join('')}
+        </div>
+        <div class="method-badge">${methodLabel}</div>
       </div>
     </div>
   `;
@@ -3518,6 +3974,11 @@ window.addEventListener('DOMContentLoaded', () => {
     el.addEventListener('input', () => el.classList.remove('field-error'));
     el.addEventListener('change', () => el.classList.remove('field-error'));
   });
+
+  // Place search → auto-fills latitude / longitude / timezone
+  setupPlaceSearch('pob', 'lat', 'lon', 'tz');
+  setupPlaceSearch('boy-pob', 'boy-lat', 'boy-lon', 'boy-tz');
+  setupPlaceSearch('girl-pob', 'girl-lat', 'girl-lon', 'girl-tz');
 });
 
 </script></body></html>

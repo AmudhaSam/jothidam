@@ -668,6 +668,56 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   padding: 5px 14px; border-radius: 50px; border: 1px solid var(--border);
 }
 
+/* ── Compat birth-detail comparison ───────── */
+.compat-birth-grid {
+  display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 0;
+  border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden;
+}
+.cbd-cell {
+  padding: 11px 14px; font-size: 0.85rem;
+  border-bottom: 1px solid rgba(184,134,11,0.12);
+}
+.cbd-head {
+  font-weight: 700; font-size: 0.78rem; letter-spacing: 0.05em;
+  text-transform: uppercase; background: rgba(184,134,11,0.06);
+}
+.cbd-head.boy { color: var(--jade-star); }
+.cbd-head.girl { color: var(--rose-star); }
+.cbd-label { color: var(--gold-mid); font-weight: 600; background: rgba(184,134,11,0.03); }
+.cbd-val { color: var(--text-primary); }
+.cbd-row-last .cbd-cell { border-bottom: none; }
+@media(max-width:560px){
+  .compat-birth-grid { grid-template-columns: 1fr; }
+  .cbd-label { background: rgba(184,134,11,0.06); }
+}
+
+/* ── Score summary table ──────────────────── */
+.score-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+.score-table th {
+  text-align: left; padding: 11px 14px; color: var(--gold-mid);
+  font-size: 0.74rem; letter-spacing: 0.06em; text-transform: uppercase;
+  border-bottom: 2px solid var(--border); font-weight: 700;
+}
+.score-table th:nth-child(n+2), .score-table td:nth-child(n+2) { text-align: center; }
+.score-table td {
+  padding: 11px 14px; border-bottom: 1px solid rgba(184,134,11,0.1);
+  color: var(--text-primary);
+}
+.score-table tr:last-child td { border-bottom: none; }
+.score-table tr:hover td { background: rgba(184,134,11,0.04); }
+.score-table .st-aspect { font-weight: 600; }
+.score-table .st-icon { margin-right: 6px; }
+.score-bar-mini {
+  display: inline-block; width: 70px; height: 7px; border-radius: 4px;
+  background: rgba(46,37,25,0.1); overflow: hidden; vertical-align: middle;
+}
+.score-bar-mini > span { display: block; height: 100%; border-radius: 4px; }
+.st-rating { font-weight: 700; }
+.st-total-row td {
+  font-weight: 700; background: rgba(184,134,11,0.07);
+  border-top: 2px solid var(--border); font-size: 0.95rem;
+}
+
 /* ── Porutham Grid ────────────────────────── */
 .porutham-grid {
   display: grid;
@@ -1108,6 +1158,20 @@ input[type="time"]::-webkit-calendar-picker-indicator {
       <!-- Score Overview -->
       <div class="result-card full-width score-overview-card">
         <div class="score-overview" id="score-overview"></div>
+      </div>
+
+      <!-- Birth chart comparison -->
+      <div class="result-card full-width">
+        <h3 class="card-title">📜 Birth Chart Details</h3>
+        <div id="compat-birth-details"></div>
+      </div>
+
+      <!-- Score summary table -->
+      <div class="result-card full-width">
+        <h3 class="card-title">📊 Compatibility Score Summary</h3>
+        <div class="table-wrap">
+          <table class="score-table" id="compat-score-table"></table>
+        </div>
       </div>
 
       <!-- 10 Porutham Grid -->
@@ -2107,6 +2171,7 @@ function calcCompatibility(boy, girl) {
   const girlRasi = getRasi(girl.Moon);
 
   return {
+    boyPos: boy, girlPos: girl,
     poruthams:    calcPoruthams(boyNak, girlNak, boyRasi, girlRasi),
     venusAnalysis: analyzeVenus(boy, girl),
     moonAnalysis:  analyzeMoon(boy, girl),
@@ -3690,6 +3755,8 @@ function renderCompatibility(boyName, girlName, result, method) {
   resultsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
   renderScoreOverview(boyName, girlName, result, method);
+  renderCompatBirthDetails(boyName, girlName, result);
+  renderCompatScoreTable(result);
   renderPoruthams(result.poruthams);
   renderVenusAnalysis(result.venusAnalysis);
   renderMoonAnalysis(result.moonAnalysis);
@@ -3703,6 +3770,81 @@ function renderCompatibility(boyName, girlName, result, method) {
   renderDivorceAnalysis(result.divorceAnalysis);
   renderCoupleGuidance(result);
   renderFinalVerdict(boyName, girlName, result);
+}
+
+// Birth chart comparison: Lagna, Rasi, Nakshatra+Pada for both
+function renderCompatBirthDetails(boyName, girlName, result) {
+  const el = document.getElementById('compat-birth-details');
+  if (!el) return;
+  const b = result.boyPos, g = result.girlPos;
+  const bNak = getNakshatra(b.Moon), gNak = getNakshatra(g.Moon);
+
+  const rows = [
+    ['Lagna (Ascendant)', RASHIS[getRasi(b.Ascendant)], RASHIS[getRasi(g.Ascendant)]],
+    ['Rasi (Moon Sign)',  RASHIS[getRasi(b.Moon)],       RASHIS[getRasi(g.Moon)]],
+    ['Janma Nakshatra',   `${bNak.name} (Pada ${bNak.pada})`, `${gNak.name} (Pada ${gNak.pada})`],
+    ['Nakshatra Lord',    bNak.lord,                     gNak.lord],
+    ['Sun Sign',          RASHIS[getRasi(b.Sun)],        RASHIS[getRasi(g.Sun)]],
+  ];
+
+  el.innerHTML = `<div class="compat-birth-grid">
+    <div class="cbd-cell cbd-head"> </div>
+    <div class="cbd-cell cbd-head boy">♂ ${boyName}</div>
+    <div class="cbd-cell cbd-head girl">♀ ${girlName}</div>
+    ${rows.map((r, i) => `
+      <div class="cbd-cell cbd-label ${i===rows.length-1?'cbd-row-last':''}">${r[0]}</div>
+      <div class="cbd-cell cbd-val ${i===rows.length-1?'cbd-row-last':''}">${r[1]}</div>
+      <div class="cbd-cell cbd-val ${i===rows.length-1?'cbd-row-last':''}">${r[2]}</div>
+    `).join('')}
+  </div>`;
+}
+
+// Score summary table across all compatibility dimensions
+function renderCompatScoreTable(result) {
+  const el = document.getElementById('compat-score-table');
+  if (!el) return;
+
+  const pPct = Math.round(result.poruthams.totalScore / result.poruthams.maxScore * 100);
+  function rate(p){ return p>=75?'Excellent':p>=55?'Good':p>=40?'Average':'Weak'; }
+  function col(p){ return p>=75?'#1e8449':p>=55?'#b8860b':p>=40?'#e67e22':'#c0392b'; }
+
+  const rows = [
+    ['🔟','Porutham (10 Kuta)', pPct, `${result.poruthams.totalScore}/${result.poruthams.maxScore}`],
+    ['♀','Venus — Love & Loyalty', result.venusAnalysis.score, ''],
+    ['☾','Moon — Emotional Mind', result.moonAnalysis.score, ''],
+    ['♃','Jupiter — Marital Blessing', result.jupiterAnalysis.score, ''],
+    ['❤️','Love & Romance', result.loveAnalysis.score, ''],
+    ['🔥','Physical Harmony', result.sexAnalysis.score, ''],
+    ['💰','Wealth & Prosperity', result.wealthAnalysis.score, ''],
+    ['👶','Children & Progeny', result.childrenAnalysis.score, ''],
+    ['🏡','Family Happiness', result.happinessAnalysis.score, ''],
+    ['♂','Mangal Dosha', result.mangalAnalysis.score, result.mangalAnalysis.status],
+  ];
+
+  // Overall = weighted blend of porutham and the special scores
+  const specialAvg = Math.round(
+    (result.venusAnalysis.score + result.moonAnalysis.score + result.jupiterAnalysis.score +
+     result.loveAnalysis.score + result.sexAnalysis.score + result.wealthAnalysis.score +
+     result.childrenAnalysis.score + result.happinessAnalysis.score) / 8);
+  const overall = Math.round(pPct * 0.5 + specialAvg * 0.5);
+
+  el.innerHTML = `
+    <thead><tr><th>Aspect</th><th>Score</th><th>Strength</th><th>Rating</th></tr></thead>
+    <tbody>
+      ${rows.map(r => `
+        <tr>
+          <td class="st-aspect"><span class="st-icon">${r[0]}</span>${r[1]}</td>
+          <td>${r[2]}%${r[3] ? ` <span style="color:var(--text-secondary);font-size:0.78rem">(${r[3]})</span>` : ''}</td>
+          <td><span class="score-bar-mini"><span style="width:${r[2]}%;background:${col(r[2])}"></span></span></td>
+          <td class="st-rating" style="color:${col(r[2])}">${rate(r[2])}</td>
+        </tr>`).join('')}
+      <tr class="st-total-row">
+        <td class="st-aspect">⭐ Overall Compatibility</td>
+        <td>${overall}%</td>
+        <td><span class="score-bar-mini"><span style="width:${overall}%;background:${col(overall)}"></span></span></td>
+        <td class="st-rating" style="color:${col(overall)}">${rate(overall)}</td>
+      </tr>
+    </tbody>`;
 }
 
 // Generic analysis renderer for the new sections

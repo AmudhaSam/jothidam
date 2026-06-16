@@ -1,0 +1,2148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jothidam – Tamil Astrology & Compatibility</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════
+   JOTHIDAM — Tamil Vedic Astrology App
+   Design: Deep cosmos + gold manuscript
+═══════════════════════════════════════════ */
+
+:root {
+  --cosmos-900: #05060f;
+  --cosmos-800: #0d1029;
+  --cosmos-700: #141838;
+  --cosmos-600: #1c2248;
+  --cosmos-500: #263070;
+  --gold-bright: #f5c842;
+  --gold-mid:    #c9982a;
+  --gold-dim:    #7a5c0e;
+  --gold-glow:   rgba(245,200,66,0.15);
+  --rose-star:   #e8718c;
+  --jade-star:   #4ecdc4;
+  --violet-star: #9b59b6;
+  --text-primary: #f0e8d0;
+  --text-secondary: #a09070;
+  --text-muted: #504830;
+  --border: rgba(245,200,66,0.18);
+  --card-bg: rgba(13,16,41,0.85);
+  --radius: 16px;
+  --radius-sm: 8px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--cosmos-900);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── Stars ────────────────────────────────── */
+.stars {
+  position: fixed; inset: 0; z-index: 0;
+  pointer-events: none;
+}
+.star {
+  position: absolute;
+  border-radius: 50%;
+  background: white;
+  animation: twinkle var(--dur, 3s) ease-in-out infinite;
+}
+@keyframes twinkle {
+  0%,100% { opacity: var(--min-op, 0.2); transform: scale(1); }
+  50% { opacity: var(--max-op, 0.9); transform: scale(1.2); }
+}
+
+/* ── Header ───────────────────────────────── */
+.site-header {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(5,6,15,0.92);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+}
+.header-inner {
+  max-width: 1200px; margin: 0 auto;
+  padding: 14px 24px;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; flex-wrap: wrap;
+}
+.logo { display: flex; align-items: center; gap: 12px; }
+.logo-om {
+  font-size: 2rem; color: var(--gold-bright);
+  text-shadow: 0 0 20px var(--gold-bright);
+  line-height: 1;
+}
+.logo-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem; font-weight: 700;
+  color: var(--gold-bright); line-height: 1;
+}
+.logo-sub {
+  font-size: 0.7rem; color: var(--text-secondary);
+  letter-spacing: 0.12em; text-transform: uppercase; margin-top: 2px;
+}
+.main-nav { display: flex; gap: 8px; }
+.nav-btn {
+  background: transparent; border: 1px solid var(--border);
+  color: var(--text-secondary); padding: 8px 18px;
+  border-radius: 50px; cursor: pointer; font-size: 0.85rem;
+  transition: all 0.2s; white-space: nowrap;
+}
+.nav-btn:hover, .nav-btn.active {
+  background: var(--gold-glow); border-color: var(--gold-mid);
+  color: var(--gold-bright);
+}
+
+/* ── Module / Hero ────────────────────────── */
+.module { position: relative; z-index: 1; }
+.module.hidden { display: none; }
+
+.hero-section {
+  padding: 80px 24px 60px;
+  text-align: center;
+  background: radial-gradient(ellipse at 50% 0%, rgba(38,48,112,0.6) 0%, transparent 70%);
+}
+.hero-compat {
+  background: radial-gradient(ellipse at 50% 0%, rgba(155,89,182,0.3) 0%, transparent 70%);
+}
+.hero-eyebrow {
+  font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--gold-mid); margin-bottom: 12px;
+}
+.hero-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 700; line-height: 1.15;
+  color: var(--text-primary); margin-bottom: 18px;
+}
+.hero-title em { color: var(--gold-bright); font-style: italic; }
+.hero-desc {
+  max-width: 560px; margin: 0 auto;
+  font-size: 1rem; color: var(--text-secondary); line-height: 1.7;
+}
+
+/* ── Form Section ─────────────────────────── */
+.form-section { padding: 0 24px 60px; }
+.form-card {
+  max-width: 860px; margin: 0 auto;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 36px;
+  backdrop-filter: blur(12px);
+}
+.form-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem; color: var(--gold-bright);
+  margin-bottom: 24px;
+}
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px; margin-bottom: 28px;
+}
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-group label {
+  font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--gold-mid); font-weight: 500;
+}
+.form-group input,
+.form-group select {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  padding: 10px 14px; font-size: 0.95rem; font-family: inherit;
+  transition: border-color 0.2s, background 0.2s;
+  outline: none;
+}
+.form-group input:focus,
+.form-group select:focus {
+  border-color: var(--gold-mid);
+  background: rgba(245,200,66,0.05);
+}
+.form-group input::placeholder { color: var(--text-muted); }
+.form-group select option { background: var(--cosmos-800); }
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="time"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.7) sepia(1) saturate(2) hue-rotate(10deg);
+  cursor: pointer;
+}
+
+.generate-btn {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  width: 100%; padding: 16px;
+  background: linear-gradient(135deg, var(--gold-mid), var(--gold-bright));
+  color: var(--cosmos-900); font-weight: 700; font-size: 1.05rem;
+  border: none; border-radius: var(--radius-sm);
+  cursor: pointer; transition: all 0.25s; letter-spacing: 0.03em;
+}
+.generate-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(245,200,66,0.35);
+}
+.generate-btn:active { transform: translateY(0); }
+.btn-icon { font-size: 1.2rem; }
+
+/* ── Compatibility form ───────────────────── */
+.compat-form-section { padding: 0 24px 60px; }
+.compat-forms {
+  max-width: 1100px; margin: 0 auto 28px;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 24px; align-items: start;
+}
+@media(max-width: 768px) {
+  .compat-forms { grid-template-columns: 1fr; }
+}
+.compat-card { max-width: none; }
+.compat-gender-badge {
+  font-size: 0.8rem; font-weight: 600; letter-spacing: 0.1em;
+  text-transform: uppercase; padding: 6px 14px;
+  border-radius: 50px; display: inline-block; margin-bottom: 20px;
+}
+.male-badge { background: rgba(78,205,196,0.15); color: var(--jade-star); border: 1px solid var(--jade-star); }
+.female-badge { background: rgba(232,113,140,0.15); color: var(--rose-star); border: 1px solid var(--rose-star); }
+.vs-divider {
+  display: flex; align-items: center; justify-content: center;
+  padding-top: 80px;
+}
+.vs-circle {
+  width: 52px; height: 52px; border-radius: 50%;
+  background: var(--gold-glow); border: 2px solid var(--gold-mid);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 0.9rem; color: var(--gold-bright);
+}
+.compat-btn { max-width: 1100px; margin: 0 auto; }
+
+/* ── Results ──────────────────────────────── */
+.results-section {
+  max-width: 1200px; margin: 0 auto;
+  padding: 0 24px 80px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+.results-section.hidden { display: none; }
+.result-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px;
+  backdrop-filter: blur(12px);
+}
+.full-width { grid-column: 1 / -1; }
+.card-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem; color: var(--gold-bright);
+  margin-bottom: 20px; padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* ── Rasi Chart Grid ──────────────────────── */
+.chart-card { display: flex; flex-direction: column; align-items: center; }
+.rasi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  width: min(340px, 100%);
+  aspect-ratio: 1;
+  border: 2px solid var(--gold-mid);
+  border-radius: 4px;
+  overflow: hidden;
+  gap: 1px; background: var(--gold-dim);
+}
+.rasi-cell {
+  background: var(--cosmos-700);
+  padding: 6px; position: relative;
+  display: flex; flex-direction: column;
+  font-size: 0.65rem; line-height: 1.4;
+  min-height: 0;
+  animation: cellFade 0.5s ease forwards;
+  opacity: 0;
+}
+@keyframes cellFade {
+  to { opacity: 1; }
+}
+.rasi-cell.center-cell { background: var(--cosmos-600); }
+.rasi-cell.highlight { background: rgba(38,48,112,0.9); }
+.rasi-num {
+  font-size: 0.55rem; color: var(--gold-dim);
+  font-weight: 600; position: absolute; top: 3px; right: 4px;
+}
+.rasi-name { color: var(--gold-mid); font-weight: 600; font-size: 0.6rem; }
+.rasi-planets { color: var(--jade-star); font-size: 0.6rem; margin-top: 2px; line-height: 1.3; }
+.navamsa-label {
+  margin-top: 10px; font-size: 0.75rem;
+  color: var(--text-secondary); letter-spacing: 0.08em;
+}
+
+/* ── Planet Table ─────────────────────────── */
+.table-wrap { overflow-x: auto; }
+.planet-table {
+  width: 100%; border-collapse: collapse;
+  font-size: 0.85rem;
+}
+.planet-table th {
+  text-align: left; padding: 10px 12px;
+  color: var(--gold-mid); font-weight: 600;
+  font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase;
+  border-bottom: 1px solid var(--border);
+}
+.planet-table td {
+  padding: 10px 12px; border-bottom: 1px solid rgba(245,200,66,0.06);
+  color: var(--text-primary);
+}
+.planet-table tr:hover td { background: rgba(245,200,66,0.04); }
+.planet-symbol { font-size: 1.1rem; margin-right: 4px; }
+.status-exalted { color: #ffd700; font-weight: 600; }
+.status-debilitated { color: #e74c3c; }
+.status-own { color: var(--jade-star); font-weight: 600; }
+.status-neutral { color: var(--text-secondary); }
+.status-friend { color: #2ecc71; }
+
+/* ── Detail Grid ──────────────────────────── */
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+}
+.detail-item { display: flex; flex-direction: column; gap: 4px; }
+.detail-label {
+  font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em;
+  color: var(--text-secondary);
+}
+.detail-value { font-size: 0.95rem; color: var(--text-primary); font-weight: 500; }
+.detail-value.highlight { color: var(--gold-bright); }
+
+/* ── Dasa Table ───────────────────────────── */
+.dasa-container { overflow-x: auto; }
+.dasa-table-inner { width: 100%; }
+.dasa-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 0; border-bottom: 1px solid rgba(245,200,66,0.07);
+}
+.dasa-planet {
+  width: 90px; flex-shrink: 0;
+  font-weight: 600; font-size: 0.9rem;
+}
+.dasa-bar-wrap { flex: 1; height: 8px; background: rgba(255,255,255,0.07); border-radius: 4px; overflow: hidden; }
+.dasa-bar { height: 100%; border-radius: 4px; transition: width 1s ease; }
+.dasa-years { font-size: 0.75rem; color: var(--text-secondary); width: 60px; text-align: right; flex-shrink: 0; }
+.dasa-dates { font-size: 0.7rem; color: var(--text-muted); width: 160px; flex-shrink: 0; }
+.dasa-current { background: rgba(245,200,66,0.08); border-radius: 8px; padding: 10px 12px; border-left: 3px solid var(--gold-bright); }
+.dasa-current .dasa-planet { color: var(--gold-bright); }
+
+/* ── Yoga Grid ────────────────────────────── */
+.yoga-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 14px;
+}
+.yoga-item {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+}
+.yoga-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.95rem; color: var(--gold-bright);
+  margin-bottom: 6px; font-weight: 600;
+}
+.yoga-present { border-color: rgba(78,205,196,0.4); }
+.yoga-present .yoga-name { color: var(--jade-star); }
+.yoga-badge {
+  display: inline-block; font-size: 0.65rem;
+  padding: 2px 8px; border-radius: 20px; margin-bottom: 8px;
+  font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;
+}
+.badge-present { background: rgba(78,205,196,0.15); color: var(--jade-star); }
+.badge-absent { background: rgba(255,255,255,0.05); color: var(--text-muted); }
+.yoga-desc { font-size: 0.8rem; color: var(--text-secondary); line-height: 1.5; }
+
+/* ── Reading ──────────────────────────────── */
+.reading-card { background: linear-gradient(135deg, rgba(13,16,41,0.95), rgba(26,20,50,0.9)); }
+.reading-content { color: var(--text-secondary); line-height: 1.8; }
+.reading-section { margin-bottom: 20px; }
+.reading-section h4 {
+  font-family: 'Playfair Display', serif;
+  color: var(--gold-bright); font-size: 1rem; margin-bottom: 8px;
+}
+.reading-section p { font-size: 0.9rem; }
+
+/* ── Divisional Charts ────────────────────── */
+.div-charts {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+}
+.div-chart-item {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+}
+.div-chart-name { font-weight: 600; color: var(--gold-mid); font-size: 0.85rem; margin-bottom: 4px; }
+.div-chart-meaning { font-size: 0.75rem; color: var(--text-secondary); }
+
+/* ── Compatibility Results ────────────────── */
+.score-overview-card { text-align: center; }
+.score-overview {
+  display: flex; align-items: center; justify-content: center;
+  gap: 48px; flex-wrap: wrap;
+}
+.score-ring {
+  position: relative; width: 160px; height: 160px;
+}
+.score-ring svg { transform: rotate(-90deg); }
+.score-ring-label {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+}
+.score-number {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.5rem; font-weight: 700; color: var(--gold-bright); line-height: 1;
+}
+.score-total { font-size: 0.8rem; color: var(--text-secondary); }
+.score-verdict {
+  font-size: 1.1rem; font-weight: 600;
+  max-width: 320px; text-align: center;
+}
+
+/* ── Porutham Grid ────────────────────────── */
+.porutham-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+}
+.porutham-item {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  display: flex; align-items: center; gap: 12px;
+}
+.porutham-icon { font-size: 1.4rem; flex-shrink: 0; }
+.porutham-name { font-size: 0.85rem; font-weight: 600; color: var(--text-primary); }
+.porutham-result { font-size: 0.75rem; margin-top: 2px; }
+.p-match { color: #2ecc71; }
+.p-partial { color: var(--gold-mid); }
+.p-nomatch { color: #e74c3c; }
+.porutham-match { border-color: rgba(46,204,113,0.3); }
+.porutham-partial { border-color: rgba(201,152,42,0.3); }
+.porutham-nomatch { border-color: rgba(231,76,60,0.2); }
+
+/* ── Special Analysis Cards ───────────────── */
+.special-analysis { font-size: 0.9rem; }
+.analysis-score {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 14px;
+}
+.analysis-meter {
+  flex: 1; height: 10px; background: rgba(255,255,255,0.08);
+  border-radius: 5px; overflow: hidden;
+}
+.analysis-fill { height: 100%; border-radius: 5px; transition: width 1s ease; }
+.analysis-score-val { font-weight: 700; font-size: 1.1rem; min-width: 40px; }
+.venus-card { border-color: rgba(232,113,140,0.3); }
+.venus-card .card-title { color: var(--rose-star); }
+.venus-card .analysis-fill { background: linear-gradient(90deg, #c0392b, var(--rose-star)); }
+.moon-card { border-color: rgba(155,89,182,0.3); }
+.moon-card .card-title { color: var(--violet-star); }
+.moon-card .analysis-fill { background: linear-gradient(90deg, #6c3483, var(--violet-star)); }
+.jupiter-card { border-color: rgba(245,200,66,0.3); }
+.jupiter-card .card-title { color: var(--gold-bright); }
+.jupiter-card .analysis-fill { background: linear-gradient(90deg, var(--gold-dim), var(--gold-bright)); }
+
+/* ── Divorce Analysis ─────────────────────── */
+.divorce-card { border-color: rgba(231,76,60,0.25); }
+.divorce-card .card-title { color: #e07070; }
+.divorce-content { font-size: 0.88rem; }
+.risk-factors { margin-top: 12px; }
+.risk-factor {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.risk-icon { flex-shrink: 0; font-size: 1rem; }
+.risk-label { font-size: 0.75rem; color: var(--text-secondary); }
+.risk-value { font-size: 0.88rem; margin-top: 2px; }
+.risk-high { color: #e74c3c; }
+.risk-medium { color: var(--gold-mid); }
+.risk-low { color: #2ecc71; }
+.risk-level-bar {
+  display: flex; gap: 4px; margin-top: 16px; align-items: center;
+}
+.risk-level-label { font-size: 0.75rem; color: var(--text-secondary); margin-right: 4px; }
+.risk-dot { width: 12px; height: 12px; border-radius: 50%; background: rgba(255,255,255,0.1); }
+.risk-dot.active-low { background: #2ecc71; }
+.risk-dot.active-med { background: var(--gold-mid); }
+.risk-dot.active-high { background: #e74c3c; }
+
+/* ── Final Verdict ────────────────────────── */
+.verdict-card { background: linear-gradient(135deg, rgba(38,48,112,0.5), rgba(26,20,50,0.8)); }
+.final-verdict { text-align: center; padding: 20px; }
+.verdict-emoji { font-size: 3rem; margin-bottom: 14px; }
+.verdict-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem; color: var(--gold-bright); margin-bottom: 12px;
+}
+.verdict-text { font-size: 0.95rem; color: var(--text-secondary); line-height: 1.8; max-width: 600px; margin: 0 auto; }
+
+/* ── Footer ───────────────────────────────── */
+.site-footer {
+  position: relative; z-index: 1;
+  text-align: center; padding: 32px 24px;
+  border-top: 1px solid var(--border);
+  font-size: 0.8rem; color: var(--text-muted);
+}
+.site-footer a { color: var(--gold-mid); text-decoration: none; }
+.site-footer a:hover { color: var(--gold-bright); }
+
+/* ── Utility ──────────────────────────────── */
+.hidden { display: none !important; }
+
+@media(max-width: 768px) {
+  .results-section { grid-template-columns: 1fr; }
+  .form-card { padding: 22px; }
+  .hero-section { padding: 50px 16px 40px; }
+}
+
+/* ── Loading state ────────────────────────── */
+.loading-overlay {
+  position: fixed; inset: 0; z-index: 200;
+  background: rgba(5,6,15,0.85); backdrop-filter: blur(8px);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 20px;
+}
+.loading-spinner {
+  width: 56px; height: 56px;
+  border: 3px solid rgba(245,200,66,0.2);
+  border-top-color: var(--gold-bright);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading-text {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem; color: var(--gold-bright);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100%{opacity:0.6}50%{opacity:1} }
+</style>
+</head>
+<body>
+  <div class="stars" id="stars"></div>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="logo">
+        <span class="logo-om">ॐ</span>
+        <div>
+          <h1 class="logo-title">Jothidam</h1>
+          <p class="logo-sub">Tamil Vedic Astrology</p>
+        </div>
+      </div>
+      <nav class="main-nav">
+        <button class="nav-btn active" onclick="showModule('jathagam',this)">📜 Jathagam</button>
+        <button class="nav-btn" onclick="showModule('compatibility',this)">💍 Compatibility</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- MODULE 1: JATHAGAM -->
+  <main id="module-jathagam" class="module active">
+    <section class="hero-section">
+      <div class="hero-content">
+        <p class="hero-eyebrow">Your Cosmic Blueprint</p>
+        <h2 class="hero-title">Generate Your<br><em>Tamil Jathagam</em></h2>
+        <p class="hero-desc">Enter your birth details to reveal planetary positions, rasi chart, dasas, yogas, and your complete horoscope reading.</p>
+      </div>
+    </section>
+    <section class="form-section">
+      <div class="form-card">
+        <h3 class="form-title">Birth Details</h3>
+        <div class="form-grid">
+          <div class="form-group"><label>Full Name</label><input type="text" id="name" placeholder="Enter your name" /></div>
+          <div class="form-group"><label>Date of Birth</label><input type="date" id="dob" /></div>
+          <div class="form-group"><label>Time of Birth</label><input type="time" id="tob" /></div>
+          <div class="form-group"><label>Place of Birth</label><input type="text" id="pob" placeholder="e.g. Chennai, India" /></div>
+          <div class="form-group"><label>Gender</label><select id="gender"><option value="male">Male</option><option value="female">Female</option><option value="other">Other</option></select></div>
+          <div class="form-group"><label>Ayanamsa</label><select id="ayanamsa"><option value="lahiri">Lahiri (Standard)</option><option value="krishnamurti">Krishnamurti</option><option value="raman">B.V. Raman</option></select></div>
+        </div>
+        <button class="generate-btn" onclick="generateJathagam()"><span class="btn-icon">✨</span> Generate Jathagam</button>
+      </div>
+    </section>
+    <section id="jathagam-results" class="results-section hidden">
+      <div class="result-card chart-card"><h3 class="card-title">🔯 Rasi Chart (South Indian)</h3><div class="rasi-grid" id="rasi-chart"></div><div class="navamsa-label">Rasi (D1)</div></div>
+      <div class="result-card chart-card"><h3 class="card-title">🌙 Navamsa Chart (D9)</h3><div class="rasi-grid" id="navamsa-chart"></div><div class="navamsa-label">Navamsa (D9)</div></div>
+      <div class="result-card full-width"><h3 class="card-title">🪐 Planetary Positions</h3><div class="table-wrap"><table class="planet-table"><thead><tr><th>Planet</th><th>Rasi</th><th>Degree</th><th>Nakshatra</th><th>Pada</th><th>Lord</th><th>Status</th></tr></thead><tbody id="planet-tbody"></tbody></table></div></div>
+      <div class="result-card"><h3 class="card-title">📋 Birth Details</h3><div class="detail-grid" id="birth-details-panel"></div></div>
+      <div class="result-card"><h3 class="card-title">⏳ Vimshottari Dasa</h3><div class="dasa-container" id="dasa-table"></div></div>
+      <div class="result-card full-width"><h3 class="card-title">⭐ Yogas & Special Combinations</h3><div class="yoga-grid" id="yoga-grid"></div></div>
+      <div class="result-card full-width reading-card"><h3 class="card-title">🔮 Horoscope Reading</h3><div id="horoscope-reading" class="reading-content"></div></div>
+      <div class="result-card full-width"><h3 class="card-title">📊 Divisional Chart Summary</h3><div class="div-charts" id="div-charts"></div></div>
+    </section>
+  </main>
+
+  <!-- MODULE 2: COMPATIBILITY -->
+  <main id="module-compatibility" class="module hidden">
+    <section class="hero-section hero-compat">
+      <div class="hero-content">
+        <p class="hero-eyebrow">Porutham Analysis</p>
+        <h2 class="hero-title">Marriage<br><em>Compatibility</em></h2>
+        <p class="hero-desc">Vedic 10-Porutham matching with Venus loyalty indicator, Moon emotional stability, Jupiter strength, and divorce risk analysis.</p>
+      </div>
+    </section>
+    <section class="form-section compat-form-section">
+      <div class="compat-forms">
+        <div class="form-card compat-card">
+          <div class="compat-gender-badge male-badge">♂ Boy / Groom</div>
+          <div class="form-grid">
+            <div class="form-group"><label>Full Name</label><input type="text" id="boy-name" placeholder="Groom's name" /></div>
+            <div class="form-group"><label>Date of Birth</label><input type="date" id="boy-dob" /></div>
+            <div class="form-group"><label>Time of Birth</label><input type="time" id="boy-tob" /></div>
+            <div class="form-group"><label>Place of Birth</label><input type="text" id="boy-pob" placeholder="e.g. Madurai, India" /></div>
+          </div>
+        </div>
+        <div class="vs-divider"><div class="vs-circle">VS</div></div>
+        <div class="form-card compat-card">
+          <div class="compat-gender-badge female-badge">♀ Girl / Bride</div>
+          <div class="form-grid">
+            <div class="form-group"><label>Full Name</label><input type="text" id="girl-name" placeholder="Bride's name" /></div>
+            <div class="form-group"><label>Date of Birth</label><input type="date" id="girl-dob" /></div>
+            <div class="form-group"><label>Time of Birth</label><input type="time" id="girl-tob" /></div>
+            <div class="form-group"><label>Place of Birth</label><input type="text" id="girl-pob" placeholder="e.g. Coimbatore, India" /></div>
+          </div>
+        </div>
+      </div>
+      <button class="generate-btn compat-btn" onclick="generateCompatibility()"><span class="btn-icon">💍</span> Check Compatibility</button>
+    </section>
+    <section id="compat-results" class="results-section hidden">
+      <div class="result-card full-width score-overview-card"><div class="score-overview" id="score-overview"></div></div>
+      <div class="result-card full-width"><h3 class="card-title">🔟 10 Porutham Analysis</h3><div class="porutham-grid" id="porutham-grid"></div></div>
+      <div class="result-card venus-card"><h3 class="card-title">♀ Venus — Loyalty Indicator</h3><div id="venus-analysis" class="special-analysis"></div></div>
+      <div class="result-card moon-card"><h3 class="card-title">☾ Moon — Emotional Stability</h3><div id="moon-analysis" class="special-analysis"></div></div>
+      <div class="result-card jupiter-card"><h3 class="card-title">♃ Jupiter — Marital Blessing</h3><div id="jupiter-analysis" class="special-analysis"></div></div>
+      <div class="result-card divorce-card full-width"><h3 class="card-title">⚠️ Divorce & Separation Risk Analysis</h3><div id="divorce-analysis" class="divorce-content"></div></div>
+      <div class="result-card full-width verdict-card"><div id="final-verdict" class="final-verdict"></div></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>Jothidam · Free Tamil Vedic Astrology · For educational purposes · <a href="https://github.com/" target="_blank">View on GitHub</a></p>
+  </footer>
+
+<script>
+/**
+ * JOTHIDAM — Vedic Astrology Calculation Engine
+ * Implements: Rasi/Navamsa charts, planetary positions,
+ * Nakshatras, Vimshottari Dasa, Yogas, Tamil Porutham
+ */
+
+// ═══════════════════════════════════════════════════════
+// CONSTANTS
+// ═══════════════════════════════════════════════════════
+
+const RASHIS = [
+  'Mesha (Aries)', 'Vrishabha (Taurus)', 'Mithuna (Gemini)',
+  'Kataka (Cancer)', 'Simha (Leo)', 'Kanya (Virgo)',
+  'Tula (Libra)', 'Vrishchika (Scorpio)', 'Dhanu (Sagittarius)',
+  'Makara (Capricorn)', 'Kumbha (Aquarius)', 'Meena (Pisces)'
+];
+const RASHI_SHORT = ['Mes','Vri','Mit','Kat','Sim','Kan','Tul','Vri','Dha','Mak','Kum','Mee'];
+const RASHI_TAMIL = ['மேஷம்','ரிஷபம்','மிதுனம்','கடகம்','சிம்மம்','கன்னி','துலாம்','விருச்சிகம்','தனுசு','மகரம்','கும்பம்','மீனம்'];
+
+const PLANETS = ['Sun','Moon','Mars','Mercury','Jupiter','Venus','Saturn','Rahu','Ketu','Ascendant'];
+const PLANET_SYMBOLS = { Sun:'☉', Moon:'☽', Mars:'♂', Mercury:'☿', Jupiter:'♃', Venus:'♀', Saturn:'♄', Rahu:'☊', Ketu:'☋', Ascendant:'Asc' };
+const PLANET_COLORS = { Sun:'#f5a623', Moon:'#c0c8e8', Mars:'#e74c3c', Mercury:'#2ecc71', Jupiter:'#f5c842', Venus:'#ff89ac', Saturn:'#9b8ca0', Rahu:'#6c7a89', Ketu:'#95a5a6', Ascendant:'#4ecdc4' };
+const DASA_COLORS = { Sun:'#f5a623', Moon:'#c0c8e8', Mars:'#e74c3c', Mercury:'#2ecc71', Jupiter:'#f5c842', Venus:'#ff89ac', Saturn:'#9b8ca0', Rahu:'#6c7a89', Ketu:'#95a5a6' };
+
+const NAKSHATRAS = [
+  { name:'Ashwini',     lord:'Ketu',    lord_num:0  },
+  { name:'Bharani',     lord:'Venus',   lord_num:1  },
+  { name:'Krittika',    lord:'Sun',     lord_num:2  },
+  { name:'Rohini',      lord:'Moon',    lord_num:3  },
+  { name:'Mrigashirsha',lord:'Mars',    lord_num:4  },
+  { name:'Ardra',       lord:'Rahu',    lord_num:5  },
+  { name:'Punarvasu',   lord:'Jupiter', lord_num:6  },
+  { name:'Pushya',      lord:'Saturn',  lord_num:7  },
+  { name:'Ashlesha',    lord:'Mercury', lord_num:8  },
+  { name:'Magha',       lord:'Ketu',    lord_num:9  },
+  { name:'Purva Phalguni', lord:'Venus', lord_num:10 },
+  { name:'Uttara Phalguni', lord:'Sun', lord_num:11 },
+  { name:'Hasta',       lord:'Moon',    lord_num:12 },
+  { name:'Chitra',      lord:'Mars',    lord_num:13 },
+  { name:'Swati',       lord:'Rahu',    lord_num:14 },
+  { name:'Vishakha',    lord:'Jupiter', lord_num:15 },
+  { name:'Anuradha',    lord:'Saturn',  lord_num:16 },
+  { name:'Jyeshtha',    lord:'Mercury', lord_num:17 },
+  { name:'Mula',        lord:'Ketu',    lord_num:18 },
+  { name:'Purva Ashadha', lord:'Venus', lord_num:19 },
+  { name:'Uttara Ashadha', lord:'Sun',  lord_num:20 },
+  { name:'Shravana',    lord:'Moon',    lord_num:21 },
+  { name:'Dhanishtha',  lord:'Mars',    lord_num:22 },
+  { name:'Shatabhisha', lord:'Rahu',    lord_num:23 },
+  { name:'Purva Bhadrapada', lord:'Jupiter', lord_num:24 },
+  { name:'Uttara Bhadrapada', lord:'Saturn', lord_num:25 },
+  { name:'Revati',      lord:'Mercury', lord_num:26 },
+];
+
+const DASA_YEARS = { Ketu:7, Venus:20, Sun:6, Moon:10, Mars:7, Rahu:18, Jupiter:16, Saturn:19, Mercury:17 };
+const DASA_ORDER = ['Ketu','Venus','Sun','Moon','Mars','Rahu','Jupiter','Saturn','Mercury'];
+
+const PLANET_LORDS = [
+  { rashi: 0, lord:'Mars'    },  // Aries
+  { rashi: 1, lord:'Venus'   },  // Taurus
+  { rashi: 2, lord:'Mercury' },  // Gemini
+  { rashi: 3, lord:'Moon'    },  // Cancer
+  { rashi: 4, lord:'Sun'     },  // Leo
+  { rashi: 5, lord:'Mercury' },  // Virgo
+  { rashi: 6, lord:'Venus'   },  // Libra
+  { rashi: 7, lord:'Mars'    },  // Scorpio
+  { rashi: 8, lord:'Jupiter' },  // Sagittarius
+  { rashi: 9, lord:'Saturn'  },  // Capricorn
+  { rashi:10, lord:'Saturn'  },  // Aquarius
+  { rashi:11, lord:'Jupiter' },  // Pisces
+];
+
+const EXALTATION = { Sun:0, Moon:1, Mars:9, Mercury:5, Jupiter:3, Venus:11, Saturn:6 };   // rashi index
+const DEBILITATION = { Sun:6, Moon:7, Mars:3, Mercury:11, Jupiter:9, Venus:5, Saturn:0 };
+const OWN_SIGN = { Sun:[4], Moon:[3], Mars:[0,7], Mercury:[2,5], Jupiter:[8,11], Venus:[1,6], Saturn:[9,10] };
+
+const AYANAMSA = { lahiri: 23.856, krishnamurti: 23.85, raman: 22.44 };
+
+// South Indian chart layout: position → [row, col] (0-indexed)
+// Rasi number (0=Aries) mapped to grid cell index (0-15)
+const SOUTH_INDIAN_LAYOUT = [
+  // Cell index → Rasi number
+  11, 0, 1, 2,   // top row: Pisces Aries Taurus Gemini
+   10,-1,-1, 3,  // Aquarius, center, center, Cancer
+    9,-1,-1, 4,  // Capricorn, center, center, Leo
+    8, 7, 6, 5   // Sagittarius Scorpio Libra Virgo
+];
+
+// ═══════════════════════════════════════════════════════
+// JULIAN DAY & TIME UTILITIES
+// ═══════════════════════════════════════════════════════
+
+function toJulianDay(year, month, day, hour = 12, tz = 5.5) {
+  const utHour = hour - tz;
+  if (month <= 2) { year -= 1; month += 12; }
+  const A = Math.floor(year / 100);
+  const B = 2 - A + Math.floor(A / 4);
+  return Math.floor(365.25 * (year + 4716)) +
+         Math.floor(30.6001 * (month + 1)) +
+         day + B - 1524.5 + utHour / 24;
+}
+
+function julianToDate(jd) {
+  const z = Math.floor(jd + 0.5);
+  const f = jd + 0.5 - z;
+  let A = z;
+  if (z >= 2299161) {
+    const alpha = Math.floor((z - 1867216.25) / 36524.25);
+    A = z + 1 + alpha - Math.floor(alpha / 4);
+  }
+  const B = A + 1524;
+  const C = Math.floor((B - 122.1) / 365.25);
+  const D = Math.floor(365.25 * C);
+  const E = Math.floor((B - D) / 30.6001);
+  const day   = B - D - Math.floor(30.6001 * E);
+  const month = E < 14 ? E - 1 : E - 13;
+  const year  = month > 2 ? C - 4716 : C - 4715;
+  return { year, month, day };
+}
+
+// ═══════════════════════════════════════════════════════
+// PLANETARY LONGITUDE CALCULATOR (Simplified Astronomical)
+// ═══════════════════════════════════════════════════════
+
+function calcPlanetaryPositions(jd, ayanamsaDeg) {
+  const T = (jd - 2451545.0) / 36525; // Julian centuries from J2000.0
+
+  // Mean longitudes (degrees)
+  const L0_sun  = (280.46646 + 36000.76983 * T) % 360;
+  const M_sun   = (357.52911 + 35999.05029 * T) % 360;
+  const eq_cent = (1.9146 - 0.004817 * T - 0.000014 * T * T) * sin(M_sun)
+                + (0.019993 - 0.000101 * T) * sin(2 * M_sun)
+                + 0.00029 * sin(3 * M_sun);
+  const sunLon  = (L0_sun + eq_cent + 360) % 360;
+
+  // Moon
+  const L0_moon = (218.3165 + 481267.8813 * T) % 360;
+  const M_moon  = (134.963 + 477198.868 * T) % 360;
+  const D_moon  = (297.852 + 445267.111 * T) % 360;
+  const F_moon  = (93.272 + 483202.018 * T) % 360;
+  const moonLon = (L0_moon
+    + 6.289 * sin(M_moon)
+    + 1.274 * sin(2 * D_moon - M_moon)
+    + 0.658 * sin(2 * D_moon)
+    + 0.214 * sin(2 * M_moon)
+    - 0.186 * sin(M_sun)
+    - 0.114 * sin(2 * F_moon)
+    + 360 * 5) % 360;
+
+  // Mars
+  const M_mars  = (19.373 + 19141.696 * T) % 360;
+  const L0_mars = (355.433 + 19141.696 * T) % 360;
+  const marsLon = (L0_mars + 1.85 * sin(M_mars) + 0.443 * sin(2 * M_mars) + 360) % 360;
+
+  // Mercury
+  const M_merc  = (174.796 + 149474.071 * T) % 360;
+  const L0_merc = (252.251 + 149474.071 * T) % 360;
+  const mercLon = (L0_merc + 1.796 * sin(M_merc) + 0.324 * sin(2 * M_merc) + 360) % 360;
+
+  // Jupiter
+  const M_jup   = (20.020 + 3034.907 * T) % 360;
+  const L0_jup  = (34.396 + 3034.907 * T) % 360;
+  const jupLon  = (L0_jup + 5.502 * sin(M_jup) + 0.167 * sin(2 * M_jup) + 360) % 360;
+
+  // Venus
+  const M_ven   = (212.233 + 58519.105 * T) % 360;
+  const L0_ven  = (181.979 + 58519.105 * T) % 360;
+  const venLon  = (L0_ven + 0.775 * sin(M_ven) + 0.050 * sin(2 * M_ven) + 360) % 360;
+
+  // Saturn
+  const M_sat   = (317.020 + 1222.114 * T) % 360;
+  const L0_sat  = (50.077 + 1222.114 * T) % 360;
+  const satLon  = (L0_sat + 6.387 * sin(M_sat) + 0.251 * sin(2 * M_sat) + 360) % 360;
+
+  // Rahu (mean lunar node, retrograde)
+  const rahuLon = (125.044 - 1934.136 * T + 360 * 5) % 360;
+  const ketuLon = (rahuLon + 180) % 360;
+
+  // Ascendant (simplified — using RAMC + latitude correction)
+  const RAMC = (280.46061837 + 360.98564736629 * (jd - 2451545.0)) % 360;
+  const ascLon = (RAMC + 90 + 360) % 360; // simplified tropical ASC
+
+  // Convert to sidereal (Vedic)
+  function toSid(lon) { return (lon - ayanamsaDeg + 360) % 360; }
+
+  return {
+    Sun:       toSid(sunLon),
+    Moon:      toSid(moonLon),
+    Mars:      toSid(marsLon),
+    Mercury:   toSid(mercLon),
+    Jupiter:   toSid(jupLon),
+    Venus:     toSid(venLon),
+    Saturn:    toSid(satLon),
+    Rahu:      toSid(rahuLon),
+    Ketu:      toSid(ketuLon),
+    Ascendant: toSid(ascLon),
+  };
+}
+
+// Helper: sin in degrees
+function sin(deg) { return Math.sin(deg * Math.PI / 180); }
+function cos(deg) { return Math.cos(deg * Math.PI / 180); }
+
+// ═══════════════════════════════════════════════════════
+// RASI & NAKSHATRA FROM LONGITUDE
+// ═══════════════════════════════════════════════════════
+
+function getRasi(lon) { return Math.floor(((lon % 360) + 360) % 360 / 30); }
+function getDegInRasi(lon) { return ((lon % 360) + 360) % 360 % 30; }
+
+function getNakshatra(lon) {
+  const normLon = ((lon % 360) + 360) % 360;
+  const nkIdx   = Math.floor(normLon / (360 / 27));
+  const pada    = Math.floor((normLon % (360 / 27)) / (360 / 108)) + 1;
+  return { ...NAKSHATRAS[nkIdx], index: nkIdx, pada };
+}
+
+function getPlanetStatus(planet, rasiIdx) {
+  if (EXALTATION[planet] === rasiIdx)    return { label: 'Exalted',     cls: 'status-exalted' };
+  if (DEBILITATION[planet] === rasiIdx)  return { label: 'Debilitated', cls: 'status-debilitated' };
+  if (OWN_SIGN[planet] && OWN_SIGN[planet].includes(rasiIdx)) return { label: 'Own Sign', cls: 'status-own' };
+  return { label: 'Neutral', cls: 'status-neutral' };
+}
+
+// ═══════════════════════════════════════════════════════
+// VIMSHOTTARI DASA
+// ═══════════════════════════════════════════════════════
+
+function calcDasa(moonLon, birthDate) {
+  const nakInfo  = getNakshatra(moonLon);
+  const nakLord  = nakInfo.lord;
+  const normLon  = ((moonLon % 360) + 360) % 360;
+
+  // Fraction elapsed in current nakshatra
+  const nkSpan   = 360 / 27;
+  const nkStart  = nakInfo.index * nkSpan;
+  const fraction = (normLon - nkStart) / nkSpan;
+
+  // Find starting dasa lord position in cycle
+  const startIdx   = DASA_ORDER.indexOf(nakLord);
+  const totalYears = DASA_YEARS[nakLord];
+  const elapsed    = fraction * totalYears;
+
+  let results = [];
+  let date = new Date(birthDate);
+  date.setFullYear(date.getFullYear() - 0); // birth date
+
+  // Remaining years in first dasa
+  const remaining = totalYears - elapsed;
+  for (let i = 0; i < 9; i++) {
+    const idx    = (startIdx + i) % 9;
+    const lord   = DASA_ORDER[idx];
+    const years  = i === 0 ? remaining : DASA_YEARS[lord];
+    const start  = new Date(date);
+    const end    = addYears(new Date(date), years);
+    results.push({ lord, years: years.toFixed(1), start, end });
+    date = end;
+  }
+  return { dasas: results, moonNak: nakInfo, firstLord: nakLord };
+}
+
+function addYears(date, years) {
+  const d = new Date(date);
+  const fullYears = Math.floor(years);
+  const months    = Math.round((years - fullYears) * 12);
+  d.setFullYear(d.getFullYear() + fullYears);
+  d.setMonth(d.getMonth() + months);
+  return d;
+}
+
+function fmtDate(d) {
+  return d.toLocaleDateString('en-IN', { year:'numeric', month:'short', day:'numeric' });
+}
+
+// ═══════════════════════════════════════════════════════
+// YOGAS
+// ═══════════════════════════════════════════════════════
+
+function detectYogas(positions) {
+  const rasi = {};
+  for (const [p, lon] of Object.entries(positions)) rasi[p] = getRasi(lon);
+
+  const yogas = [];
+
+  // Gaja Kesari Yoga: Moon & Jupiter in kendra (1,4,7,10) from each other
+  const moonRasi = rasi.Moon;
+  const jupRasi  = rasi.Jupiter;
+  const moonJupDiff = Math.abs(moonRasi - jupRasi);
+  const gajaKesari = [0,3,6,9].includes(moonJupDiff % 12);
+  yogas.push({
+    name: 'Gaja Kesari Yoga',
+    present: gajaKesari,
+    desc: 'Moon and Jupiter in mutual kendra. Bestows intelligence, wisdom, and social respect.'
+  });
+
+  // Budhaditya Yoga: Sun + Mercury in same rasi
+  yogas.push({
+    name: 'Budhaditya Yoga',
+    present: rasi.Sun === rasi.Mercury,
+    desc: 'Sun conjunct Mercury. Endows sharp intellect, eloquence, and analytical ability.'
+  });
+
+  // Chandra-Mangala Yoga: Moon + Mars in same rasi
+  yogas.push({
+    name: 'Chandra-Mangala Yoga',
+    present: rasi.Moon === rasi.Mars,
+    desc: 'Moon conjunct Mars. Creates emotional courage, entrepreneurial drive, and financial acumen.'
+  });
+
+  // Hamsa Yoga: Jupiter in kendra in own/exalted sign
+  const jupInKendra = [0,3,6,9].includes(jupRasi % 3); // simplified
+  const jupStrong = OWN_SIGN.Jupiter.includes(jupRasi) || EXALTATION.Jupiter === jupRasi;
+  yogas.push({
+    name: 'Hamsa Yoga (Pancha Mahapurusha)',
+    present: jupInKendra && jupStrong,
+    desc: 'Jupiter strong in kendra. Signifies wisdom, spiritual inclination, and benefic influence.'
+  });
+
+  // Malavya Yoga: Venus in kendra in own/exalted sign
+  const venStrong = OWN_SIGN.Venus.includes(rasi.Venus) || EXALTATION.Venus === rasi.Venus;
+  const venInKendra = [0,3,6,9].includes(rasi.Venus % 3);
+  yogas.push({
+    name: 'Malavya Yoga (Pancha Mahapurusha)',
+    present: venInKendra && venStrong,
+    desc: 'Venus strong in kendra. Confers beauty, artistic talent, luxury, and marital happiness.'
+  });
+
+  // Ruchaka Yoga: Mars in kendra in own/exalted sign
+  const marsStrong = OWN_SIGN.Mars.includes(rasi.Mars) || EXALTATION.Mars === rasi.Mars;
+  const marsInKendra = [0,3,6,9].includes(rasi.Mars % 3);
+  yogas.push({
+    name: 'Ruchaka Yoga (Pancha Mahapurusha)',
+    present: marsInKendra && marsStrong,
+    desc: 'Mars strong in kendra. Grants leadership, physical strength, and military prowess.'
+  });
+
+  // Dhana Yoga: Lords of 2nd and 11th houses strong/conjunct
+  yogas.push({
+    name: 'Dhana Yoga',
+    present: rasi.Jupiter === rasi.Venus || rasi.Jupiter === rasi.Mercury,
+    desc: 'Financial yogas present. Indicates potential for wealth accumulation and prosperity.'
+  });
+
+  // Kemadruma Yoga: No planet adjacent to Moon (adverse)
+  const moonAdj = [(moonRasi + 1) % 12, (moonRasi + 11) % 12];
+  const planetsNearMoon = Object.entries(rasi)
+    .filter(([p]) => !['Moon','Ascendant'].includes(p))
+    .some(([,r]) => moonAdj.includes(r));
+  yogas.push({
+    name: 'Kemadruma Yoga (Challenging)',
+    present: !planetsNearMoon,
+    desc: 'No planets flanking Moon. May create loneliness, emotional turbulence, or sudden reversals.'
+  });
+
+  // Viparita Raja Yoga: Lords of 6,8,12 in each other's houses
+  yogas.push({
+    name: 'Viparita Raja Yoga',
+    present: rasi.Saturn === rasi.Mars && [6,7,11].includes(rasi.Saturn),
+    desc: 'Dusthana lords exchanged. Turns adversity into advantage — obstacles become opportunities.'
+  });
+
+  // Neecha Bhanga Raja Yoga: Debilitated planet cancellation
+  const debPlanets = Object.entries(rasi).filter(([p,r]) => DEBILITATION[p] === r && p !== 'Rahu' && p !== 'Ketu');
+  const neechaBhanga = debPlanets.some(([p]) => {
+    const cancellor = { Sun:'Saturn', Moon:'Venus', Mars:'Jupiter', Mercury:'Jupiter', Jupiter:'Mercury', Venus:'Mars', Saturn:'Sun' };
+    return rasi[cancellor[p]] !== undefined;
+  });
+  yogas.push({
+    name: 'Neecha Bhanga Raja Yoga',
+    present: neechaBhanga && debPlanets.length > 0,
+    desc: 'Debilitation cancellation. An initially weak planet rises to deliver exceptional results.'
+  });
+
+  return yogas;
+}
+
+// ═══════════════════════════════════════════════════════
+// NAVAMSA (D9) POSITIONS
+// ═══════════════════════════════════════════════════════
+
+function getNavamsaRasi(lon) {
+  const normLon = ((lon % 360) + 360) % 360;
+  const navIdx  = Math.floor(normLon / (30 / 9)); // each navamsa = 3°20'
+  return navIdx % 12;
+}
+
+// ═══════════════════════════════════════════════════════
+// HOROSCOPE READING GENERATOR
+// ═══════════════════════════════════════════════════════
+
+function generateReading(positions, name) {
+  const rasi    = {};
+  const nakInfo = {};
+  for (const [p, lon] of Object.entries(positions)) {
+    rasi[p]    = getRasi(lon);
+    if (p !== 'Ascendant') nakInfo[p] = getNakshatra(lon);
+  }
+
+  const ascRasi  = rasi.Ascendant;
+  const ascName  = RASHIS[ascRasi];
+  const moonRasi = rasi.Moon;
+  const sunRasi  = rasi.Sun;
+
+  const lordOfAsc = PLANET_LORDS[ascRasi].lord;
+
+  const sections = [
+    {
+      title: `🌅 Lagna (Ascendant) — ${ascName}`,
+      text: getLagnaReading(ascRasi, lordOfAsc, name)
+    },
+    {
+      title: `🌙 Chandra Rasi — ${RASHIS[moonRasi]}`,
+      text: getMoonReading(moonRasi, nakInfo.Moon)
+    },
+    {
+      title: `☉ Sun Sign — ${RASHIS[sunRasi]}`,
+      text: getSunReading(sunRasi)
+    },
+    {
+      title: `🪐 Saturn Influence`,
+      text: getSaturnReading(rasi.Saturn, ascRasi)
+    },
+    {
+      title: `♃ Jupiter's Blessings`,
+      text: getJupiterReading(rasi.Jupiter, ascRasi)
+    },
+    {
+      title: `❤️ Seventh House & Marriage`,
+      text: getSeventhHouseReading(rasi, ascRasi)
+    },
+    {
+      title: `💰 Wealth & Career Prospects`,
+      text: getWealthReading(rasi, ascRasi)
+    },
+  ];
+
+  return sections;
+}
+
+function getLagnaReading(ascRasi, lord, name) {
+  const readings = [
+    `${name}'s Mesha Lagna grants a dynamic, pioneering personality. Ruled by Mars, they possess natural leadership and competitive drive. The Aries rising confers a muscular frame, direct communication style, and strong initiative. Life path involves leadership roles, sports, or entrepreneurial ventures.`,
+    `${name}'s Vrishabha Lagna bestows a calm, determined nature ruled by Venus. They appreciate beauty, comfort, and material stability. Taurus rising grants a melodious voice, strong aesthetic sense, and patient disposition. Finance and the arts are favored domains.`,
+    `${name}'s Mithuna Lagna, ruled by Mercury, creates a quick, versatile intellect. Communication, writing, and commerce are natural talents. The Gemini ascendant manifests as adaptability, curiosity, and social charm — sometimes leading to scattered energy.`,
+    `${name}'s Kataka Lagna, ruled by Moon, creates a deeply empathetic, nurturing personality. Home, family, and emotional security are central themes. Cancer rising grants strong intuition, an excellent memory, and a protective nature toward loved ones.`,
+    `${name}'s Simha Lagna, ruled by Sun, radiates charisma, authority, and pride. Leo rising bestows natural leadership, creative talent, and a generous heart. Life often unfolds on a grand stage where they command respect and admiration.`,
+    `${name}'s Kanya Lagna, ruled by Mercury, creates an analytical, service-oriented character. Virgo rising confers precision, health-consciousness, and a discerning mind. They excel in fields requiring attention to detail — medicine, editing, accounting, or research.`,
+    `${name}'s Tula Lagna, ruled by Venus, creates a diplomatic, relationship-centered personality. Libra rising bestows charm, aesthetic refinement, and a strong sense of justice. Partnership and balance are recurring themes throughout life.`,
+    `${name}'s Vrishchika Lagna, ruled by Mars, creates a transformative, intense personality. Scorpio rising confers penetrating insight, strong willpower, and resilience. Periods of profound change lead to regeneration and hidden knowledge.`,
+    `${name}'s Dhanu Lagna, ruled by Jupiter, creates an optimistic, philosophical personality. Sagittarius rising bestows a love of travel, higher learning, and spiritual seeking. Teaching, law, or spiritual leadership suits this placement well.`,
+    `${name}'s Makara Lagna, ruled by Saturn, creates a disciplined, ambitious personality. Capricorn rising confers patience, practicality, and a methodical approach to achievement. Success comes through persistent effort rather than sudden fortune.`,
+    `${name}'s Kumbha Lagna, ruled by Saturn, creates a humanitarian, unconventional personality. Aquarius rising bestows originality, social awareness, and progressive thinking. Service to humanity and innovation in technology or science may define their path.`,
+    `${name}'s Meena Lagna, ruled by Jupiter, creates a compassionate, spiritually-oriented personality. Pisces rising bestows imagination, empathy, and a connection to the unseen. Spiritual practice, creative arts, or healing professions resonate deeply.`,
+  ];
+  return readings[ascRasi];
+}
+
+function getMoonReading(moonRasi, nakInfo) {
+  const moods = [
+    'Impulsive emotions, quick to anger but quick to forgive. Passionate responses to challenges.',
+    'Stable, possessive emotions. Strong need for security; slow to change once committed.',
+    'Emotionally restless, curious, dual-natured. Needs variety and mental stimulation.',
+    'Highly empathetic, intuitive, and home-loving. Deeply attached to mother and family.',
+    'Proud emotional expression. Needs recognition and loyalty from loved ones.',
+    'Analytical emotions; tends to overthink and worry. Self-critical but highly caring.',
+    'Balanced, socially-oriented emotions. Seeks harmony and dislikes conflict greatly.',
+    'Intensely emotional with deep transformative power. Prone to jealousy but fiercely loyal.',
+    'Optimistic, freedom-loving emotions. Craves adventure and philosophical understanding.',
+    'Reserved, ambitious emotions. Controls outward expression; inner life is rich and complex.',
+    'Detached, idealistic emotions. Values friendship and humanity; may seem aloof in intimacy.',
+    'Deeply compassionate, boundary-less emotions. Highly intuitive but vulnerable to others\' moods.',
+  ];
+  return `Moon in ${RASHIS[moonRasi]}, Nakshatra ${nakInfo.name} (Pada ${nakInfo.pada}): ${moods[moonRasi]} The ${nakInfo.name} nakshatra ruled by ${nakInfo.lord} colors the mind with specific themes of ${getNakDesc(nakInfo.name)}.`;
+}
+
+function getNakDesc(name) {
+  const descs = {
+    'Ashwini': 'speed, healing, and new beginnings',
+    'Bharani': 'transformation, restraint, and intensity',
+    'Krittika': 'purification, cutting through illusion, leadership',
+    'Rohini': 'beauty, creativity, sensuality, material prosperity',
+    'Mrigashirsha': 'seeking, exploration, and gentle sensitivity',
+    'Ardra': 'storms of change, intellectual power, emotional turmoil',
+    'Punarvasu': 'restoration, optimism, and return to original goodness',
+    'Pushya': 'nourishment, nurturing, devotion, and stability',
+    'Ashlesha': 'serpentine wisdom, cunning, and deep mysticism',
+    'Magha': 'royalty, ancestral connection, authority, and pride',
+    'Purva Phalguni': 'pleasure, creativity, romance, and relaxation',
+    'Uttara Phalguni': 'patronage, friendship, healing, and service',
+    'Hasta': 'skill, craftsmanship, dexterity, and resourcefulness',
+    'Chitra': 'beauty, craftsmanship, artistry, and form',
+    'Swati': 'independence, flexibility, and scattering of energy',
+    'Vishakha': 'focused ambition, purpose, and triumph through effort',
+    'Anuradha': 'devotion, friendship, esoteric knowledge, success abroad',
+    'Jyeshtha': 'seniority, protection of family, hidden power',
+    'Mula': 'root truths, destruction of the old, philosophical depth',
+    'Purva Ashadha': 'invincibility, water energy, early victory',
+    'Uttara Ashadha': 'lasting victory, dharmic leadership, universal principles',
+    'Shravana': 'listening, learning, connection across distances',
+    'Dhanishtha': 'wealth, music, group endeavors, and abundance',
+    'Shatabhisha': 'healing, secrecy, independent research, cosmic law',
+    'Purva Bhadrapada': 'fiery transformation, spiritual warrior energy',
+    'Uttara Bhadrapada': 'depth, wisdom, protection, and inner peace',
+    'Revati': 'completion, nourishment of others, timeless compassion',
+  };
+  return descs[name] || 'spiritual evolution and karmic themes';
+}
+
+function getSunReading(sunRasi) {
+  const readings = [
+    'Sun in Aries: Natural-born leader with fierce individuality. Career flourishes in independent or pioneer roles.',
+    'Sun in Taurus: Determined, artistic identity. Finds purpose through beauty, finance, or the arts.',
+    'Sun in Gemini: Intellectual identity. Communication, teaching, or media are natural callings.',
+    'Sun in Cancer: Identity tied to home and family. Nurturing professions suit them deeply.',
+    'Sun in Leo: Radiant self-expression. Born to lead, perform, and inspire others.',
+    'Sun in Virgo: Service-oriented identity. Excellence in analysis, healthcare, or detailed craft.',
+    'Sun in Libra: Diplomatic identity. Law, design, partnerships, and social justice resonate.',
+    'Sun in Scorpio: Intense, transformative identity. Research, psychology, or occult mastery beckons.',
+    'Sun in Sagittarius: Philosophical identity. Higher education, travel, or teaching expand the self.',
+    'Sun in Capricorn: Disciplined, authoritative identity. Ambition, governance, or engineering are pathways.',
+    'Sun in Aquarius: Humanitarian identity. Technology, social reform, or collective endeavors call.',
+    'Sun in Pisces: Spiritually-inclined identity. Arts, healing, spirituality, or film are resonant paths.',
+  ];
+  return readings[sunRasi];
+}
+
+function getSaturnReading(satRasi, ascRasi) {
+  const houseNum = ((satRasi - ascRasi + 12) % 12) + 1;
+  const effects = {
+    1: 'Saturn in the 1st house delays recognition but builds a durable legacy. Discipline defines the personality; health requires sustained attention.',
+    2: 'Saturn in the 2nd house may delay wealth accumulation but creates conservative financial habits. Family duties can feel burdensome initially.',
+    3: '3rd-house Saturn strengthens persistence and communication through hardship. Siblings may be few or create responsibilities.',
+    4: 'Saturn in the 4th creates a strict home environment. Property gains come late but are substantial and stable.',
+    5: 'Saturn in the 5th can delay children or create thoughtful parenting. Creative expression is disciplined and structured.',
+    6: 'Saturn in the 6th brings excellent results — strong service ethic, defeat of enemies, and recovery from illness through effort.',
+    7: 'Saturn in the 7th may delay marriage or create an older/serious partner. Commitments are durable once made.',
+    8: 'Saturn in the 8th grants longevity but creates themes of hidden matters, legacies, and confrontations with mortality.',
+    9: 'Saturn in the 9th can bring philosophical austerity. Father may be strict; spiritual growth through discipline is marked.',
+    10: 'Saturn in the 10th (exalted position) — the classic career indicator of hard-won, lasting professional success and authority.',
+    11: 'Saturn in the 11th creates slow but consistent gains; social networks are carefully curated and highly loyal.',
+    12: 'Saturn in the 12th favors meditation, solitude, and work in hidden institutions — hospitals, prisons, monasteries.',
+  };
+  return effects[houseNum] || 'Saturn\'s influence brings structure, discipline, and karmic lessons in the relevant life area.';
+}
+
+function getJupiterReading(jupRasi, ascRasi) {
+  const houseNum = ((jupRasi - ascRasi + 12) % 12) + 1;
+  const effects = {
+    1: 'Jupiter in the 1st house: Expansive personality, wisdom, and optimism. Tendency toward weight gain; often a teacher or mentor figure.',
+    2: 'Jupiter in the 2nd: Wealth through speech, knowledge, and family connections. A generous and prosperous financial outlook.',
+    3: 'Jupiter in the 3rd: Wisdom in communication. Fortunate siblings; writing, teaching, or publishing are blessed paths.',
+    4: 'Jupiter in the 4th: Happy home life, property gains, and a wise, supportive mother. Spiritual atmosphere at home.',
+    5: 'Jupiter in the 5th: Blessed with children; strong creative intelligence. Teaching, speculation, and romance are favored.',
+    6: 'Jupiter in the 6th: Protection from enemies and disease. Service professions are dignified and rewarding.',
+    7: 'Jupiter in the 7th: Fortunate marriage to a wise, benefic partner. Business partnerships are expansive and successful.',
+    8: 'Jupiter in the 8th: Longevity, hidden wealth (inheritance), and occult knowledge. Transformations are ultimately positive.',
+    9: 'Jupiter in the 9th (own house): Supreme blessing — strong dharma, spiritual inclination, wise teachers, and fortunate travels.',
+    10: 'Jupiter in the 10th: Respected career in teaching, law, finance, or governance. Professional reputation is honorable.',
+    11: 'Jupiter in the 11th: Abundant gains, large and beneficial social circles. Aspirations consistently materialize.',
+    12: 'Jupiter in the 12th: Spiritual liberation, charity, and foreign gains. Expenditure is on noble causes.',
+  };
+  return effects[houseNum] || 'Jupiter bestows wisdom, expansion, and divine grace in the relevant house matters.';
+}
+
+function getSeventhHouseReading(rasi, ascRasi) {
+  const seventhRasi = (ascRasi + 6) % 12;
+  const seventhLord = PLANET_LORDS[seventhRasi].lord;
+  const seventhLordRasi = rasi[seventhLord];
+  const planetsIn7th = Object.entries(rasi).filter(([p,r]) => r === seventhRasi && p !== 'Ascendant').map(([p]) => p);
+
+  let text = `The 7th house (${RASHIS[seventhRasi]}) governs marriage and partnerships, ruled by ${seventhLord}. `;
+
+  if (planetsIn7th.length > 0) {
+    text += `${planetsIn7th.join(', ')} occupy the 7th house — `;
+    if (planetsIn7th.includes('Jupiter') || planetsIn7th.includes('Venus')) {
+      text += 'a benefic influence that promises a harmonious, loving partnership. ';
+    } else if (planetsIn7th.includes('Saturn') || planetsIn7th.includes('Mars')) {
+      text += 'indicating a delayed or challenging partnership that ultimately strengthens character. Patience in love is advised. ';
+    } else {
+      text += 'creating distinctive qualities in the partner and marriage dynamic. ';
+    }
+  } else {
+    text += 'The unoccupied 7th house focuses marriage themes through its lord. ';
+  }
+
+  text += `${seventhLord} placed in ${RASHIS[seventhLordRasi]} determines the quality and timing of partnerships. Marriage is best approached with awareness of karmic lessons it brings.`;
+  return text;
+}
+
+function getWealthReading(rasi, ascRasi) {
+  const jupHouse = ((rasi.Jupiter - ascRasi + 12) % 12) + 1;
+  const venHouse = ((rasi.Venus - ascRasi + 12) % 12) + 1;
+  const satHouse = ((rasi.Saturn - ascRasi + 12) % 12) + 1;
+
+  let text = `Wealth analysis: Jupiter in house ${jupHouse} ${jupHouse === 2 || jupHouse === 11 ? 'directly supports financial growth' : 'influences career through ' + (jupHouse <= 6 ? 'early life efforts' : 'later achievements')}. `;
+  text += `Venus in house ${venHouse} ${[2,5,11].includes(venHouse) ? 'favors wealth through arts, luxury, or social connections' : 'brings comfort through partnerships and aesthetic endeavors'}. `;
+  text += `Saturn in house ${satHouse} ${satHouse === 10 ? 'creates exceptional career authority' : satHouse === 11 ? 'generates steady, lasting gains' : 'requires patience before rewards materialize'}. `;
+  text += 'Overall financial trajectory suggests steady accumulation with peaks during Jupiter and Venus dasa periods.';
+  return text;
+}
+
+// ═══════════════════════════════════════════════════════
+// COMPATIBILITY ENGINE
+// ═══════════════════════════════════════════════════════
+
+function calcCompatibility(boy, girl) {
+  const boyNak  = getNakshatra(boy.Moon);
+  const girlNak = getNakshatra(girl.Moon);
+  const boyRasi = getRasi(boy.Moon);
+  const girlRasi = getRasi(girl.Moon);
+
+  return {
+    poruthams:    calcPoruthams(boyNak, girlNak, boyRasi, girlRasi),
+    venusAnalysis: analyzeVenus(boy, girl),
+    moonAnalysis:  analyzeMoon(boy, girl),
+    jupiterAnalysis: analyzeJupiter(boy, girl),
+    divorceAnalysis: analyzeDivorce(boy, girl),
+  };
+}
+
+// 10 Tamil Poruthams
+function calcPoruthams(boyNak, girlNak, boyRasi, girlRasi) {
+  const bn = boyNak.index + 1;  // 1-27
+  const gn = girlNak.index + 1;
+
+  // Nakshatra-based calculations
+  const nakDiff = ((gn - bn) + 27) % 27;
+
+  // 1. Dina Porutham (health & longevity)
+  const dina = (nakDiff % 9) !== 6 && (nakDiff % 9) !== 5;
+
+  // 2. Gana Porutham (nature compatibility)
+  const devaGana  = [1,5,7,8,13,15,17,22,27]; // Ashwini, Mrigashirsha, Punarvasu, Pushya, Hasta, Swati, Anuradha, Shravana, Revati
+  const manuGana  = [2,4,6,11,12,20,21,25,26];
+  const rakshasaGana = [3,9,10,14,16,18,19,23,24];
+  const getGana = n => devaGana.includes(n) ? 'Deva' : manuGana.includes(n) ? 'Manu' : 'Rakshasa';
+  const boyGana = getGana(bn); const girlGana = getGana(gn);
+  const ganaMatch = boyGana === girlGana || (boyGana === 'Deva' && girlGana === 'Manu') || (boyGana === 'Manu' && girlGana === 'Deva');
+  const gana = { match: ganaMatch ? 'match' : 'partial', detail: `Boy: ${boyGana} Gana, Girl: ${girlGana} Gana` };
+
+  // 3. Mahendra Porutham (prosperity & longevity)
+  const mahendra = [4,7,10,13,16,19,22,25].includes(nakDiff) ? 'match' : 'partial';
+
+  // 4. Stree Dirgha (longevity of wife)
+  const streeDirgha = nakDiff > 7 ? 'match' : 'nomatch';
+
+  // 5. Yoni Porutham (sexual compatibility) — based on nakshatra animal pairs
+  const yoniAnimals = ['Horse','Elephant','Sheep','Snake','Dog','Cat','Rat','Cow','Buffalo','Tiger','Hare','Monkey','Mongoose','Lion','Horse','Tiger','Cow','Rabbit','Dog','Monkey','Mongoose','Cow','Lion','Horse','Elephant','Sheep','Elephant'];
+  const boyAnimal = yoniAnimals[boyNak.index];
+  const girlAnimal = yoniAnimals[girlNak.index];
+  const yoniEnemy = { Horse:['Buffalo'], Elephant:['Lion'], Sheep:['Mongoose'], Snake:['Mongoose'], Dog:['Hare'], Cat:['Rat'], Rat:['Cat'], Cow:['Tiger'], Buffalo:['Horse'], Tiger:['Elephant'], Hare:['Dog'], Monkey:['Sheep'], Mongoose:['Snake','Sheep'], Lion:['Elephant'] };
+  const yoniMatch = boyAnimal === girlAnimal ? 'match' : (yoniEnemy[boyAnimal] && yoniEnemy[boyAnimal].includes(girlAnimal)) ? 'nomatch' : 'partial';
+
+  // 6. Rasi Porutham (sign compatibility)
+  const rasiDiff = ((girlRasi - boyRasi) + 12) % 12;
+  const rasiFavorable = [1,2,4,5,7,8,10,11].includes(rasiDiff);
+  const rasiMatch = rasiFavorable ? 'match' : 'partial';
+
+  // 7. Rajju Porutham (life force) — very important
+  const rajjuGroups = [[1,9,10,18,19,27],[2,8,11,17,20,26],[3,7,12,16,21,25],[4,6,13,15,22,24],[5,14,23]];
+  const boyRajju = rajjuGroups.findIndex(g => g.includes(bn));
+  const girlRajju = rajjuGroups.findIndex(g => g.includes(gn));
+  const rajju = boyRajju !== girlRajju ? 'match' : 'nomatch';
+
+  // 8. Vedha Porutham (obstruction check)
+  const vedhaTable = {1:19, 2:7, 3:8, 4:14, 5:15, 6:20, 7:2, 8:3, 9:12, 10:16, 11:19, 12:9, 13:22, 14:4, 15:5, 16:10, 17:26, 18:24, 19:1, 20:6, 21:27, 22:13, 23:25, 24:18, 25:23, 26:17, 27:21};
+  const vedha = vedhaTable[bn] !== gn && vedhaTable[gn] !== bn ? 'match' : 'nomatch';
+
+  // 9. Vashya Porutham (influence/control)
+  const vashyaTable = {0:[3,8], 1:[3,11], 2:[5,6], 3:[4,10], 4:[3], 5:[2,6], 6:[1,5], 7:[2,4], 8:[3,9], 9:[0,10], 10:[9,11], 11:[3,8]};
+  const vashya = vashyaTable[boyRasi] && vashyaTable[boyRasi].includes(girlRasi) ? 'match' : 'partial';
+
+  // 10. Nadi Porutham (health lineage) — MOST important
+  const nadiGroups = [[1,6,11,16,21],[2,7,12,17,22],[3,8,13,18,23],[4,9,14,19,24],[5,10,15,20,25],[26],[27]];
+  const boyNadi = nadiGroups.findIndex(g => g.includes(bn));
+  const girlNadi = nadiGroups.findIndex(g => g.includes(gn));
+  const nadi = boyNadi !== girlNadi ? 'match' : 'nomatch';
+
+  const poruthams = [
+    { icon:'🌟', name:'Dina Porutham',    match: dina ? 'match' : 'nomatch',  weight:3, detail:'Health & Longevity' },
+    { icon:'🔥', name:'Gana Porutham',    match: gana.match,                   weight:6, detail:`Nature: ${gana.detail}` },
+    { icon:'🌙', name:'Mahendra Porutham',match: mahendra,                     weight:6, detail:'Prosperity & Longevity' },
+    { icon:'♀️', name:'Stree Dirgha',     match: streeDirgha,                  weight:6, detail:"Wife's Longevity" },
+    { icon:'❤️', name:'Yoni Porutham',    match: yoniMatch,                    weight:4, detail:`${boyAnimal} + ${girlAnimal}` },
+    { icon:'♊', name:'Rasi Porutham',    match: rasiMatch,                    weight:3, detail:'Sign Harmony' },
+    { icon:'🎯', name:'Rajju Porutham',   match: rajju,                        weight:8, detail:'Life Force (Critical)' },
+    { icon:'🚫', name:'Vedha Porutham',   match: vedha,                        weight:2, detail:'Obstruction Check' },
+    { icon:'🤝', name:'Vashya Porutham',  match: vashya,                       weight:2, detail:'Mutual Influence' },
+    { icon:'🧬', name:'Nadi Porutham',    match: nadi,                         weight:8, detail:'Health Lineage (Critical)' },
+  ];
+
+  const totalScore = poruthams.reduce((s,p) => s + (p.match === 'match' ? p.weight : p.match === 'partial' ? p.weight * 0.5 : 0), 0);
+  const maxScore   = poruthams.reduce((s,p) => s + p.weight, 0);
+
+  return { poruthams, totalScore: Math.round(totalScore), maxScore };
+}
+
+function analyzeVenus(boy, girl) {
+  const boyVenRasi = getRasi(boy.Venus);
+  const girlVenRasi = getRasi(girl.Venus);
+  const boyVenNak  = getNakshatra(boy.Venus);
+  const girlVenNak = getNakshatra(girl.Venus);
+
+  const boyVenStatus  = getPlanetStatus('Venus', boyVenRasi);
+  const girlVenStatus = getPlanetStatus('Venus', girlVenRasi);
+  const venDiff = Math.abs(boyVenRasi - girlVenRasi);
+
+  let score = 70;
+  let loyaltyFactors = [];
+
+  // Strong Venus = high loyalty potential
+  if (boyVenStatus.label === 'Exalted') { score += 15; loyaltyFactors.push('Boy: Venus exalted in Pisces — deep capacity for devotion and beauty in love'); }
+  else if (boyVenStatus.label === 'Own Sign') { score += 10; loyaltyFactors.push('Boy: Venus in own sign — natural affection, artistic charm, and relationship harmony'); }
+  else if (boyVenStatus.label === 'Debilitated') { score -= 15; loyaltyFactors.push('Boy: Venus debilitated in Virgo — may struggle with romantic idealization vs reality'); }
+
+  if (girlVenStatus.label === 'Exalted') { score += 15; loyaltyFactors.push('Girl: Venus exalted in Pisces — romantic idealism and fierce devotion to the beloved'); }
+  else if (girlVenStatus.label === 'Own Sign') { score += 10; loyaltyFactors.push('Girl: Venus in own sign — naturally charming and loyal within committed bonds'); }
+  else if (girlVenStatus.label === 'Debilitated') { score -= 15; loyaltyFactors.push('Girl: Venus debilitated — critical nature about relationships; requires conscious effort to appreciate partner'); }
+
+  // Venus-Mars conjunction: passionate but volatile
+  const boyMarsRasi = getRasi(boy.Mars);
+  const girlMarsRasi = getRasi(girl.Mars);
+  if (boyVenRasi === boyMarsRasi) { score -= 5; loyaltyFactors.push('Boy: Venus-Mars conjunction — passionate intensity may create possessiveness or jealousy'); }
+  if (girlVenRasi === girlMarsRasi) { score += 5; loyaltyFactors.push('Girl: Venus-Mars conjunction — passionate devotion and magnetic attraction energy'); }
+
+  // Saturn aspecting Venus = delayed but committed
+  const boySatRasi = getRasi(boy.Saturn);
+  if ([3,7,10].map(h => (boyVenRasi + h) % 12).includes(boySatRasi % 12)) {
+    score += 8; loyaltyFactors.push('Boy: Saturn aspects Venus — serious, committed approach to relationships; loyalty through discipline');
+  }
+
+  // Venus in 7th house (from own Lagna)
+  const boyAscRasi = getRasi(boy.Ascendant);
+  if (boyVenRasi === (boyAscRasi + 6) % 12) { score += 10; loyaltyFactors.push('Boy: Venus in 7th house — marriage is a central life focus; high commitment to partnership'); }
+  const girlAscRasi = getRasi(girl.Ascendant);
+  if (girlVenRasi === (girlAscRasi + 6) % 12) { score += 10; loyaltyFactors.push('Girl: Venus in 7th house — deeply invested in marital happiness and partner\'s wellbeing'); }
+
+  score = Math.min(100, Math.max(20, score));
+
+  return {
+    score,
+    boyVenus: `${RASHIS[boyVenRasi]} (${boyVenNak.name})`,
+    girlVenus: `${RASHIS[girlVenRasi]} (${girlVenNak.name})`,
+    factors: loyaltyFactors,
+    summary: score >= 80 ? 'High Loyalty Potential — Both Venus placements indicate commitment, romantic depth, and genuine devotion.' :
+             score >= 60 ? 'Moderate Loyalty — Conscious effort and open communication will sustain romantic faithfulness.' :
+             'Challenging — Venus placements suggest romantic volatility. Trust must be built through consistent actions, not assumptions.'
+  };
+}
+
+function analyzeMoon(boy, girl) {
+  const boyMoonRasi  = getRasi(boy.Moon);
+  const girlMoonRasi = getRasi(girl.Moon);
+  const boyMoonNak   = getNakshatra(boy.Moon);
+  const girlMoonNak  = getNakshatra(girl.Moon);
+
+  const moonDiff = Math.abs(boyMoonRasi - girlMoonRasi);
+  let score = 60;
+  let factors = [];
+
+  // Trine moons: excellent emotional harmony
+  if ([0,4,8].includes(moonDiff)) { score += 25; factors.push('Moon trine — profound emotional synchronicity; you understand each other\'s unspoken feelings'); }
+  else if ([2,10].includes(moonDiff)) { score += 15; factors.push('Moon in friendly signs — emotional compatibility flows naturally with some productive differences'); }
+  else if ([6].includes(moonDiff)) { score -= 10; factors.push('Moon opposition — strong attraction but emotional needs can conflict; requires conscious bridging'); }
+  else if ([3,9].includes(moonDiff)) { score += 5; factors.push('Moon in square — emotional dynamism; growth through working through differences'); }
+
+  // Moon in water signs: deeply emotional
+  const waterSigns = [3, 7, 11]; // Cancer, Scorpio, Pisces
+  if (waterSigns.includes(boyMoonRasi)) { score += 5; factors.push('Boy: Moon in water sign — deeply empathetic, intuitive, and emotionally responsive partner'); }
+  if (waterSigns.includes(girlMoonRasi)) { score += 5; factors.push('Girl: Moon in water sign — rich inner emotional world; nurturing and perceptive'); }
+
+  // Moon-Saturn: emotional restriction
+  const boySatRasi = getRasi(boy.Saturn);
+  const girlSatRasi = getRasi(girl.Saturn);
+  if (boySatRasi === boyMoonRasi) { score -= 8; factors.push('Boy: Saturn conjunct Moon — emotional expression may be suppressed; childhood conditioning affects emotional openness'); }
+  if (girlSatRasi === girlMoonRasi) { score -= 8; factors.push('Girl: Saturn conjunct Moon — may appear reserved or melancholic; needs patient emotional reassurance'); }
+
+  // Moon exalted/own
+  if (boyMoonRasi === 1) { score += 10; factors.push('Boy: Moon exalted in Taurus — emotionally stable, sensual, and reliably nurturing'); }
+  if (girlMoonRasi === 1) { score += 10; factors.push('Girl: Moon exalted in Taurus — emotionally grounded, loyal, and consistently supportive'); }
+  if (boyMoonRasi === 3) { score += 8; factors.push('Boy: Moon in own sign Cancer — highly empathetic, family-oriented emotional nature'); }
+  if (girlMoonRasi === 3) { score += 8; factors.push('Girl: Moon in own sign Cancer — nurturing, intuitive, deeply attached to loved ones'); }
+
+  score = Math.min(100, Math.max(20, score));
+
+  return {
+    score,
+    boyMoon:  `${RASHIS[boyMoonRasi]} — ${boyMoonNak.name}`,
+    girlMoon: `${RASHIS[girlMoonRasi]} — ${girlMoonNak.name}`,
+    factors,
+    summary: score >= 80 ? 'Excellent Emotional Resonance — Your emotional rhythms align beautifully, creating deep mutual understanding.' :
+             score >= 60 ? 'Good Emotional Compatibility — Some differences exist but create growth opportunities in the relationship.' :
+             'Emotional Adjustment Needed — Significantly different emotional temperaments require conscious communication and patience.'
+  };
+}
+
+function analyzeJupiter(boy, girl) {
+  const boyJupRasi  = getRasi(boy.Jupiter);
+  const girlJupRasi = getRasi(girl.Jupiter);
+  const boyAscRasi  = getRasi(boy.Ascendant);
+  const girlAscRasi = getRasi(girl.Ascendant);
+
+  let score = 65;
+  let factors = [];
+
+  // Jupiter aspects 7th house (marriage)
+  const boy7th = (boyAscRasi + 6) % 12;
+  const girl7th = (girlAscRasi + 6) % 12;
+  const jupAspects = [3,6,9]; // Jupiter aspects 5th, 7th, 9th from itself (counting from 1)
+
+  const boyJupAspects7th = jupAspects.some(h => (boyJupRasi + h) % 12 === boy7th);
+  if (boyJupAspects7th) { score += 15; factors.push('Boy: Jupiter aspects 7th house — divine blessing on marriage; expansion and wisdom in partnership'); }
+
+  const girlJupAspects7th = jupAspects.some(h => (girlJupRasi + h) % 12 === girl7th);
+  if (girlJupAspects7th) { score += 15; factors.push('Girl: Jupiter aspects 7th house — blessed marriage potential; seeks a wise, expansive partner'); }
+
+  // Jupiter exalted
+  if (boyJupRasi === 3) { score += 15; factors.push('Boy: Jupiter exalted in Cancer — supreme wisdom, generosity, and dharmic approach to marriage'); }
+  if (girlJupRasi === 3) { score += 15; factors.push('Girl: Jupiter exalted in Cancer — exceptional blessing for marital harmony and family happiness'); }
+
+  // Jupiter in own sign
+  if ([8,11].includes(boyJupRasi)) { score += 10; factors.push('Boy: Jupiter in own sign — philosophical, optimistic, and spiritually uplifting in marriage'); }
+  if ([8,11].includes(girlJupRasi)) { score += 10; factors.push('Girl: Jupiter in own sign — brings grace, wisdom, and abundance to the marital home'); }
+
+  // Jupiter debilitated
+  if (boyJupRasi === 9) { score -= 12; factors.push('Boy: Jupiter debilitated in Capricorn — practical over philosophical; may struggle with commitment or generosity'); }
+  if (girlJupRasi === 9) { score -= 12; factors.push('Girl: Jupiter debilitated — may feel spiritually unfulfilled in partnerships; needs mutual growth focus'); }
+
+  // Jupiter in same sign (both partners)
+  if (boyJupRasi === girlJupRasi) { score += 8; factors.push('Shared Jupiter sign — similar worldviews, beliefs, and philosophical foundations strengthen the union'); }
+
+  score = Math.min(100, Math.max(20, score));
+
+  return {
+    score,
+    boyJupiter:  `${RASHIS[boyJupRasi]}`,
+    girlJupiter: `${RASHIS[girlJupRasi]}`,
+    factors,
+    summary: score >= 80 ? 'Strong Jupiter — Marriage carries divine blessings, shared wisdom, and mutual growth toward dharma.' :
+             score >= 60 ? 'Moderate Jupiter Strength — Good foundation for a purposeful marriage; shared beliefs should be nurtured.' :
+             'Jupiter Needs Strengthening — Regular spiritual practices, gratitude, and Thursday fasting can invoke Jupiter\'s blessings.'
+  };
+}
+
+function analyzeDivorce(boy, girl) {
+  let riskScore = 0; // Higher = more risk
+  const factors = [];
+
+  const boyAscRasi = getRasi(boy.Ascendant);
+  const girlAscRasi = getRasi(girl.Ascendant);
+
+  // Mars in 7th, 8th (Mangal Dosha area)
+  const boyMarsRasi = getRasi(boy.Mars);
+  const girlMarsRasi = getRasi(girl.Mars);
+  const boyMarsHouse = ((boyMarsRasi - boyAscRasi + 12) % 12) + 1;
+  const girlMarsHouse = ((girlMarsRasi - girlAscRasi + 12) % 12) + 1;
+
+  const mangalHouses = [1,2,4,7,8,12];
+  const boyMangal = mangalHouses.includes(boyMarsHouse);
+  const girlMangal = mangalHouses.includes(girlMarsHouse);
+
+  if (boyMangal && !girlMangal) {
+    riskScore += 20;
+    factors.push({ icon:'⚔️', label:'Mangal Dosha', value:'Boy is Manglik, Girl is not — imbalance. Both being Manglik cancels the dosha.', level:'medium' });
+  } else if (girlMangal && !boyMangal) {
+    riskScore += 20;
+    factors.push({ icon:'⚔️', label:'Mangal Dosha', value:'Girl is Manglik, Boy is not — imbalance in Mars energy. Remedial measures recommended.', level:'medium' });
+  } else if (boyMangal && girlMangal) {
+    factors.push({ icon:'⚔️', label:'Mangal Dosha', value:'Both partners Manglik — doshas cancel out; passionate and energetic marriage.', level:'low' });
+  } else {
+    factors.push({ icon:'⚔️', label:'Mangal Dosha', value:'Neither partner has Mangal Dosha — harmonious Mars energy in the relationship.', level:'low' });
+  }
+
+  // 7th house lord condition
+  const boy7thLord = PLANET_LORDS[(boyAscRasi + 6) % 12].lord;
+  const boy7thLordRasi = getRasi(boy[boy7thLord] || boy.Jupiter);
+  const boy7thStatus = getPlanetStatus(boy7thLord, boy7thLordRasi);
+  if (boy7thStatus.label === 'Debilitated') {
+    riskScore += 15;
+    factors.push({ icon:'⚠️', label:"Boy's 7th Lord", value:`${boy7thLord} debilitated — weakened capacity for sustained partnership. Conscious relationship work needed.`, level:'medium' });
+  } else {
+    factors.push({ icon:'✅', label:"Boy's 7th Lord", value:`${boy7thLord} in ${RASHIS[boy7thLordRasi]} — ${boy7thStatus.label}. ${boy7thStatus.label === 'Exalted' ? 'Strong marital fortune.' : 'Functional marriage house lord.'}`, level:'low' });
+  }
+
+  // Saturn in 7th
+  const boySatRasi = getRasi(boy.Saturn);
+  const boySatHouse = ((boySatRasi - boyAscRasi + 12) % 12) + 1;
+  const girlSatRasi = getRasi(girl.Saturn);
+  const girlSatHouse = ((girlSatRasi - girlAscRasi + 12) % 12) + 1;
+  if (boySatHouse === 7) {
+    riskScore += 10;
+    factors.push({ icon:'🪐', label:'Saturn in Boy\'s 7th', value:'Marriage may be delayed or partner is older/serious. Commitment is slow but once given, lasting.', level:'medium' });
+  }
+  if (girlSatHouse === 7) {
+    riskScore += 10;
+    factors.push({ icon:'🪐', label:'Saturn in Girl\'s 7th', value:'Girl may marry late or to a stern partner. Long-term marriage is stable once past early adjustments.', level:'medium' });
+  }
+
+  // Rahu/Ketu in 7th
+  const boyRahuRasi = getRasi(boy.Rahu);
+  const boyRahuHouse = ((boyRahuRasi - boyAscRasi + 12) % 12) + 1;
+  if (boyRahuHouse === 7) {
+    riskScore += 18;
+    factors.push({ icon:'☊', label:'Rahu in Boy\'s 7th', value:'Rahu in 7th can cause unconventional partnerships, attraction to unusual partners, or karmic relationship patterns. Awareness prevents repeated patterns.', level:'high' });
+  }
+  const girlRahuRasi = getRasi(girl.Rahu);
+  const girlRahuHouse = ((girlRahuRasi - girlAscRasi + 12) % 12) + 1;
+  if (girlRahuHouse === 7) {
+    riskScore += 18;
+    factors.push({ icon:'☊', label:'Rahu in Girl\'s 7th', value:'Rahu in 7th suggests karmic soul connections that may be intense and transformative. Clarity about expectations is essential.', level:'high' });
+  }
+
+  // Venus-Saturn opposition (relationship vs duty conflict)
+  const boyVenRasi = getRasi(boy.Venus);
+  if (Math.abs(boyVenRasi - boySatRasi) === 6) {
+    riskScore += 10;
+    factors.push({ icon:'⚖️', label:'Venus-Saturn Opposition (Boy)', value:'Tension between love (Venus) and duty (Saturn). May feel emotionally unsatisfied despite committed relationship.', level:'medium' });
+  }
+
+  // Remedies
+  const remedies = [
+    'Perform Navagraha puja before marriage',
+    'Both partners recite Vishnu Sahasranamam on Fridays',
+    'Manglik partners should marry on auspicious Tithis after consulting a jyotishi',
+    'Keep a Tulasi plant in the home for Jupiter\'s blessings',
+    'Observe Pradosh Vrat together for Saturn\'s grace',
+    'Donate yellow cloth or turmeric on Thursdays for Jupiter strength',
+  ];
+
+  const overallRisk = riskScore >= 40 ? 'High' : riskScore >= 20 ? 'Moderate' : 'Low';
+
+  return { factors, riskScore, overallRisk, remedies };
+}
+
+// ═══════════════════════════════════════════════════════
+// DIVISIONAL CHARTS
+// ═══════════════════════════════════════════════════════
+
+const DIVISIONAL_CHARTS = [
+  { code:'D1',  name:'Rasi Chart',      meaning:'Overall personality and life path' },
+  { code:'D2',  name:'Hora Chart',      meaning:'Wealth and financial status' },
+  { code:'D3',  name:'Drekkana Chart',  meaning:'Siblings, courage, self-effort' },
+  { code:'D4',  name:'Chaturthamsha',   meaning:'Fixed assets, home, fortune' },
+  { code:'D7',  name:'Saptamsha',       meaning:'Children and grandchildren' },
+  { code:'D9',  name:'Navamsa Chart',   meaning:'Marriage, dharma, and spiritual path' },
+  { code:'D10', name:'Dashamsha',       meaning:'Career, profession, authority' },
+  { code:'D12', name:'Dwadashamsha',    meaning:'Parents and ancestors' },
+  { code:'D16', name:'Shodashamsha',    meaning:'Vehicles, comforts, mental happiness' },
+  { code:'D20', name:'Vimshamsha',      meaning:'Spiritual progress and upasana' },
+  { code:'D24', name:'Chaturvimshamsha',meaning:'Education and knowledge' },
+  { code:'D27', name:'Bhamsha',         meaning:'Strength and vitality' },
+  { code:'D30', name:'Trimshamsha',     meaning:'Misfortunes and evils' },
+  { code:'D40', name:'Khavedamsha',     meaning:'Auspicious and inauspicious effects' },
+  { code:'D45', name:'Akshavedamsha',   meaning:'General indications' },
+  { code:'D60', name:'Shashtyamsha',    meaning:'Past life karma and overall indications' },
+];
+
+// Export
+if (typeof module !== 'undefined') module.exports = {
+  RASHIS, RASHI_SHORT, RASHI_TAMIL, PLANETS, PLANET_SYMBOLS, PLANET_COLORS,
+  NAKSHATRAS, DASA_YEARS, DASA_ORDER, PLANET_LORDS, EXALTATION, DEBILITATION,
+  SOUTH_INDIAN_LAYOUT, AYANAMSA, toJulianDay, julianToDate, calcPlanetaryPositions,
+  getRasi, getDegInRasi, getNakshatra, getPlanetStatus, getNavamsaRasi,
+  calcDasa, fmtDate, detectYogas, generateReading,
+  calcCompatibility, DIVISIONAL_CHARTS, DASA_COLORS
+};
+
+/**
+ * JOTHIDAM — App UI Controller
+ * Handles rendering of all UI components
+ */
+
+// ── Stars ──────────────────────────────────────────────
+(function createStars() {
+  const container = document.getElementById('stars');
+  const count = 200;
+  for (let i = 0; i < count; i++) {
+    const star = document.createElement('div');
+    star.className = 'star';
+    const size = Math.random() * 2.5 + 0.5;
+    star.style.cssText = `
+      left: ${Math.random() * 100}%;
+      top: ${Math.random() * 100}%;
+      width: ${size}px; height: ${size}px;
+      --dur: ${2 + Math.random() * 4}s;
+      --min-op: ${0.1 + Math.random() * 0.2};
+      --max-op: ${0.6 + Math.random() * 0.4};
+      animation-delay: ${Math.random() * 5}s;
+    `;
+    container.appendChild(star);
+  }
+})();
+
+// ── Module Navigation ──────────────────────────────────
+function showModule(name, btn) {
+  document.querySelectorAll('.module').forEach(m => m.classList.add('hidden'));
+  document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
+  document.getElementById(`module-${name}`).classList.remove('hidden');
+  btn.classList.add('active');
+}
+
+// ── Loading overlay ────────────────────────────────────
+function showLoading(msg = 'Calculating planetary positions…') {
+  const el = document.createElement('div');
+  el.id = 'loading-overlay';
+  el.className = 'loading-overlay';
+  el.innerHTML = `<div class="loading-spinner"></div><div class="loading-text">${msg}</div>`;
+  document.body.appendChild(el);
+}
+function hideLoading() {
+  const el = document.getElementById('loading-overlay');
+  if (el) el.remove();
+}
+
+// ── Jathagam Generation ────────────────────────────────
+function generateJathagam() {
+  const name   = document.getElementById('name').value || 'Native';
+  const dobStr = document.getElementById('dob').value;
+  const tobStr = document.getElementById('tob').value || '06:00';
+  const pob    = document.getElementById('pob').value || 'India';
+  const ayanamsaKey = document.getElementById('ayanamsa').value;
+
+  if (!dobStr) { alert('Please enter your Date of Birth.'); return; }
+
+  showLoading('Reading the stars for ' + name + '…');
+
+  setTimeout(() => {
+    try {
+      const [yr, mo, dy] = dobStr.split('-').map(Number);
+      const [hr, mn]     = tobStr.split(':').map(Number);
+      const hour = hr + mn / 60;
+      const ayanamDeg = AYANAMSA[ayanamsaKey] || AYANAMSA.lahiri;
+
+      const jd = toJulianDay(yr, mo, dy, hour, 5.5); // IST default
+      const pos = calcPlanetaryPositions(jd, ayanamDeg);
+
+      // Stagger anim
+      hideLoading();
+      renderJathagam({ name, dobStr, tobStr, pob, ayanamsaKey, yr, mo, dy, hour }, pos, jd);
+    } catch (e) {
+      hideLoading();
+      console.error(e);
+      alert('Calculation error. Please check inputs.');
+    }
+  }, 1200);
+}
+
+function renderJathagam(info, pos, jd) {
+  const resultsEl = document.getElementById('jathagam-results');
+  resultsEl.classList.remove('hidden');
+  resultsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  renderRasiChart('rasi-chart', pos, false);
+  renderRasiChart('navamsa-chart', pos, true);
+  renderPlanetTable(pos);
+  renderBirthDetails(info, pos);
+  renderDasaTable(pos.Moon, info.dobStr);
+  renderYogas(pos);
+  renderHoroscope(pos, info.name);
+  renderDivisionalCharts();
+}
+
+// ── South Indian Rasi Chart ────────────────────────────
+function renderRasiChart(elId, positions, isNavamsa) {
+  const el = document.getElementById(elId);
+  el.innerHTML = '';
+
+  // Map rasi → planets
+  const rasiMap = {};
+  for (const [planet, lon] of Object.entries(positions)) {
+    const r = isNavamsa ? getNavamsaRasi(lon) : getRasi(lon);
+    if (!rasiMap[r]) rasiMap[r] = [];
+    rasiMap[r].push(planet);
+  }
+
+  SOUTH_INDIAN_LAYOUT.forEach((rasiNum, cellIdx) => {
+    const cell = document.createElement('div');
+
+    if (rasiNum === -1) {
+      // Center decorative cell
+      cell.className = 'rasi-cell center-cell';
+      if (cellIdx === 5) {
+        cell.innerHTML = `<div style="text-align:center;color:var(--gold-bright);font-size:1.2rem;margin:auto;">ॐ</div>`;
+      }
+      el.appendChild(cell);
+      return;
+    }
+
+    cell.className = 'rasi-cell';
+    cell.style.animationDelay = (cellIdx * 50) + 'ms';
+
+    const planetsHere = (rasiMap[rasiNum] || [])
+      .map(p => (PLANET_SYMBOLS[p] || p.slice(0,3)) + ' ' + (isNavamsa ? '' : ''))
+      .join(' ');
+
+    cell.innerHTML = `
+      <span class="rasi-num">${rasiNum + 1}</span>
+      <span class="rasi-name">${RASHI_SHORT[rasiNum]}</span>
+      ${planetsHere ? `<span class="rasi-planets">${planetsHere}</span>` : ''}
+    `;
+
+    if (planetsHere) cell.classList.add('highlight');
+    el.appendChild(cell);
+  });
+}
+
+// ── Planet Table ───────────────────────────────────────
+function renderPlanetTable(positions) {
+  const tbody = document.getElementById('planet-tbody');
+  tbody.innerHTML = '';
+
+  for (const planet of PLANETS) {
+    const lon     = positions[planet];
+    const rasiIdx = getRasi(lon);
+    const deg     = getDegInRasi(lon).toFixed(2);
+    const nak     = planet !== 'Ascendant' ? getNakshatra(lon) : null;
+    const status  = (planet !== 'Ascendant' && planet !== 'Rahu' && planet !== 'Ketu')
+                  ? getPlanetStatus(planet, rasiIdx) : { label:'—', cls:'status-neutral' };
+    const lord    = PLANET_LORDS[rasiIdx].lord;
+
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><span class="planet-symbol" style="color:${PLANET_COLORS[planet]}">${PLANET_SYMBOLS[planet]}</span> ${planet}</td>
+      <td>${RASHIS[rasiIdx]}</td>
+      <td>${deg}°</td>
+      <td>${nak ? nak.name : '—'}</td>
+      <td>${nak ? nak.pada : '—'}</td>
+      <td>${lord}</td>
+      <td class="${status.cls}">${status.label}</td>
+    `;
+    tbody.appendChild(tr);
+  }
+}
+
+// ── Birth Details ──────────────────────────────────────
+function renderBirthDetails(info, pos) {
+  const moonNak  = getNakshatra(pos.Moon);
+  const ascRasi  = getRasi(pos.Ascendant);
+  const sunRasi  = getRasi(pos.Sun);
+  const moonRasi = getRasi(pos.Moon);
+
+  const items = [
+    { label: 'Name',          value: info.name },
+    { label: 'Date of Birth', value: new Date(info.dobStr).toLocaleDateString('en-IN', {day:'numeric',month:'long',year:'numeric'}) },
+    { label: 'Time of Birth', value: info.tobStr + ' IST' },
+    { label: 'Place of Birth',value: info.pob },
+    { label: 'Lagna (Ascendant)', value: RASHIS[ascRasi], highlight: true },
+    { label: 'Rasi (Moon Sign)',  value: RASHIS[moonRasi], highlight: true },
+    { label: 'Janma Nakshatra',   value: `${moonNak.name} (Pada ${moonNak.pada})`, highlight: true },
+    { label: 'Nakshatra Lord',    value: moonNak.lord },
+    { label: 'Sun Sign',          value: RASHIS[sunRasi] },
+    { label: 'Ayanamsa',          value: info.ayanamsaKey.charAt(0).toUpperCase() + info.ayanamsaKey.slice(1) },
+  ];
+
+  const el = document.getElementById('birth-details-panel');
+  el.innerHTML = items.map(item => `
+    <div class="detail-item">
+      <span class="detail-label">${item.label}</span>
+      <span class="detail-value ${item.highlight ? 'highlight' : ''}">${item.value}</span>
+    </div>
+  `).join('');
+}
+
+// ── Dasa Table ─────────────────────────────────────────
+function renderDasaTable(moonLon, dobStr) {
+  const birthDate = new Date(dobStr);
+  const dasaData  = calcDasa(moonLon, birthDate);
+  const today     = new Date();
+
+  const el = document.getElementById('dasa-table');
+  const maxYears = Math.max(...Object.values(DASA_YEARS));
+
+  let html = '';
+
+  html += `<div style="margin-bottom:14px;font-size:0.85rem;color:var(--text-secondary)">
+    Janma Nakshatra: <strong style="color:var(--gold-bright)">${dasaData.moonNak.name}</strong> 
+    — Starting Dasa: <strong style="color:var(--gold-bright)">${dasaData.firstLord}</strong>
+  </div>`;
+
+  dasaData.dasas.forEach(dasa => {
+    const isCurrent = today >= dasa.start && today < dasa.end;
+    const barPct    = (parseFloat(dasa.years) / maxYears) * 100;
+    const color     = DASA_COLORS[dasa.lord] || '#888';
+
+    html += `<div class="dasa-row ${isCurrent ? 'dasa-current' : ''}">
+      <div class="dasa-planet" style="color:${color}">${isCurrent ? '▶ ' : ''}${dasa.lord}</div>
+      <div class="dasa-bar-wrap">
+        <div class="dasa-bar" style="width:${barPct}%;background:${color};opacity:0.8"></div>
+      </div>
+      <div class="dasa-years">${dasa.years} yrs</div>
+      <div class="dasa-dates">${fmtDate(dasa.start)} – ${fmtDate(dasa.end)}</div>
+    </div>`;
+  });
+
+  el.innerHTML = html;
+}
+
+// ── Yogas ──────────────────────────────────────────────
+function renderYogas(positions) {
+  const yogas = detectYogas(positions);
+  const el    = document.getElementById('yoga-grid');
+
+  el.innerHTML = yogas.map(yoga => `
+    <div class="yoga-item ${yoga.present ? 'yoga-present' : ''}">
+      <div class="yoga-name">${yoga.name}</div>
+      <span class="yoga-badge ${yoga.present ? 'badge-present' : 'badge-absent'}">
+        ${yoga.present ? '✓ Present' : '✗ Not Present'}
+      </span>
+      <div class="yoga-desc">${yoga.desc}</div>
+    </div>
+  `).join('');
+}
+
+// ── Horoscope Reading ──────────────────────────────────
+function renderHoroscope(positions, name) {
+  const sections = generateReading(positions, name);
+  const el       = document.getElementById('horoscope-reading');
+
+  el.innerHTML = sections.map(s => `
+    <div class="reading-section">
+      <h4>${s.title}</h4>
+      <p>${s.text}</p>
+    </div>
+  `).join('');
+}
+
+// ── Divisional Charts ──────────────────────────────────
+function renderDivisionalCharts() {
+  const el = document.getElementById('div-charts');
+  el.innerHTML = DIVISIONAL_CHARTS.map(d => `
+    <div class="div-chart-item">
+      <div class="div-chart-name">${d.code} — ${d.name}</div>
+      <div class="div-chart-meaning">${d.meaning}</div>
+    </div>
+  `).join('');
+}
+
+// ═══════════════════════════════════════════════════════
+// COMPATIBILITY MODULE
+// ═══════════════════════════════════════════════════════
+
+function generateCompatibility() {
+  const boyName = document.getElementById('boy-name').value || 'Groom';
+  const boyDob  = document.getElementById('boy-dob').value;
+  const boyTob  = document.getElementById('boy-tob').value || '06:00';
+
+  const girlName = document.getElementById('girl-name').value || 'Bride';
+  const girlDob  = document.getElementById('girl-dob').value;
+  const girlTob  = document.getElementById('girl-tob').value || '06:00';
+
+  if (!boyDob || !girlDob) { alert('Please enter both Date of Birth fields.'); return; }
+
+  showLoading(`Calculating compatibility for ${boyName} & ${girlName}…`);
+
+  setTimeout(() => {
+    try {
+      const ayanamDeg = AYANAMSA.lahiri;
+
+      function parsePositions(dobStr, tobStr) {
+        const [yr, mo, dy] = dobStr.split('-').map(Number);
+        const [hr, mn]     = tobStr.split(':').map(Number);
+        const hour = hr + mn / 60;
+        const jd   = toJulianDay(yr, mo, dy, hour, 5.5);
+        return calcPlanetaryPositions(jd, ayanamDeg);
+      }
+
+      const boyPos  = parsePositions(boyDob, boyTob);
+      const girlPos = parsePositions(girlDob, girlTob);
+
+      const result = calcCompatibility(boyPos, girlPos);
+
+      hideLoading();
+      renderCompatibility(boyName, girlName, result);
+    } catch (e) {
+      hideLoading();
+      console.error(e);
+      alert('Calculation error. Please check inputs.');
+    }
+  }, 1500);
+}
+
+function renderCompatibility(boyName, girlName, result) {
+  const resultsEl = document.getElementById('compat-results');
+  resultsEl.classList.remove('hidden');
+  resultsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  renderScoreOverview(boyName, girlName, result);
+  renderPoruthams(result.poruthams);
+  renderVenusAnalysis(result.venusAnalysis);
+  renderMoonAnalysis(result.moonAnalysis);
+  renderJupiterAnalysis(result.jupiterAnalysis);
+  renderDivorceAnalysis(result.divorceAnalysis);
+  renderFinalVerdict(boyName, girlName, result);
+}
+
+function renderScoreOverview(boyName, girlName, result) {
+  const { poruthams, venusAnalysis, moonAnalysis, jupiterAnalysis } = result;
+  const { totalScore, maxScore } = poruthams;
+  const pct = (totalScore / maxScore) * 100;
+
+  const overallLabel = pct >= 75 ? 'Excellent Match ✨' :
+                       pct >= 55 ? 'Good Match 💚' :
+                       pct >= 40 ? 'Average Match 🟡' : 'Challenging Match ⚠️';
+
+  const color = pct >= 75 ? '#2ecc71' : pct >= 55 ? '#f5c842' : pct >= 40 ? '#e67e22' : '#e74c3c';
+
+  const circum = 2 * Math.PI * 60;
+  const offset = circum * (1 - pct / 100);
+
+  document.getElementById('score-overview').innerHTML = `
+    <div class="score-ring">
+      <svg width="160" height="160" viewBox="0 0 160 160">
+        <circle cx="80" cy="80" r="60" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="12"/>
+        <circle cx="80" cy="80" r="60" fill="none" stroke="${color}" stroke-width="12"
+          stroke-dasharray="${circum}" stroke-dashoffset="${offset}"
+          stroke-linecap="round" style="transition:stroke-dashoffset 1.5s ease"/>
+      </svg>
+      <div class="score-ring-label">
+        <div class="score-number" style="color:${color}">${totalScore}</div>
+        <div class="score-total">of ${maxScore}</div>
+      </div>
+    </div>
+    <div>
+      <div style="font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--gold-bright);margin-bottom:8px">
+        ${boyName} & ${girlName}
+      </div>
+      <div class="score-verdict" style="color:${color}">${overallLabel}</div>
+      <div style="font-size:0.85rem;color:var(--text-secondary);margin-top:12px;max-width:280px">
+        Porutham Score: ${totalScore}/${maxScore} · Venus: ${venusAnalysis.score}% · Moon: ${moonAnalysis.score}% · Jupiter: ${jupiterAnalysis.score}%
+      </div>
+    </div>
+  `;
+}
+
+function renderPoruthams(result) {
+  const { poruthams } = result;
+  const el = document.getElementById('porutham-grid');
+
+  el.innerHTML = poruthams.map(p => {
+    const cls = p.match === 'match' ? 'porutham-match' : p.match === 'partial' ? 'porutham-partial' : 'porutham-nomatch';
+    const resultLabel = p.match === 'match' ? '✓ Match' : p.match === 'partial' ? '~ Partial' : '✗ No Match';
+    const resultCls   = p.match === 'match' ? 'p-match' : p.match === 'partial' ? 'p-partial' : 'p-nomatch';
+
+    return `<div class="porutham-item ${cls}">
+      <div class="porutham-icon">${p.icon}</div>
+      <div>
+        <div class="porutham-name">${p.name}</div>
+        <div class="porutham-result ${resultCls}">${resultLabel} · Weight: ${p.weight}</div>
+        <div style="font-size:0.75rem;color:var(--text-muted);margin-top:3px">${p.detail}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderVenusAnalysis(venus) {
+  const el = document.getElementById('venus-analysis');
+  el.innerHTML = `
+    <div class="analysis-score">
+      <div class="analysis-meter">
+        <div class="analysis-fill" style="width:${venus.score}%"></div>
+      </div>
+      <div class="analysis-score-val" style="color:var(--rose-star)">${venus.score}%</div>
+    </div>
+    <div style="font-size:0.85rem;margin-bottom:12px">
+      <strong>Boy's Venus:</strong> ${venus.boyVenus} &nbsp;|&nbsp;
+      <strong>Girl's Venus:</strong> ${venus.girlVenus}
+    </div>
+    ${venus.factors.map(f => `<div style="padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:0.82rem;color:var(--text-secondary)">• ${f}</div>`).join('')}
+    <div style="margin-top:14px;font-size:0.88rem;color:var(--text-primary);font-style:italic">${venus.summary}</div>
+  `;
+}
+
+function renderMoonAnalysis(moon) {
+  const el = document.getElementById('moon-analysis');
+  el.innerHTML = `
+    <div class="analysis-score">
+      <div class="analysis-meter">
+        <div class="analysis-fill" style="width:${moon.score}%"></div>
+      </div>
+      <div class="analysis-score-val" style="color:var(--violet-star)">${moon.score}%</div>
+    </div>
+    <div style="font-size:0.85rem;margin-bottom:12px">
+      <strong>Boy's Moon:</strong> ${moon.boyMoon} &nbsp;|&nbsp;
+      <strong>Girl's Moon:</strong> ${moon.girlMoon}
+    </div>
+    ${moon.factors.map(f => `<div style="padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:0.82rem;color:var(--text-secondary)">• ${f}</div>`).join('')}
+    <div style="margin-top:14px;font-size:0.88rem;color:var(--text-primary);font-style:italic">${moon.summary}</div>
+  `;
+}
+
+function renderJupiterAnalysis(jup) {
+  const el = document.getElementById('jupiter-analysis');
+  el.innerHTML = `
+    <div class="analysis-score">
+      <div class="analysis-meter">
+        <div class="analysis-fill" style="width:${jup.score}%"></div>
+      </div>
+      <div class="analysis-score-val" style="color:var(--gold-bright)">${jup.score}%</div>
+    </div>
+    <div style="font-size:0.85rem;margin-bottom:12px">
+      <strong>Boy's Jupiter:</strong> ${jup.boyJupiter} &nbsp;|&nbsp;
+      <strong>Girl's Jupiter:</strong> ${jup.girlJupiter}
+    </div>
+    ${jup.factors.map(f => `<div style="padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:0.82rem;color:var(--text-secondary)">• ${f}</div>`).join('')}
+    <div style="margin-top:14px;font-size:0.88rem;color:var(--text-primary);font-style:italic">${jup.summary}</div>
+  `;
+}
+
+function renderDivorceAnalysis(d) {
+  const el = document.getElementById('divorce-analysis');
+
+  const riskColor = d.overallRisk === 'High' ? '#e74c3c' : d.overallRisk === 'Moderate' ? '#e67e22' : '#2ecc71';
+
+  const dots = d.overallRisk === 'High'
+    ? '<div class="risk-dot active-high"></div><div class="risk-dot active-high"></div><div class="risk-dot active-high"></div>'
+    : d.overallRisk === 'Moderate'
+    ? '<div class="risk-dot active-low"></div><div class="risk-dot active-med"></div><div class="risk-dot"></div>'
+    : '<div class="risk-dot active-low"></div><div class="risk-dot"></div><div class="risk-dot"></div>';
+
+  el.innerHTML = `
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:18px">
+      <div style="font-size:2rem">${d.overallRisk === 'High' ? '⚠️' : d.overallRisk === 'Moderate' ? '🟡' : '✅'}</div>
+      <div>
+        <div style="font-size:1.1rem;font-weight:700;color:${riskColor}">Overall Separation Risk: ${d.overallRisk}</div>
+        <div class="risk-level-bar">
+          <span class="risk-level-label">Risk:</span>
+          ${dots}
+        </div>
+      </div>
+    </div>
+    <div class="risk-factors">
+      ${d.factors.map(f => `
+        <div class="risk-factor">
+          <div class="risk-icon">${f.icon}</div>
+          <div>
+            <div class="risk-label">${f.label}</div>
+            <div class="risk-value risk-${f.level}">${f.value}</div>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+    <div style="margin-top:20px;padding:16px;background:rgba(245,200,66,0.05);border:1px solid var(--border);border-radius:8px">
+      <div style="font-size:0.8rem;font-weight:600;color:var(--gold-mid);margin-bottom:10px;letter-spacing:0.08em;text-transform:uppercase">Recommended Remedies</div>
+      ${d.remedies.map(r => `<div style="font-size:0.82rem;color:var(--text-secondary);padding:4px 0">🙏 ${r}</div>`).join('')}
+    </div>
+  `;
+}
+
+function renderFinalVerdict(boyName, girlName, result) {
+  const { poruthams, venusAnalysis, moonAnalysis, jupiterAnalysis, divorceAnalysis } = result;
+  const pct = (poruthams.totalScore / poruthams.maxScore) * 100;
+  const avgSpecial = (venusAnalysis.score + moonAnalysis.score + jupiterAnalysis.score) / 3;
+  const overallPct = Math.round(pct * 0.5 + avgSpecial * 0.5);
+
+  let emoji, title, text;
+
+  if (overallPct >= 75 && divorceAnalysis.overallRisk === 'Low') {
+    emoji = '💫';
+    title = 'Highly Auspicious Match';
+    text = `${boyName} and ${girlName} share an exceptionally harmonious compatibility. The 10 Poruthams align strongly, Venus placements suggest mutual devotion, the Moon signs resonate emotionally, and Jupiter blesses the union. This combination points toward a fulfilling, long-lasting marriage with shared growth in all dimensions — material, emotional, and spiritual.`;
+  } else if (overallPct >= 60) {
+    emoji = '💚';
+    title = 'Good Compatibility — Marriage Recommended';
+    text = `${boyName} and ${girlName} share solid compatibility with some areas that will deepen through conscious effort. The foundation for a happy, stable marriage exists. Open communication about each partner's needs, shared spiritual practices, and awareness of the specific areas highlighted above will help this union flourish beautifully.`;
+  } else if (overallPct >= 45) {
+    emoji = '🌙';
+    title = 'Moderate Compatibility — Proceed Mindfully';
+    text = `${boyName} and ${girlName} have areas of natural compatibility alongside meaningful differences. Marriage can still be fulfilling with honest communication, mutual respect, and appropriate Vedic remedies. Consulting a qualified Jyotishi for detailed analysis and recommended muhurta is advisable before proceeding.`;
+  } else {
+    emoji = '🌟';
+    title = 'Challenging Compatibility — Expert Consultation Advised';
+    text = `Significant astrological differences exist between ${boyName} and ${girlName}. This does not preclude a meaningful relationship, but requires deep mutual understanding, remedial measures, and ideally the guidance of an experienced Jyotishi. If both individuals are committed to growth and have other connecting factors (emotional, intellectual, spiritual), the relationship can still be transformative and meaningful.`;
+  }
+
+  document.getElementById('final-verdict').innerHTML = `
+    <div class="verdict-emoji">${emoji}</div>
+    <div class="verdict-title">${title}</div>
+    <div class="verdict-text">${text}</div>
+    <div style="margin-top:20px;font-size:0.8rem;color:var(--text-muted)">
+      Overall Compatibility Score: ${overallPct}% · 
+      Porutham: ${poruthams.totalScore}/${poruthams.maxScore} · 
+      Divorce Risk: ${divorceAnalysis.overallRisk}
+    </div>
+  `;
+}
+
+// ── Set default dates ─────────────────────────────────
+window.addEventListener('DOMContentLoaded', () => {
+  const today = new Date();
+  const thirtyYearsAgo = new Date(today.getFullYear() - 30, today.getMonth(), today.getDate());
+  const fmt = d => d.toISOString().split('T')[0];
+
+  document.getElementById('dob').value       = fmt(thirtyYearsAgo);
+  document.getElementById('tob').value       = '10:30';
+  document.getElementById('boy-dob').value   = fmt(thirtyYearsAgo);
+  document.getElementById('boy-tob').value   = '08:00';
+  const thirtyTwoYearsAgo = new Date(today.getFullYear() - 28, today.getMonth(), today.getDate());
+  document.getElementById('girl-dob').value  = fmt(thirtyTwoYearsAgo);
+  document.getElementById('girl-tob').value  = '14:00';
+});
+</script>
+</body>
+</html>

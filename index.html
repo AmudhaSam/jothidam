@@ -691,6 +691,25 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   .cbd-label { background: rgba(184,134,11,0.06); }
 }
 
+/* ── Compat Yogas (both partners) ─────────── */
+.cy-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media(max-width:560px){ .cy-grid { grid-template-columns: 1fr; } }
+.cy-col {
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  padding: 14px 16px; background: #fff;
+}
+.cy-head {
+  font-weight: 700; font-size: 0.9rem; margin-bottom: 12px;
+  padding-bottom: 8px; border-bottom: 2px solid var(--border);
+}
+.cy-head.boy { color: var(--jade-star); border-bottom-color: var(--jade-star); }
+.cy-head.girl { color: var(--rose-star); border-bottom-color: var(--rose-star); }
+.cy-yoga { display: flex; flex-direction: column; padding: 8px 0; border-bottom: 1px solid rgba(184,134,11,0.1); }
+.cy-yoga:last-child { border-bottom: none; }
+.cy-yoga-name { font-weight: 600; font-size: 0.85rem; color: var(--gold-bright); }
+.cy-yoga-desc { font-size: 0.78rem; color: var(--text-secondary); margin-top: 3px; }
+.cy-none { font-size: 0.82rem; color: var(--text-secondary); font-style: italic; padding: 8px 0; }
+
 /* ── Score summary table ──────────────────── */
 .score-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
 .score-table th {
@@ -1164,6 +1183,12 @@ input[type="time"]::-webkit-calendar-picker-indicator {
       <div class="result-card full-width">
         <h3 class="card-title">📜 Birth Chart Details</h3>
         <div id="compat-birth-details"></div>
+      </div>
+
+      <!-- Yogas & Special Combinations (both partners) -->
+      <div class="result-card full-width">
+        <h3 class="card-title">⭐ Yogas & Special Combinations</h3>
+        <div id="compat-yogas"></div>
       </div>
 
       <!-- Score summary table -->
@@ -3544,6 +3569,7 @@ function renderCompatibility(boyName, girlName, result, method) {
 
   renderScoreOverview(boyName, girlName, result, method);
   renderCompatBirthDetails(boyName, girlName, result);
+  renderCompatYogas(boyName, girlName, result);
   renderCompatScoreTable(result);
   renderPoruthams(result.poruthams);
   renderVenusAnalysis(result.venusAnalysis);
@@ -3585,6 +3611,36 @@ function renderCompatBirthDetails(boyName, girlName, result) {
       <div class="cbd-cell cbd-val ${i===rows.length-1?'cbd-row-last':''}">${r[2]}</div>
     `).join('')}
   </div>`;
+}
+
+// Yogas & Special Combinations for both partners, side by side
+function renderCompatYogas(boyName, girlName, result) {
+  const el = document.getElementById('compat-yogas');
+  if (!el) return;
+  const boyYogas  = detectYogas(result.boyPos);
+  const girlYogas = detectYogas(result.girlPos);
+
+  function present(list) {
+    const yes = list.filter(y => y.present);
+    if (!yes.length) return '<div class="cy-none">No major yogas present</div>';
+    return yes.map(y => `
+      <div class="cy-yoga">
+        <span class="cy-yoga-name">✦ ${y.name}</span>
+        <span class="cy-yoga-desc">${y.desc}</span>
+      </div>`).join('');
+  }
+
+  el.innerHTML = `
+    <div class="cy-grid">
+      <div class="cy-col">
+        <div class="cy-head boy">♂ ${boyName}</div>
+        ${present(boyYogas)}
+      </div>
+      <div class="cy-col">
+        <div class="cy-head girl">♀ ${girlName}</div>
+        ${present(girlYogas)}
+      </div>
+    </div>`;
 }
 
 // Score summary table across all compatibility dimensions

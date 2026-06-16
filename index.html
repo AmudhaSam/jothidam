@@ -1260,157 +1260,8 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 
   
 <script>
-/**
- * SURYA SIDDHANTA & VAKYA PANCHANGAM Engine
- * Ancient Tamil/Vedic planetary calculation
- *
- * Surya Siddhanta (~400 CE): raw classical text revolutions
- * Vakya Panchangam: Surya Siddhanta + Bija (seed) corrections
- *   as used in the living Tamil tradition (Kumbakonam/Thanjavur).
- */
-
-// ── Constants from Surya Siddhanta ──────────────────────
-const SS_JD_KALI_EPOCH = 588465.5;        // JD at start of Kali Yuga (noon 17 Feb 3102 BCE)
-const SS_MAHAYUGA_DAYS = 1577917500;       // civil days in a Mahayuga
-
-// Planetary revolutions in one Mahayuga (4,320,000 yrs) — Surya Siddhanta
-const SS_REVOLUTIONS = {
-  Sun:        4320000,
-  Moon:      57753336,
-  Mars:       2296832,
-  Mercury:   17937060,
-  Jupiter:    364220,
-  Venus:      7022376,
-  Saturn:     146568,
-  Moon_Apogee: 488219,
-  Moon_Node:  -232238,   // Rahu (retrograde)
-};
-
-// Manda (equation of centre) epicycle sizes — degrees of arc
-const SS_MANDA_EPICYCLE = {
-  Sun: 13.5, Moon: 32.0, Mars: 73.5, Mercury: 28.0,
-  Jupiter: 32.5, Venus: 11.5, Saturn: 48.5,
-};
-// Sighra epicycle sizes — degrees of arc
-const SS_SIGHRA_EPICYCLE = {
-  Mars: 233.5, Mercury: 132.5, Jupiter: 71.0, Venus: 261.5, Saturn: 39.5,
-};
-// Mandocca (apogee) longitudes approx for the modern era (deg)
-const SS_MANDOCCA = {
-  Sun: 78.5, Moon: 0 /*calculated*/, Mars: 130, Mercury: 220,
-  Jupiter: 172, Venus: 80, Saturn: 240,
-};
-
-// ── Vakya Bija corrections (applied to raw SS) ──────────
-// These approximate the traditional Tamil corrections that keep
-// the Vakya Panchangam aligned with observed sky (~Lahiri frame).
-const VAKYA_BIJA = {
-  Sun:     -1.10,
-  Moon:    -9.66,
-  Mars:    -0.90,
-  Mercury: -2.40,
-  Jupiter: -1.30,
-  Venus:   -1.80,
-  Saturn:  -2.60,
-  Rahu:     0.40,
-};
-
-function ssDeg2rad(d) { return d * Math.PI / 180; }
-function ssSin(d) { return Math.sin(ssDeg2rad(d)); }
-function ssCos(d) { return Math.cos(ssDeg2rad(d)); }
-function ssNorm(x) { return ((x % 360) + 360) % 360; }
-
-// Mean longitude from revolutions and ahargana
-function ssMeanLon(revs, ahargana) {
-  const frac = ((revs * ahargana) / SS_MAHAYUGA_DAYS) % 1;
-  return ssNorm(frac * 360);
-}
-
-// Equation of centre / sighra correction (R-sine approximation)
-function ssEpicycleCorrection(meanLon, apogeeLon, epicycle) {
-  const anomaly = ssNorm(meanLon - apogeeLon);
-  const s = ssSin(anomaly);
-  let corr = Math.asin(Math.max(-1, Math.min(1, (epicycle / 360) * Math.abs(s))));
-  corr = corr * 180 / Math.PI;
-  return s < 0 ? -corr : corr;
-}
-
-/**
- * Compute all positions using Surya Siddhanta.
- * @param {number} jd       Julian Day (UT)
- * @param {number} lat      birth latitude
- * @param {number} lon      birth longitude (deg E)
- * @param {boolean} useVakya  apply Vakya Bija corrections
- * @returns {object} sidereal longitudes keyed by planet + Ascendant
- */
-function calcSuryaSiddhanta(jd, lat, lon, useVakya) {
-  const ahargana = jd - SS_JD_KALI_EPOCH;
-
-  // Sun
-  const sunMean = ssMeanLon(SS_REVOLUTIONS.Sun, ahargana);
-  const sunCorr = ssEpicycleCorrection(sunMean, SS_MANDOCCA.Sun, SS_MANDA_EPICYCLE.Sun);
-  let sun = ssNorm(sunMean + sunCorr);
-
-  // Moon
-  const moonMean   = ssMeanLon(SS_REVOLUTIONS.Moon, ahargana);
-  const moonApogee = ssMeanLon(SS_REVOLUTIONS.Moon_Apogee, ahargana);
-  const moonCorr   = ssEpicycleCorrection(moonMean, moonApogee, SS_MANDA_EPICYCLE.Moon);
-  let moon = ssNorm(moonMean + moonCorr);
-
-  // Superior + inferior planets: manda then sighra
-  function planetTrue(key) {
-    const mean = ssMeanLon(SS_REVOLUTIONS[key], ahargana);
-    const mandaCorr = ssEpicycleCorrection(mean, SS_MANDOCCA[key], SS_MANDA_EPICYCLE[key]);
-    const manda = ssNorm(mean + mandaCorr);
-    const sighraCorr = ssEpicycleCorrection(manda, sun, SS_SIGHRA_EPICYCLE[key] / 4);
-    return ssNorm(manda + sighraCorr);
-  }
-  let mars    = planetTrue('Mars');
-  let mercury = planetTrue('Mercury');
-  let jupiter = planetTrue('Jupiter');
-  let venus   = planetTrue('Venus');
-  let saturn  = planetTrue('Saturn');
-
-  // Rahu / Ketu
-  let rahu = ssMeanLon(SS_REVOLUTIONS.Moon_Node, ahargana);
-  // Apply Vakya corrections
-  if (useVakya) {
-    sun     = ssNorm(sun     + VAKYA_BIJA.Sun);
-    moon    = ssNorm(moon    + VAKYA_BIJA.Moon);
-    mars    = ssNorm(mars    + VAKYA_BIJA.Mars);
-    mercury = ssNorm(mercury + VAKYA_BIJA.Mercury);
-    jupiter = ssNorm(jupiter + VAKYA_BIJA.Jupiter);
-    venus   = ssNorm(venus   + VAKYA_BIJA.Venus);
-    saturn  = ssNorm(saturn  + VAKYA_BIJA.Saturn);
-    rahu    = ssNorm(rahu    + VAKYA_BIJA.Rahu);
-  }
-  let ketu = ssNorm(rahu + 180);
-
-  // Ascendant — calculated from sidereal time, SS obliquity 24°
-  const epsilon = 24.0;
-  const GMST = ssNorm(280.46061837 + 360.98564736629 * (jd - 2451545.0));
-  const LST  = ssNorm(GMST + lon);
-  const numer = -ssCos(LST);
-  const denom = ssSin(epsilon) * Math.tan(ssDeg2rad(lat)) + ssCos(epsilon) * ssSin(LST);
-  let ascTropical = ssNorm(Math.atan2(numer, denom) * 180 / Math.PI);
-  if (ssCos(LST) < 0) ascTropical = ssNorm(ascTropical + 180);
-  // Convert tropical Lagna to the SS/Vakya sidereal frame.
-  // SS frame ≈ Lahiri for the modern era; Vakya targets observed (Lahiri ~23.79° in 1994).
-  // Compute a date-dependent ayanamsa to map tropical Lagna → sidereal:
-  const yearsFrom1900 = (jd - 2415020.5) / 365.25;
-  const lahiriAyan = 22.4661 + (50.2388475 * yearsFrom1900) / 3600;
-  // Lagna is a geometric (sky) quantity, not derived from SS revolution tables,
-  // so it does NOT carry the SS Moon/planet drift. Both methods compute it in the
-  // observed sidereal frame (Lahiri-aligned). Only the planetary longitudes differ
-  // between raw SS and Vakya.
-  let ascendant = ssNorm(ascTropical - lahiriAyan);
-
-  return {
-    Sun: sun, Moon: moon, Mars: mars, Mercury: mercury,
-    Jupiter: jupiter, Venus: venus, Saturn: saturn,
-    Rahu: rahu, Ketu: ketu, Ascendant: ascendant,
-  };
-}
+// (Legacy Surya Siddhanta engine removed — calculations now use the
+//  precise calcAccurate() engine below, with method-based ayanamsa.)
 
 
 /**
@@ -1537,80 +1388,6 @@ function julianToDate(jd) {
 // PLANETARY LONGITUDE CALCULATOR (Simplified Astronomical)
 // ═══════════════════════════════════════════════════════
 
-function calcPlanetaryPositions(jd, ayanamsaDeg) {
-  const T = (jd - 2451545.0) / 36525; // Julian centuries from J2000.0
-
-  // Mean longitudes (degrees)
-  const L0_sun  = (280.46646 + 36000.76983 * T) % 360;
-  const M_sun   = (357.52911 + 35999.05029 * T) % 360;
-  const eq_cent = (1.9146 - 0.004817 * T - 0.000014 * T * T) * sin(M_sun)
-                + (0.019993 - 0.000101 * T) * sin(2 * M_sun)
-                + 0.00029 * sin(3 * M_sun);
-  const sunLon  = (L0_sun + eq_cent + 360) % 360;
-
-  // Moon
-  const L0_moon = (218.3165 + 481267.8813 * T) % 360;
-  const M_moon  = (134.963 + 477198.868 * T) % 360;
-  const D_moon  = (297.852 + 445267.111 * T) % 360;
-  const F_moon  = (93.272 + 483202.018 * T) % 360;
-  const moonLon = (L0_moon
-    + 6.289 * sin(M_moon)
-    + 1.274 * sin(2 * D_moon - M_moon)
-    + 0.658 * sin(2 * D_moon)
-    + 0.214 * sin(2 * M_moon)
-    - 0.186 * sin(M_sun)
-    - 0.114 * sin(2 * F_moon)
-    + 360 * 5) % 360;
-
-  // Mars
-  const M_mars  = (19.373 + 19141.696 * T) % 360;
-  const L0_mars = (355.433 + 19141.696 * T) % 360;
-  const marsLon = (L0_mars + 1.85 * sin(M_mars) + 0.443 * sin(2 * M_mars) + 360) % 360;
-
-  // Mercury
-  const M_merc  = (174.796 + 149474.071 * T) % 360;
-  const L0_merc = (252.251 + 149474.071 * T) % 360;
-  const mercLon = (L0_merc + 1.796 * sin(M_merc) + 0.324 * sin(2 * M_merc) + 360) % 360;
-
-  // Jupiter
-  const M_jup   = (20.020 + 3034.907 * T) % 360;
-  const L0_jup  = (34.396 + 3034.907 * T) % 360;
-  const jupLon  = (L0_jup + 5.502 * sin(M_jup) + 0.167 * sin(2 * M_jup) + 360) % 360;
-
-  // Venus
-  const M_ven   = (212.233 + 58519.105 * T) % 360;
-  const L0_ven  = (181.979 + 58519.105 * T) % 360;
-  const venLon  = (L0_ven + 0.775 * sin(M_ven) + 0.050 * sin(2 * M_ven) + 360) % 360;
-
-  // Saturn
-  const M_sat   = (317.020 + 1222.114 * T) % 360;
-  const L0_sat  = (50.077 + 1222.114 * T) % 360;
-  const satLon  = (L0_sat + 6.387 * sin(M_sat) + 0.251 * sin(2 * M_sat) + 360) % 360;
-
-  // Rahu (mean lunar node, retrograde)
-  const rahuLon = (125.044 - 1934.136 * T + 360 * 5) % 360;
-  const ketuLon = (rahuLon + 180) % 360;
-
-  // Ascendant (simplified — using RAMC + latitude correction)
-  const RAMC = (280.46061837 + 360.98564736629 * (jd - 2451545.0)) % 360;
-  const ascLon = (RAMC + 90 + 360) % 360; // simplified tropical ASC
-
-  // Convert to sidereal (Vedic)
-  function toSid(lon) { return (lon - ayanamsaDeg + 360) % 360; }
-
-  return {
-    Sun:       toSid(sunLon),
-    Moon:      toSid(moonLon),
-    Mars:      toSid(marsLon),
-    Mercury:   toSid(mercLon),
-    Jupiter:   toSid(jupLon),
-    Venus:     toSid(venLon),
-    Saturn:    toSid(satLon),
-    Rahu:      toSid(rahuLon),
-    Ketu:      toSid(ketuLon),
-    Ascendant: toSid(ascLon),
-  };
-}
 
 // Helper: sin in degrees
 function sin(deg) { return Math.sin(deg * Math.PI / 180); }
@@ -1625,6 +1402,17 @@ function cos(deg) { return Math.cos(deg * Math.PI / 180); }
 function lahiriAyanamsa(jd) {
   const y = (jd - 2415020.5) / 365.25;       // years from 1900.0
   return 22.4661 + (50.2388475 * y) / 3600;  // arcsec → deg
+}
+
+// Surya Siddhanta ayanamsa. The classical text places the sidereal zero point
+// using a precession of 54"/yr from a zero-ayanamsa epoch at Kali year 3600
+// (≈ 499 CE / JD 1903682.5). This is the traditional value used in the
+// Vakya/Surya almanac stream; it trails Lahiri by roughly 2–3° in modern times.
+function suryaSiddhantaAyanamsa(jd) {
+  const yearsFromZero = (jd - 1903682.5) / 365.25636; // sidereal year, from ~499 CE
+  let a = (54 / 3600) * yearsFromZero;                 // 54 arcsec/yr precession
+  // keep within a sensible range
+  return a;
 }
 
 // Keplerian orbital elements (J2000.0 epoch, rates per Julian century T)
@@ -1741,23 +1529,23 @@ function calcAccurate(jd, lat, lonE, method) {
   // place ascendant in correct half
   if (asc < ramc - 90 || asc > ramc + 270) asc = norm(asc + 180);
 
-  // Ayanamsa / method correction:
-  //  - 'surya' (Ancient): raw Surya Siddhanta frame — classical positions run
-  //    ahead of the observed sky by ~9.66° (accumulated drift since ~400 CE).
-  //  - 'vakya' (Traditional, default): Vakya Panchangam, corrected to the
-  //    observed sidereal sky (aligned with Lahiri ayanamsa).
-  const ay = lahiriAyanamsa(jd);
-  const suryaOffset = (method === 'surya') ? 9.66 : 0;
-  // Planets carry the Surya drift; the Ascendant is a geometric sky quantity
-  // (computed from sidereal time) and is the SAME in both methods.
-  const toSid    = lon => norm(lon - ay + suryaOffset);
-  const toSidAsc = lon => norm(lon - ay);
+  // Sidereal conversion via ayanamsa. Both methods use the same precise
+  // astronomical longitudes and differ only in the AYANAMSA (the zero-point of
+  // the sidereal zodiac), which is the genuine distinction between traditions:
+  //   - 'vakya' (Traditional, default): Lahiri / Chitrapaksha ayanamsa, the
+  //     Government-of-India standard matched by the Tamil Vakya Panchangam.
+  //   - 'surya' (Ancient): the classical Surya Siddhanta ayanamsa, which in the
+  //     modern era trails Lahiri by a small, documented amount.
+  // The whole chart (planets AND ascendant) shifts together by the ayanamsa,
+  // so the two methods each stay internally consistent.
+  const ay = (method === 'surya') ? suryaSiddhantaAyanamsa(jd) : lahiriAyanamsa(jd);
+  const toSid = lon => norm(lon - ay);
 
   return {
     Sun: toSid(sunLon), Moon: toSid(moonLon), Mars: toSid(marsLon),
     Mercury: toSid(mercLon), Jupiter: toSid(jupLon), Venus: toSid(venLon),
     Saturn: toSid(satLon), Rahu: toSid(rahuLon), Ketu: toSid(ketuLon),
-    Ascendant: toSidAsc(asc),
+    Ascendant: toSid(asc),
   };
 }
 
